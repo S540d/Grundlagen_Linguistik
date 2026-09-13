@@ -3,6 +3,7 @@ export default function (eleventyConfig) {
   eleventyConfig.ignores.add("src/tools/**");
 
   return {
+    pathPrefix: "/Grundlagen_Linguistik/",
     dir: {
       input: "src",
       includes: "_includes",

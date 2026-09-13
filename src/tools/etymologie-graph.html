@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Etymologie-Graph</title>
+<style>
+  :root{
+    --paper:#E7E1CE;
+    --paper-raised:#EFEADA;
+    --ink:#232F39;
+    --ink-soft:#57646E;
+    --ink-faint:#8A8F82;
+    --rust:#A0432B;
+    --river:#2C6E7F;
+    --river-soft:#DCE9EA;
+    --rust-soft:#EADAD3;
+    --line:#B9AF93;
+    --radius:10px;
+    --serif: Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--paper); color:var(--ink); font-family:var(--sans); line-height:1.5; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:480px; margin:0 auto; padding:22px 18px 60px;}
+  header{padding-bottom:18px; margin-bottom:18px; border-bottom:1px solid var(--line);}
+  header .kicker{font-size:0.8rem; color:var(--rust); margin:0 0 6px;}
+  h1{font-family:var(--serif); font-weight:600; font-size:clamp(1.4rem,6vw,1.8rem); margin:0 0 10px;}
+  header p{margin:0; color:var(--ink-soft); font-size:0.95rem;}
+
+  .source-note{
+    font-size:0.82rem; color:var(--ink-soft);
+    background:var(--river-soft);
+    border-radius:8px;
+    padding:10px 12px;
+    margin-bottom:18px;
+  }
+  .source-note strong{color:var(--river);}
+
+  .chips{display:flex; gap:8px; margin-bottom:18px;}
+  .chip{
+    flex:1; text-align:center; font-size:0.9rem; padding:9px 6px;
+    border:1px solid var(--line); border-radius:8px; cursor:pointer; background:var(--paper-raised);
+  }
+  .chip.active{background:var(--river); border-color:var(--river); color:#fff;}
+
+  .legend{display:flex; gap:14px; font-size:0.78rem; color:var(--ink-soft); margin-bottom:10px;}
+  .legend span{display:flex; align-items:center; gap:5px;}
+  .dot{width:9px; height:9px; border-radius:50%; display:inline-block;}
+  .dot.compound{background:var(--river);}
+  .dot.cognate{background:var(--rust);}
+
+  .graph-shell{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:6px;
+    margin-bottom:14px;
+  }
+  svg{display:block; width:100%; height:auto;}
+  .edge{stroke:var(--line); stroke-width:1.3;}
+  .node-circle{stroke-width:1.5; cursor:pointer;}
+  .node-circle.compound{fill:var(--river-soft); stroke:var(--river);}
+  .node-circle.cognate{fill:var(--rust-soft); stroke:var(--rust);}
+  .node-circle.center{fill:var(--ink); stroke:var(--ink);}
+  .node-circle.selected{stroke-width:3;}
+  .node-label{font-family:var(--serif); font-size:9.5px; fill:var(--ink); pointer-events:none;}
+  .node-label.center{fill:#fff; font-size:11px;}
+
+  .info-box{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:14px;
+    min-height:70px;
+  }
+  .info-box .term{font-family:var(--serif); font-size:1.1rem; margin-bottom:4px;}
+  .info-box .gloss{font-size:0.9rem; color:var(--ink); margin-bottom:6px;}
+  .info-box .src{font-size:0.75rem; color:var(--ink-faint);}
+  .info-box .placeholder{font-size:0.88rem; color:var(--ink-faint);}
+
+  footer{color:var(--ink-faint); font-size:0.8rem; border-top:1px solid var(--line); padding-top:16px; margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="kicker">Modul 8 &middot; Bauphase 6 (Abschluss)</p>
+    <h1>Etymologie-Graph</h1>
+    <p>Zwei Wortfamilien, deren Verzweigungen aus dem Original-Grimm belegt sind &mdash; nicht aus dem Gedächtnis ergänzt.</p>
+  </header>
+
+  <div class="source-note">
+    <strong>Zur Quellenlage:</strong> Wortfamilie und Belege recherchiert im ¹DWB, der Original-Ausgabe von Jacob und Wilhelm Grimm (1854 ff., gemeinfrei, über DWDS digitalisiert) — nicht in der urheberrechtlich geschützten Neubearbeitung (²DWB, ab 1965). Fremdsprachliche Vergleichsformen wie in Bauphase 4/5.
+  </div>
+
+  <div class="chips">
+    <div class="chip active" data-word="vater">Vater</div>
+    <div class="chip" data-word="apfel">Apfel</div>
+  </div>
+
+  <div class="legend">
+    <span><span class="dot compound"></span>Wortfamilie (Nhd.)</span>
+    <span><span class="dot cognate"></span>Verwandte Sprachen</span>
+  </div>
+
+  <div class="graph-shell">
+    <svg viewBox="0 0 340 340" id="graphSvg"></svg>
+  </div>
+
+  <div class="info-box" id="infoBox">
+    <p class="placeholder">Auf einen Knoten tippen für Beleg und Erklärung.</p>
+  </div>
+
+  <footer>
+    Modul 8 &middot; letzter Baustein aus Phase 6 (s. Abschnitt 7) &middot; Quelle für „Vater": dwds.de/wb/dwb/vater · Quelle für „Apfel": dwds.de/wb/dwb/apfel und dwds.de/wb/dwb/apfelschnitz.
+  </footer>
+
+</div>
+
+<script>
+const FAMILIES = {
+  vater: {
+    center: "Vater",
+    nodes: [
+      { word:"Vetter", type:"compound",
+        gloss:"Ursprünglich der umgelautete Plural von „Vater" (ahd./mhd. veter). Verdrängte im Mhd. den unumgelauteten Plural vollständig und verengte sich dabei in der Bedeutung zu „Cousin, männlicher Verwandter" — Vetter und Vater sind also dieselbe Wortwurzel mit gespaltener Bedeutung.",
+        src:"¹DWB, dwds.de/wb/dwb/vater" },
+      { word:"Gevatter", type:"compound",
+        gloss:"Entwickelt sich laut Grimm aus einem alten Femininum und verdrängt „vater" in bestimmten Verwendungen (Patenschaft) — auch im Niederdeutschen.",
+        src:"¹DWB, dwds.de/wb/dwb/vater" },
+      { word:"vater (ohne Artikel)", type:"compound",
+        gloss:"Wie andere Verwandtschaftswörter wurde „vater" im älteren Deutsch oft wie ein Eigenname ohne Artikel gebraucht — vom Wörterbuch mit Belegen aus Luther und Fischart illustriert.",
+        src:"¹DWB, dwds.de/wb/dwb/vater" },
+      { word:"engl. father", type:"cognate",
+        gloss:"Gemeinsamer germ. Ursprung *fader — nimmt an der zweiten Lautverschiebung nicht teil (s. Bauphase 5, Stammbaum).",
+        src:"vgl. Stammbaum-Werkzeug, Bauphase 5" },
+      { word:"lat. pater", type:"cognate",
+        gloss:"Ohne germanische Lautverschiebungen — derselbe idg. Ansatz *ph₂tḗr wie Vater/father, s. Bauphase 4 (Rückwärtstool).",
+        src:"vgl. Rückwärts-Lautverschiebungstool, Bauphase 4" },
+      { word:"got. fadar", type:"cognate",
+        gloss:"Einziges direkt belegtes ostgermanisches Zeugnis (Wulfila-Bibel, 4. Jh.) — zeigt die erste Lautverschiebung bereits abgeschlossen.",
+        src:"vgl. Stammbaum-Werkzeug, Bauphase 5" }
+    ]
+  },
+  apfel: {
+    center: "Apfel",
+    nodes: [
+      { word:"Apfelbaum", type:"compound", gloss:"Bereits im ¹DWB als eigener Eintrag geführt — einfachste Bildung aus Grundwort + Baum.", src:"¹DWB, dwds.de/wb/dwb/apfelschnitz (Stichwortliste)" },
+      { word:"Apfelmus", type:"compound", gloss:"Bildung mit „Mus" — eine von vielen Speise-Komposita rund um Apfel im ¹DWB.", src:"¹DWB, dwds.de/wb/dwb/apfelschnitz (Stichwortliste)" },
+      { word:"Apfelwein", type:"compound", gloss:"Bezeichnung des vergorenen Apfelgetränks — im ¹DWB als eigenes Stichwort erfasst.", src:"¹DWB, dwds.de/wb/dwb/apfelschnitz (Stichwortliste)" },
+      { word:"Apfelschimmel", type:"compound", gloss:"Übertragung der Farbbezeichnung „apfelgrau" auf ein geflecktes Pferdefell — zeigt, wie sich Wortfamilien in ganz andere Sachbereiche ausbreiten.", src:"¹DWB, dwds.de/wb/dwb/apfelschnitz (Stichwortliste)" },
+      { word:"Apfelsine", type:"compound", gloss:"Wörtlich „Apfel aus China" (sina- = China) — ein Kompositum, das die Frucht über ihre Herkunft benennt, nicht über ihre Form.", src:"¹DWB, dwds.de/wb/dwb/apfelschnitz (Stichwortliste)" },
+      { word:"ir. ubull / kymr. afal", type:"cognate",
+        gloss:"Keltische Verwandte — von Grimm selbst als Beleg für eine alte west-/mitteleuropäische Wortsippe angeführt.",
+        src:"¹DWB, dwds.de/wb/dwb/apfel" },
+      { word:"kein lat./griech. Verwandter", type:"cognate",
+        gloss:"Grimm hält ausdrücklich fest: Latein (pomum) und Griechisch (mêlon) haben KEIN verwandtes Wort — ein klassisches Indiz für ein vorindogermanisches Substrat- bzw. Wanderwort (s. Bauphase 4, „Rekonstruktion endet hier“).",
+        src:"¹DWB, dwds.de/wb/dwb/apfel" }
+    ]
+  }
+};
+
+let currentWord = "vater";
+let selectedIdx = null;
+
+function buildGraph(){
+  const fam = FAMILIES[currentWord];
+  const svg = document.getElementById("graphSvg");
+  const cx = 170, cy = 170, r = 118, nodeR = 34, centerR = 42;
+  const n = fam.nodes.length;
+
+  let html = "";
+
+  // edges first (so nodes draw on top)
+  fam.nodes.forEach((node, i) => {
+    const angle = (i / n) * 2 * Math.PI - Math.PI / 2;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+    html += `<line class="edge" x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"/>`;
+  });
+
+  // center node
+  html += `<circle class="node-circle center" cx="${cx}" cy="${cy}" r="${centerR}"/>`;
+  html += `<text class="node-label center" x="${cx}" y="${cy+4}" text-anchor="middle">${fam.center}</text>`;
+
+  // satellite nodes
+  fam.nodes.forEach((node, i) => {
+    const angle = (i / n) * 2 * Math.PI - Math.PI / 2;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+    const sel = i === selectedIdx ? " selected" : "";
+    html += `<circle class="node-circle ${node.type}${sel}" data-idx="${i}" cx="${x}" cy="${y}" r="${nodeR}"/>`;
+    const words = node.word.split(" ");
+    words.forEach((w, li) => {
+      html += `<text class="node-label" x="${x}" y="${y - ((words.length-1)*5) + li*10 + 3}" text-anchor="middle" data-idx="${i}">${w}</text>`;
+    });
+  });
+
+  svg.innerHTML = html;
+
+  svg.querySelectorAll("[data-idx]").forEach(el => {
+    el.addEventListener("click", () => {
+      selectedIdx = parseInt(el.dataset.idx, 10);
+      buildGraph();
+      showInfo();
+    });
+  });
+}
+
+function showInfo(){
+  const box = document.getElementById("infoBox");
+  if (selectedIdx === null){
+    box.innerHTML = `<p class="placeholder">Auf einen Knoten tippen für Beleg und Erklärung.</p>`;
+    return;
+  }
+  const node = FAMILIES[currentWord].nodes[selectedIdx];
+  box.innerHTML = `
+    <div class="term">${node.word}</div>
+    <div class="gloss">${node.gloss}</div>
+    <div class="src">Quelle: ${node.src}</div>
+  `;
+}
+
+document.querySelectorAll(".chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    currentWord = chip.dataset.word;
+    selectedIdx = null;
+    buildGraph();
+    showInfo();
+  });
+});
+
+buildGraph();
+showInfo();
+</script>
+</body>
+</html>

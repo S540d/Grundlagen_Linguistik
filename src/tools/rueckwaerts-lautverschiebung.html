@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rückwärts-Lautverschiebungstool</title>
+<style>
+  :root{
+    --paper:#E7E1CE;
+    --paper-raised:#EFEADA;
+    --ink:#232F39;
+    --ink-soft:#57646E;
+    --ink-faint:#8A8F82;
+    --rust:#A0432B;
+    --rust-soft:#C97A5E;
+    --river:#2C6E7F;
+    --river-soft:#DCE9EA;
+    --line:#B9AF93;
+    --radius:10px;
+    --serif: Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:480px; margin:0 auto; padding:22px 18px 60px;}
+  header{padding-bottom:18px; margin-bottom:22px; border-bottom:1px solid var(--line);}
+  header .kicker{font-size:0.8rem; color:var(--rust); margin:0 0 6px;}
+  h1{font-family:var(--serif); font-weight:600; font-size:clamp(1.4rem,6vw,1.8rem); margin:0 0 10px;}
+  header p{margin:0; color:var(--ink-soft); font-size:0.95rem;}
+  .caveat{
+    background:var(--river-soft);
+    border-radius:8px;
+    padding:12px 14px;
+    font-size:0.87rem;
+    color:var(--ink);
+    margin-top:14px;
+  }
+  .caveat strong{color:var(--river);}
+
+  h2{font-family:var(--serif); font-size:1.2rem; font-weight:600; margin:0 0 4px;}
+  .section-intro{color:var(--ink-soft); font-size:0.9rem; margin:0 0 16px;}
+  section{margin-bottom:38px;}
+
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px;}
+  .chip{
+    font-size:0.88rem; background:var(--paper-raised); border:1px solid var(--line);
+    color:var(--ink); padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .chip:hover{border-color:var(--river);}
+  .chip.active{background:var(--river); border-color:var(--river); color:#fff;}
+
+  .observation{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px;
+    margin-bottom:16px;
+  }
+  .observation .word{font-family:var(--serif); font-size:1.4rem; margin-bottom:4px;}
+  .observation .meta{font-size:0.85rem; color:var(--ink-soft);}
+
+  .stage{margin-bottom:16px;}
+  .stage-label{
+    font-size:0.78rem;
+    color:var(--ink-faint);
+    text-transform:none;
+    margin:0 0 8px;
+  }
+
+  .candidate{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-left:3px solid var(--river);
+    border-radius:0 8px 8px 0;
+    padding:12px 14px;
+    margin-bottom:10px;
+  }
+  .candidate.alt{border-left-color:var(--ink-faint);}
+  .candidate .form-line{
+    display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+    margin-bottom:6px;
+  }
+  .candidate .form{font-family:var(--serif); font-size:1.1rem;}
+  .badge{
+    font-size:0.7rem;
+    padding:2px 8px;
+    border-radius:999px;
+    border:1px solid currentColor;
+  }
+  .badge.sicher{color:var(--river);}
+  .badge.wahrscheinlich{color:var(--rust);}
+  .badge.moeglich{color:var(--ink-soft);}
+  .badge.unwahrscheinlich{color:var(--ink-faint); border-style:dashed;}
+  .candidate .note{font-size:0.88rem; color:var(--ink-soft); margin:0;}
+
+  .limit-box{
+    background:none;
+    border:1px dashed var(--line);
+    border-radius:8px;
+    padding:14px;
+    font-size:0.88rem;
+    color:var(--ink-soft);
+  }
+  .limit-box strong{color:var(--ink);}
+
+  .idg-candidate{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:14px;
+    margin-bottom:12px;
+  }
+  .idg-candidate .form-line{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px;}
+  .idg-candidate .form{font-family:var(--serif); font-style:italic; font-size:1.15rem;}
+  .chain{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:0.86rem;
+    color:var(--ink);
+    background:var(--river-soft);
+    border-radius:6px;
+    padding:8px 10px;
+    margin-bottom:8px;
+  }
+  .check-btn{
+    font-size:0.8rem;
+    background:none;
+    border:1px solid var(--river);
+    color:var(--river);
+    padding:5px 11px;
+    border-radius:999px;
+    cursor:pointer;
+  }
+  .check-result{
+    display:none;
+    margin-top:8px;
+    font-size:0.87rem;
+    padding-top:8px;
+    border-top:1px dashed var(--line);
+  }
+  .check-result.shown{display:block;}
+  .check-result .mark{color:var(--river); font-weight:600;}
+
+  .legend{
+    display:flex; flex-wrap:wrap; gap:10px;
+    font-size:0.78rem; color:var(--ink-soft);
+    margin-top:14px;
+  }
+  .legend span{display:flex; align-items:center; gap:5px;}
+
+  footer{color:var(--ink-faint); font-size:0.8rem; border-top:1px solid var(--line); padding-top:16px;}
+
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="kicker">Bauphase 4 &middot; technisch anspruchsvollste Komponente</p>
+    <h1>Rückwärts-Lautverschiebungstool</h1>
+    <p>Neuhochdeutsches Wort rein, mögliche urgermanische und indogermanische Vorformen raus &mdash; mit Regelkette statt einer einzigen „Antwort".</p>
+    <div class="caveat">
+      <strong>Zur Vorsicht (Abschnitt 8):</strong> Lautgesetze sind nicht eindeutig umkehrbar. Dieses Werkzeug zeigt deshalb alle Kandidaten, die das Regelsystem zulässt &mdash; auch dort, wo nur einer davon der in der Forschung bevorzugten Etymologie entspricht &mdash; und lässt sich per Vorwärts-Check gegenprüfen.
+    </div>
+  </header>
+
+  <section id="tool">
+    <h2>Wort wählen</h2>
+    <p class="section-intro">Wörter aus Modul 5 (Abschnitt 4.2) &mdash; dieselbe Regel-Engine wie im Lautverschiebungswerkzeug aus Bauphase 3.</p>
+    <div class="chips" id="wordChips"></div>
+
+    <div class="observation" id="observation"></div>
+
+    <div class="stage">
+      <p class="stage-label">Schritt 1 &middot; zurück zur urgermanischen Stufe (2. Lautverschiebung rückgängig gemacht)</p>
+      <div id="stage1"></div>
+    </div>
+
+    <div class="stage">
+      <p class="stage-label">Schritt 2 &middot; zurück zur indogermanischen Stufe (1. Lautverschiebung / Verners Gesetz rückgängig gemacht)</p>
+      <div id="stage2"></div>
+    </div>
+
+    <div class="legend">
+      <span><span class="badge sicher">sicher</span> eindeutig aus der Regel ableitbar</span>
+      <span><span class="badge wahrscheinlich">wahrscheinlich</span> Regel-Standardfall</span>
+      <span><span class="badge moeglich">möglich</span> Alternative, nicht ausschließbar</span>
+      <span><span class="badge unwahrscheinlich">unwahrscheinlich</span> nur mit Zusatzannahme erklärbar</span>
+    </div>
+  </section>
+
+  <footer>
+    Modul 5, Abschnitt 8 &middot; Regel-Engine aus Bauphase 2/3 weiterverwendet (s. Abschnitt 9) &middot; nächster Schritt laut Roadmap: Bauphase 5, Stammbaum-Visualisierung und Ablautreihen-Trainer.
+  </footer>
+
+</div>
+
+<script>
+/* ======================================================================
+   SCHRITT 1: generische, rein strukturelle Regel-Umkehr der zweiten
+   Lautverschiebung. Macht keine Aussage über konkrete Etymologien —
+   nur darüber, welche Gmc.-Konsonanten dieselbe hd. Oberfläche ergeben
+   können (s. Abschnitt 9: Regel-Logik getrennt von Wortdaten).
+   ====================================================================== */
+const STAGE1_REVERSE = {
+  p: {
+    affricate: [
+      { form:"p", certainty:"sicher", note:"pf entsteht ausschließlich durch die zweite Verschiebung aus Gmc. p im Anlaut/nach Konsonant." }
+    ],
+    fricative: [
+      { form:"p", certainty:"wahrscheinlich", note:"f kann aus der zweiten Verschiebung von intervokalischem Gmc. p stammen." },
+      { form:"f (unverschoben)", certainty:"möglich", note:"Gmc. f existierte auch unabhängig von der zweiten Verschiebung und bleibt von ihr unberührt — von außen nicht unterscheidbar." }
+    ]
+  },
+  t: {
+    affricate: [
+      { form:"t", certainty:"sicher", note:"ts/z entsteht durch die zweite Verschiebung aus Gmc. t im Anlaut oder im Sonderfall nach r/l/n." }
+    ],
+    fricative: [
+      { form:"t", certainty:"wahrscheinlich", note:"s/ß kann aus der zweiten Verschiebung von intervokalischem Gmc. t stammen." },
+      { form:"s (unverschoben)", certainty:"möglich", note:"Gmc. s bleibt von der zweiten Verschiebung unberührt — ebenfalls nicht von außen unterscheidbar." }
+    ]
+  },
+  k: {
+    affricate: [
+      { form:"k", certainty:"sicher", note:"kx/ch (Affrikate) entsteht durch die zweite Verschiebung aus Gmc. k im Anlaut/nach Konsonant." }
+    ],
+    fricative: [
+      { form:"k", certainty:"wahrscheinlich", note:"ch kann aus der zweiten Verschiebung von intervokalischem Gmc. k stammen." },
+      { form:"h (unverschoben)", certainty:"möglich", note:"Gmc. h bleibt von der zweiten Verschiebung unberührt." }
+    ]
+  },
+  d: {
+    special: [
+      { form:"d", certainty:"sicher", note:"t entsteht regelmäßig aus Gmc. d, unabhängig von der Position." },
+      { form:"t (unverschoben, unregelmäßig)", certainty:"unwahrscheinlich", note:"Reguläres Gmc. t wäre bereits in der ersten Verschiebung zu þ geworden — ein unverschobenes t hier wäre nur durch Entlehnung/Analogie erklärbar." }
+    ]
+  }
+};
+
+/* ======================================================================
+   SCHRITT 2: kuratierte idg.-Rekonstruktionen. Nur dort ausgefüllt, wo
+   die Wortgeschichte sicher genug ist, um über die reine Lautregel
+   hinauszugehen — sonst ein expliziter Stopp statt einer erfundenen
+   Vorform (s. Abschnitt 8, "falsche Präzision").
+   ====================================================================== */
+const WORDS = [
+  { id:"pfeffer", nhd:"Pfeffer", cognate:"engl. pepper / niederl. peper", consonant:"p", position:"affricate",
+    stage2:{ limitNote:"Lehnwort über lat./griech. <em>piper</em>, letztlich aus dem Sanskrit — erst nach Abschluss der ersten Lautverschiebung ins Germanische entlehnt. Das unverschobene p (vgl. engl. <em>pepper</em>, nicht ×<em>fefer</em>) ist der Beleg dafür. Keine idg. Vorform über Grimms Gesetz rekonstruierbar." } },
+
+  { id:"apfel", nhd:"Apfel", cognate:"engl. apple / niederl. appel", consonant:"p", position:"affricate",
+    stage2:{ limitNote:"Herkunft umstritten — vermutlich ein vorindogermanisches Substratwort (ähnlich „Wein\"). Keine gesicherte idg. Wurzel, daher endet die Rückführung auf der urgermanischen Stufe." } },
+
+  { id:"pfund", nhd:"Pfund", cognate:"engl. pound / niederl. pond", consonant:"p", position:"affricate",
+    stage2:{ limitNote:"Lehnwort aus lat. <em>pondo</em>, wie Pfeffer erst nach der ersten Lautverschiebung entlehnt (unverschobenes p, vgl. engl. <em>pound</em>). Keine idg. Vorform." } },
+
+  { id:"offen", nhd:"offen", cognate:"engl. open", consonant:"p", position:"fricative",
+    stage2:{ limitNote:"Weitere idg. Herkunft in der Forschung nicht einheitlich genug für eine belastbare Rückführung. Wir bleiben auf der urgermanischen Stufe." } },
+
+  { id:"schlafen", nhd:"schlafen", cognate:"engl. sleep / niederl. slapen", consonant:"p", position:"fricative",
+    stage2:{ limitNote:"Idg. Herkunft ungeklärt. Die Rückführung bleibt auf der urgermanischen Stufe." } },
+
+  { id:"zeit", nhd:"Zeit", cognate:"engl. tide", consonant:"t", position:"fricative",
+    stage2:{ candidates:[
+      { idg:"*deh₂- („teilen, abschneiden“)", certainty:"sicher",
+        chain:"idg. *d → (Grimm: Medien → Tenues) → Gmc. *t → (2. LV, intervokalisch) → hd. z",
+        check:"Ergibt „Zeit“ — stimmt." }
+    ]}},
+
+  { id:"herz", nhd:"Herz", cognate:"engl. heart", consonant:"t", position:"affricate",
+    stage2:{ candidates:[
+      { idg:"*ḱerd- („Herz“)", certainty:"sicher",
+        chain:"idg. *d → (Grimm: Medien → Tenues) → Gmc. *t → (2. LV, Sonderfall nach r) → hd. z",
+        check:"Ergibt „Herz“ — stimmt; vgl. lat. cor/cord-, griech. kardía." }
+    ]}},
+
+  { id:"wasser", nhd:"Wasser", cognate:"engl. water", consonant:"t", position:"fricative",
+    stage2:{ candidates:[
+      { idg:"*ud- („Wasser“)", certainty:"sicher",
+        chain:"idg. *d → (Grimm: Medien → Tenues) → Gmc. *t → (2. LV, intervokalisch) → hd. ss",
+        check:"Ergibt „Wasser“ — stimmt." }
+    ]}},
+
+  { id:"machen", nhd:"machen", cognate:"engl. make / niederl. maken", consonant:"k", position:"fricative",
+    stage2:{ limitNote:"Eine mögliche Verbindung zu einer idg. Wurzel *maǵ- („kneten, passen“) wird diskutiert, gilt aber nicht als gesichert. Wir bleiben vorsichtshalber auf der urgermanischen Stufe." } },
+
+  { id:"tag", nhd:"Tag", cognate:"engl. day / niederl. dag", consonant:"d", position:"special",
+    stage2:{ candidates:[
+      { idg:"*dʰegʷʰ- („brennen“)", certainty:"wahrscheinlich",
+        chain:"idg. *dʰ → (Grimm: Aspirierte Media → Media) → Gmc. *d → (2. LV, Sonderregel d→t) → hd. Tag",
+        check:"Ergibt „Tag“ — stimmt; in der Forschung die bevorzugte, aber nicht unumstrittene Erklärung." },
+      { idg:"*t (Akzent nicht auf der vorausgehenden Silbe)", certainty:"möglich",
+        chain:"idg. *t → (Grimm: Tenues → Frikative) → (Verner: stimmhaft, da Akzent nicht unmittelbar davor) → Gmc. *d → (2. LV, Sonderregel d→t) → hd. Tag",
+        check:"Ergibt ebenfalls „Tag“ — vom Regelsystem her nicht von Kandidat 1 zu unterscheiden. Genau das ist die Verner-bedingte Mehrdeutigkeit aus Abschnitt 8." }
+    ]}}
+];
+
+const POSITION_LABEL = {
+  affricate: "Anlaut / Gemination / nach Konsonant",
+  fricative: "intervokalisch",
+  special: "Sonderregel d→t"
+};
+
+function certClass(c){
+  return c.replace("ä","ae").replace(/\s/g,"");
+}
+
+let selectedId = WORDS[0].id;
+
+function renderChips(){
+  const el = document.getElementById("wordChips");
+  el.innerHTML = "";
+  WORDS.forEach(w => {
+    const chip = document.createElement("div");
+    chip.className = "chip" + (w.id === selectedId ? " active" : "");
+    chip.textContent = w.nhd;
+    chip.addEventListener("click", () => { selectedId = w.id; renderAll(); });
+    el.appendChild(chip);
+  });
+}
+
+function renderAll(){
+  renderChips();
+  const w = WORDS.find(x => x.id === selectedId);
+
+  document.getElementById("observation").innerHTML = `
+    <div class="word">${w.nhd}</div>
+    <div class="meta">${w.cognate} &middot; Konsonant „${w.consonant}“, ${POSITION_LABEL[w.position]}</div>
+  `;
+
+  const s1 = STAGE1_REVERSE[w.consonant][w.position];
+  document.getElementById("stage1").innerHTML = s1.map((c,i) => `
+    <div class="candidate${i>0 ? " alt" : ""}">
+      <div class="form-line">
+        <span class="form">Gmc. *${c.form}</span>
+        <span class="badge ${certClass(c.certainty)}">${c.certainty}</span>
+      </div>
+      <p class="note">${c.note}</p>
+    </div>
+  `).join("");
+
+  const s2 = w.stage2;
+  const s2el = document.getElementById("stage2");
+  if (s2.limitNote){
+    s2el.innerHTML = `<div class="limit-box"><strong>Rekonstruktion endet hier.</strong> ${s2.limitNote}</div>`;
+  } else {
+    s2el.innerHTML = s2.candidates.map((c,i) => `
+      <div class="idg-candidate">
+        <div class="form-line">
+          <span class="form">idg. ${c.idg}</span>
+          <span class="badge ${certClass(c.certainty)}">${c.certainty}</span>
+        </div>
+        <div class="chain">${c.chain}</div>
+        <button class="check-btn" type="button" data-idx="${i}">Vorwärts prüfen</button>
+        <div class="check-result" data-idx="${i}"><span class="mark">✓</span> ${c.check}</div>
+      </div>
+    `).join("");
+    s2el.querySelectorAll(".check-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const res = s2el.querySelector(`.check-result[data-idx="${btn.dataset.idx}"]`);
+        res.classList.add("shown");
+      });
+    });
+  }
+}
+
+renderAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ablautreihen-Trainer</title>
+<style>
+  :root{
+    --paper:#E7E1CE;
+    --paper-raised:#EFEADA;
+    --ink:#232F39;
+    --ink-soft:#57646E;
+    --ink-faint:#8A8F82;
+    --rust:#A0432B;
+    --rust-soft:#C97A5E;
+    --river:#2C6E7F;
+    --river-soft:#DCE9EA;
+    --line:#B9AF93;
+    --radius:10px;
+    --serif: Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--paper); color:var(--ink); font-family:var(--sans); line-height:1.5; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:480px; margin:0 auto; padding:22px 18px 60px;}
+  header{padding-bottom:18px; margin-bottom:22px; border-bottom:1px solid var(--line);}
+  header .kicker{font-size:0.8rem; color:var(--rust); margin:0 0 6px;}
+  h1{font-family:var(--serif); font-weight:600; font-size:clamp(1.4rem,6vw,1.8rem); margin:0 0 10px;}
+  header p{margin:0; color:var(--ink-soft); font-size:0.95rem;}
+  h2{font-family:var(--serif); font-size:1.2rem; font-weight:600; margin:0 0 4px;}
+  .section-intro{color:var(--ink-soft); font-size:0.9rem; margin:0 0 16px;}
+  section{margin-bottom:40px;}
+
+  .tabs{display:flex; gap:8px; margin-bottom:18px;}
+  .tab{
+    flex:1; text-align:center; font-size:0.9rem; padding:9px 6px;
+    border:1px solid var(--line); border-radius:8px; cursor:pointer; background:var(--paper-raised);
+  }
+  .tab.active{background:var(--river); border-color:var(--river); color:#fff;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  .class-card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px;
+    margin-bottom:14px;
+  }
+  .class-card .head{display:flex; align-items:baseline; gap:10px; margin-bottom:6px;}
+  .class-card .num{font-family:var(--serif); font-size:1.3rem; color:var(--rust);}
+  .class-card .formula{font-family:var(--serif); font-style:italic; font-size:1.05rem;}
+  .class-card .origin{font-size:0.78rem; color:var(--ink-faint); margin-bottom:10px;}
+  .verb-row{
+    display:flex; gap:8px; font-size:0.92rem; padding:5px 0;
+    border-top:1px solid var(--line);
+  }
+  .verb-row:first-of-type{border-top:none;}
+  .verb-row span{flex:1;}
+  .verb-row .inf{font-weight:600;}
+  .gw-note{
+    margin-top:10px;
+    font-size:0.83rem;
+    color:var(--ink-soft);
+    background:var(--river-soft);
+    border-radius:6px;
+    padding:8px 10px;
+  }
+  .gw-note strong{color:var(--river);}
+
+  .suppl-note{
+    border:1px dashed var(--line);
+    border-radius:8px;
+    padding:12px 14px;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    margin-top:6px;
+  }
+
+  /* Trainer */
+  .deck-status{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:0.85rem; color:var(--ink-soft); margin-bottom:12px;
+  }
+  .deck-status button{
+    font-size:0.78rem; background:none; border:1px solid var(--line);
+    color:var(--ink-soft); padding:5px 10px; border-radius:999px; cursor:pointer;
+  }
+  .card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:28px 18px;
+    text-align:center;
+    min-height:160px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:10px;
+    cursor:pointer;
+  }
+  .card .prompt-label{font-size:0.78rem; color:var(--ink-faint);}
+  .card .prompt-word{font-family:var(--serif); font-size:2rem;}
+  .card .answer{display:none; margin-top:6px;}
+  .card.flipped .answer{display:block;}
+  .card .answer .forms{font-family:var(--serif); font-style:italic; font-size:1.15rem; color:var(--rust); margin-bottom:6px;}
+  .card .answer .class-tag{font-size:0.78rem; color:var(--ink-soft);}
+  .card .tap-hint{font-size:0.78rem; color:var(--ink-faint); margin-top:4px;}
+
+  .rate-row{display:flex; gap:10px; margin-top:14px;}
+  .rate-row button{
+    flex:1; padding:11px; border-radius:8px; border:1px solid var(--line);
+    font-size:0.9rem; cursor:pointer; background:var(--paper-raised); color:var(--ink);
+  }
+  .rate-row button.again{border-color:var(--rust); color:var(--rust);}
+  .rate-row button.know{border-color:var(--river); color:var(--river);}
+  .rate-row{display:none;}
+  .rate-row.shown{display:flex;}
+
+  footer{color:var(--ink-faint); font-size:0.8rem; border-top:1px solid var(--line); padding-top:16px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="kicker">Modul 7 &middot; Bauphase 5</p>
+    <h1>Ablautreihen-Trainer</h1>
+    <p>Die sieben starken Ablautreihen zum Nachschlagen und zum Drillen &mdash; inklusive der Fälle, in denen Verners Gesetz noch als Konsonantenwechsel durchschlägt.</p>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" data-panel="ref">Nachschlagen</div>
+    <div class="tab" data-panel="trainer">Trainer</div>
+  </div>
+
+  <div class="panel active" id="panel-ref">
+    <section>
+      <h2>Die sieben Reihen</h2>
+      <p class="section-intro">Formel = Vokal in Infinitiv – Präteritum – Partizip II (neuhochdeutsche Vereinfachung der ursprünglich vierstufigen idg./ahd. Abstufung).</p>
+      <div id="classCards"></div>
+      <div class="suppl-note">
+        <strong>Randnotiz zu Abschnitt 4.1:</strong> „war" vs. „gewesen" ist <em>kein</em> Beispiel einer regulären Ablautreihe — <em>sein</em> ist ein supplettives Verb aus mehreren Wurzeln. Der þ/d-Wechsel darin ist aber derselbe Verner-Mechanismus wie bei „werden" unten.
+      </div>
+    </section>
+  </div>
+
+  <div class="panel" id="panel-trainer">
+    <section>
+      <h2>Karteikarten</h2>
+      <p class="section-intro">Infinitiv antippen, Formen selbst herleiten, dann aufdecken und ehrlich einschätzen.</p>
+      <div class="deck-status">
+        <span id="deckStatus">Karte 1 von 16 &middot; 0 gewusst</span>
+        <button id="resetBtn" type="button">Neu mischen</button>
+      </div>
+      <div class="card" id="flashcard">
+        <div class="prompt-label">Infinitiv</div>
+        <div class="prompt-word" id="promptWord"></div>
+        <div class="answer" id="answerBlock">
+          <div class="forms" id="answerForms"></div>
+          <div class="class-tag" id="answerClass"></div>
+        </div>
+        <div class="tap-hint" id="tapHint">antippen zum Aufdecken</div>
+      </div>
+      <div class="rate-row" id="rateRow">
+        <button class="again" type="button" data-know="0">Nochmal</button>
+        <button class="know" type="button" data-know="1">Gewusst</button>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    Modul 7 &middot; unabhängig von Bauphase 2–4 (s. Abschnitt 7) &middot; letzter Baustein aus Phase 5. Als Nächstes laut Roadmap: Phase 6 (Paralleltext-Viewer, Etymologie-Graph) — dort zuerst die Datenlage aus Abschnitt 6 prüfen.
+  </footer>
+
+</div>
+
+<script>
+const CLASSES = [
+  { num:"I", formula:"ei – i – i", origin:"idg. *ei/oi/i",
+    verbs:[
+      {inf:"reißen", praet:"riss", pII:"gerissen"},
+      {inf:"schreiben", praet:"schrieb", pII:"geschrieben"},
+      {inf:"bleiben", praet:"blieb", pII:"geblieben"}
+    ]},
+  { num:"II", formula:"ie/eu – o – o", origin:"idg. *eu/ou/u",
+    verbs:[
+      {inf:"fliegen", praet:"flog", pII:"geflogen"},
+      {inf:"ziehen", praet:"zog", pII:"gezogen", gw:"h (ziehen) vs. g (zog/gezogen) — ahd. ziohan/gizogan, direkte Verner-Folge (s. Abschnitt 4.1)."},
+      {inf:"frieren", praet:"fror", pII:"gefroren", gw:"s (vgl. Frost) vs. r (fror/gefroren) — Rhotazismus, s wurde über Verner zu z und im Westgerm. weiter zu r."}
+    ]},
+  { num:"III", formula:"i/e – a – u/o", origin:"Vokal + Nasal/Liquid + Konsonant",
+    verbs:[
+      {inf:"binden", praet:"band", pII:"gebunden"},
+      {inf:"singen", praet:"sang", pII:"gesungen"},
+      {inf:"werden", praet:"wurde (veraltet: ward)", pII:"geworden", gw:"þ/d-Wechsel — ahd. werdan/wart/wurtum, reliktartig noch im veralteten „ward" erkennbar."}
+    ]},
+  { num:"IV", formula:"e – a – o", origin:"Vokal + einfacher Resonant (m, n, l, r)",
+    verbs:[
+      {inf:"nehmen", praet:"nahm", pII:"genommen"},
+      {inf:"stehlen", praet:"stahl", pII:"gestohlen"},
+      {inf:"kommen", praet:"kam", pII:"gekommen"}
+    ]},
+  { num:"V", formula:"e – a – e", origin:"Vokal + einfacher Obstruent (nicht Nasal)",
+    verbs:[
+      {inf:"geben", praet:"gab", pII:"gegeben"},
+      {inf:"lesen", praet:"las", pII:"gelesen"},
+      {inf:"sitzen", praet:"saß", pII:"gesessen"}
+    ]},
+  { num:"VI", formula:"a – u – a", origin:"idg. o-Stufe",
+    verbs:[
+      {inf:"fahren", praet:"fuhr", pII:"gefahren"},
+      {inf:"tragen", praet:"trug", pII:"getragen"},
+      {inf:"schlagen", praet:"schlug", pII:"geschlagen"}
+    ]},
+  { num:"VII", formula:"(a/ā/au/ei…) – ie/i – wie Infinitiv", origin:"reduplizierende Klasse",
+    verbs:[
+      {inf:"heißen", praet:"hieß", pII:"geheißen"},
+      {inf:"schlafen", praet:"schlief", pII:"geschlafen"},
+      {inf:"fallen", praet:"fiel", pII:"gefallen"},
+      {inf:"halten", praet:"hielt", pII:"gehalten"}
+    ]}
+];
+
+function renderClassCards(){
+  const el = document.getElementById("classCards");
+  el.innerHTML = CLASSES.map(c => `
+    <div class="class-card">
+      <div class="head">
+        <span class="num">${c.num}</span>
+        <span class="formula">${c.formula}</span>
+      </div>
+      <div class="origin">${c.origin}</div>
+      ${c.verbs.map(v => `
+        <div class="verb-row">
+          <span class="inf">${v.inf}</span><span>${v.praet}</span><span>${v.pII}</span>
+        </div>
+      `).join("")}
+      ${c.verbs.filter(v => v.gw).map(v => `<div class="gw-note"><strong>Grammatischer Wechsel (${v.inf}):</strong> ${v.gw}</div>`).join("")}
+    </div>
+  `).join("");
+}
+
+/* ---- Trainer ---- */
+let deck = [];
+let idx = 0;
+let knownCount = 0;
+
+function buildDeck(){
+  const all = [];
+  CLASSES.forEach(c => c.verbs.forEach(v => all.push({...v, cls:c.num})));
+  for (let i = all.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [all[i], all[j]] = [all[j], all[i]];
+  }
+  return all;
+}
+
+function showCard(){
+  const card = document.getElementById("flashcard");
+  const rateRow = document.getElementById("rateRow");
+  card.classList.remove("flipped");
+  rateRow.classList.remove("shown");
+  document.getElementById("tapHint").style.display = "block";
+
+  const v = deck[idx];
+  document.getElementById("promptWord").textContent = v.inf;
+  document.getElementById("answerForms").textContent = `${v.praet} – ${v.pII}`;
+  document.getElementById("answerClass").textContent = `Ablautreihe ${v.cls}` + (v.gw ? " · grammatischer Wechsel" : "");
+  document.getElementById("deckStatus").textContent = `Karte ${idx + 1} von ${deck.length} · ${knownCount} gewusst`;
+}
+
+function flip(){
+  const card = document.getElementById("flashcard");
+  card.classList.add("flipped");
+  document.getElementById("tapHint").style.display = "none";
+  document.getElementById("rateRow").classList.add("shown");
+}
+
+function nextCard(know){
+  if (know) knownCount++;
+  idx++;
+  if (idx >= deck.length){
+    idx = 0;
+    deck = buildDeck();
+  }
+  showCard();
+}
+
+function resetDeck(){
+  deck = buildDeck();
+  idx = 0;
+  knownCount = 0;
+  showCard();
+}
+
+document.getElementById("flashcard").addEventListener("click", () => {
+  if (!document.getElementById("flashcard").classList.contains("flipped")) flip();
+});
+document.querySelectorAll(".rate-row button").forEach(btn => {
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    nextCard(btn.dataset.know === "1");
+  });
+});
+document.getElementById("resetBtn").addEventListener("click", resetDeck);
+
+/* ---- Tabs ---- */
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    tab.classList.add("active");
+    document.getElementById("panel-" + tab.dataset.panel).classList.add("active");
+  });
+});
+
+renderClassCards();
+resetDeck();
+</script>
+</body>
+</html>

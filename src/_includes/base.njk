@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ title }} · Historische Linguistik</title>
+<style>
+  :root{
+    --paper:#E7E1CE;
+    --paper-raised:#EFEADA;
+    --ink:#232F39;
+    --ink-soft:#57646E;
+    --ink-faint:#8A8F82;
+    --rust:#A0432B;
+    --rust-soft:#C97A5E;
+    --river:#2C6E7F;
+    --river-soft:#DCE9EA;
+    --line:#B9AF93;
+    --radius:10px;
+    --serif: Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--paper); color:var(--ink); font-family:var(--sans); line-height:1.5; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:560px; margin:0 auto; padding:22px 18px 60px;}
+  header.site{padding-bottom:18px; margin-bottom:22px; border-bottom:1px solid var(--line);}
+  header.site .kicker{font-size:0.8rem; color:var(--rust); margin:0 0 6px;}
+  h1{font-family:var(--serif); font-weight:600; font-size:clamp(1.4rem,6vw,1.8rem); margin:0 0 10px;}
+  header.site p{margin:0; color:var(--ink-soft); font-size:0.95rem;}
+  footer.site{color:var(--ink-faint); font-size:0.8rem; border-top:1px solid var(--line); padding-top:16px; margin-top:30px;}
+  footer.site a{color:var(--ink-faint);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  {{ content | safe }}
+  <footer class="site">
+    Lernpfad „Historische Linguistik" · <a href="https://github.com/S540d/Grundlagen_Linguistik">Quellcode auf GitHub</a>
+  </footer>
+</div>
+</body>
+</html>

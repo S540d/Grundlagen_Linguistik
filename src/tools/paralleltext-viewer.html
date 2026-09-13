@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paralleltext-Viewer</title>
+<style>
+  :root{
+    --paper:#E7E1CE;
+    --paper-raised:#EFEADA;
+    --ink:#232F39;
+    --ink-soft:#57646E;
+    --ink-faint:#8A8F82;
+    --rust:#A0432B;
+    --river:#2C6E7F;
+    --river-soft:#DCE9EA;
+    --line:#B9AF93;
+    --radius:10px;
+    --serif: Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--paper); color:var(--ink); font-family:var(--sans); line-height:1.5; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:480px; margin:0 auto; padding:22px 18px 60px;}
+  header{padding-bottom:18px; margin-bottom:18px; border-bottom:1px solid var(--line);}
+  header .kicker{font-size:0.8rem; color:var(--rust); margin:0 0 6px;}
+  h1{font-family:var(--serif); font-weight:600; font-size:clamp(1.4rem,6vw,1.8rem); margin:0 0 10px;}
+  header p{margin:0; color:var(--ink-soft); font-size:0.95rem;}
+
+  .tabs{display:flex; gap:6px; margin-bottom:18px;}
+  .tab{
+    flex:1; text-align:center; font-size:0.82rem; padding:8px 4px;
+    border:1px solid var(--line); border-radius:8px; cursor:pointer; background:var(--paper-raised);
+  }
+  .tab.active{background:var(--river); border-color:var(--river); color:#fff;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  .source-note{
+    font-size:0.82rem; color:var(--ink-soft);
+    background:var(--river-soft);
+    border-radius:8px;
+    padding:10px 12px;
+    margin-bottom:18px;
+  }
+  .source-note strong{color:var(--river);}
+
+  h2{font-family:var(--serif); font-size:1.1rem; font-weight:600; margin:20px 0 4px;}
+  h3{font-family:var(--serif); font-size:1rem; font-weight:600; margin:16px 0 4px; color:var(--ink-soft);}
+
+  .verse-line{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:12px 14px;
+    margin-bottom:10px;
+  }
+  .verse-line .orig{
+    font-family:var(--serif);
+    font-size:1.05rem;
+    margin-bottom:6px;
+  }
+  .verse-line .transl{
+    font-size:0.88rem;
+    color:var(--ink-soft);
+    padding-top:6px;
+    border-top:1px dashed var(--line);
+  }
+
+  .gloss-line{margin-bottom:16px;}
+  .gloss-words{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:6px;
+  }
+  .gloss-word{text-align:center;}
+  .gloss-word .w{font-family:var(--serif); font-size:1rem;}
+  .gloss-word .g{font-size:0.68rem; color:var(--rust); display:block; margin-top:2px;}
+  .gloss-transl{
+    font-size:0.88rem;
+    color:var(--ink-soft);
+    padding-top:8px;
+    border-top:1px dashed var(--line);
+  }
+
+  .vocab-list{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:12px 14px;
+    font-size:0.85rem;
+    margin-top:12px;
+  }
+  .vocab-list div{padding:4px 0;}
+  .vocab-list .term{font-family:var(--serif); color:var(--rust);}
+
+  footer{color:var(--ink-faint); font-size:0.8rem; border-top:1px solid var(--line); padding-top:16px; margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="kicker">Modul 11 &middot; Bauphase 6</p>
+    <h1>Paralleltext-Viewer</h1>
+    <p>Drei echte, gemeinfreie Primärtexte aus drei Sprachstufen &mdash; Original, Glossierung, Übersetzung.</p>
+  </header>
+
+  <div class="source-note">
+    <strong>Zur Quellenlage:</strong> Originaltext recherchiert (Hildebrandslied nach einer Edition der Sächsischen Akademie der Wissenschaften Leipzig; Nibelungenlied-Strophe nach mehreren übereinstimmenden Editionen; Lutherbibel nach dem Druck von 1545). Übersetzung und Wort-für-Wort-Glossierung sind eigene, unabhängig erstellte Fassungen — keine Übernahme fremder Übersetzungen, um deren Urheberrecht nicht zu verletzen.
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-panel="ahd">Ahd. (~830)</div>
+    <div class="tab" data-panel="mhg">Mhd. (~1200)</div>
+    <div class="tab" data-panel="enhd">Frühnhd. (1545)</div>
+  </div>
+
+  <!-- ================= AHD: HILDEBRANDSLIED ================= -->
+  <div class="panel active" id="panel-ahd">
+    <h2>Hildebrandslied, Zeilen 1–6</h2>
+    <p class="section-intro" style="color:var(--ink-soft); font-size:0.88rem;">Kassel, Murhardsche Bibliothek — Abschrift zweier Schreiber, um 830, nach älterer Vorlage. Vater Hildebrand und Sohn Hadubrand rüsten sich, ohne einander zu erkennen, zum Zweikampf.</p>
+
+    <div class="gloss-line">
+      <div class="gloss-words">
+        <div class="gloss-word"><span class="w">Ik</span><span class="g">ich</span></div>
+        <div class="gloss-word"><span class="w">gihorta</span><span class="g">hörte</span></div>
+        <div class="gloss-word"><span class="w">dat</span><span class="g">das/dass</span></div>
+        <div class="gloss-word"><span class="w">seggen,</span><span class="g">sagen</span></div>
+      </div>
+      <div class="gloss-transl">„Ich hörte das sagen,"</div>
+    </div>
+
+    <div class="gloss-line">
+      <div class="gloss-words">
+        <div class="gloss-word"><span class="w">dat</span><span class="g">dass</span></div>
+        <div class="gloss-word"><span class="w">sih</span><span class="g">sich</span></div>
+        <div class="gloss-word"><span class="w">urhettun</span><span class="g">als Kämpfer gegenübertraten</span></div>
+        <div class="gloss-word"><span class="w">ænon muotin,</span><span class="g">aus eigenem Entschluss</span></div>
+      </div>
+      <div class="gloss-transl">„dass sich zwei aus eigenem Entschluss zum Zweikampf stellten,"</div>
+    </div>
+
+    <div class="gloss-line">
+      <div class="gloss-words">
+        <div class="gloss-word"><span class="w">Hiltibrant</span><span class="g">Hildebrand</span></div>
+        <div class="gloss-word"><span class="w">enti</span><span class="g">und</span></div>
+        <div class="gloss-word"><span class="w">Hadubrant</span><span class="g">Hadubrand</span></div>
+        <div class="gloss-word"><span class="w">untar heriun tuem,</span><span class="g">zwischen zwei Heeren</span></div>
+      </div>
+      <div class="gloss-transl">„Hildebrand und Hadubrand, zwischen zwei Heeren —"</div>
+    </div>
+
+    <div class="gloss-line">
+      <div class="gloss-words">
+        <div class="gloss-word"><span class="w">sunufatarungo</span><span class="g">Sohn und Vater</span></div>
+        <div class="gloss-word"><span class="w">iro</span><span class="g">ihre</span></div>
+        <div class="gloss-word"><span class="w">saro</span><span class="g">Rüstung</span></div>
+        <div class="gloss-word"><span class="w">rihtun,</span><span class="g">richteten</span></div>
+      </div>
+      <div class="gloss-transl">„Sohn und Vater richteten ihre Rüstung,"</div>
+    </div>
+
+    <div class="gloss-line">
+      <div class="gloss-words">
+        <div class="gloss-word"><span class="w">garutun se</span><span class="g">bereiteten sie</span></div>
+        <div class="gloss-word"><span class="w">iro guðhamun,</span><span class="g">ihre Kampfgewänder</span></div>
+        <div class="gloss-word"><span class="w">gurtun sih</span><span class="g">gürteten sich</span></div>
+        <div class="gloss-word"><span class="w">iro suert ana,</span><span class="g">ihre Schwerter um</span></div>
+      </div>
+      <div class="gloss-transl">„bereiteten ihre Kampfgewänder, gürteten sich ihre Schwerter um,"</div>
+    </div>
+
+    <div class="gloss-line">
+      <div class="gloss-words">
+        <div class="gloss-word"><span class="w">helidos</span><span class="g">die Helden</span></div>
+        <div class="gloss-word"><span class="w">ubar ringa,</span><span class="g">über die Ringpanzer</span></div>
+        <div class="gloss-word"><span class="w">do sie</span><span class="g">als sie</span></div>
+        <div class="gloss-word"><span class="w">to dero hiltiu ritun.</span><span class="g">zu dem Kampf ritten</span></div>
+      </div>
+      <div class="gloss-transl">„die Helden, über die Ringpanzer — als sie zu dem Kampf ritten."</div>
+    </div>
+
+    <div class="vocab-list">
+      <div><span class="term">hiltiu</span> „Kampf" — steckt im Namen <em>Hiltibrant</em> selbst.</div>
+      <div><span class="term">helidos</span> → nhd. „Held", unverändert seit dem Ahd.</div>
+      <div><span class="term">Ik gihorta ðat seggen</span> — derselbe Satzbau wie nhd. „Ich hörte sagen", über 1200 Jahre stabil.</div>
+    </div>
+  </div>
+
+  <!-- ================= MHG: NIBELUNGENLIED ================= -->
+  <div class="panel" id="panel-mhg">
+    <h2>Nibelungenlied, 1. Strophe</h2>
+    <p class="section-intro" style="color:var(--ink-soft); font-size:0.88rem;">Um 1200, Verfasser unbekannt. Eröffnungsstrophe, die das ganze Epos als „alte mære" (alte Erzählung) ankündigt.</p>
+
+    <div class="verse-line">
+      <div class="orig">Uns ist in alten mæren wunders vil geseit</div>
+      <div class="transl">Uns wird in alten Erzählungen viel Erstaunliches berichtet</div>
+    </div>
+    <div class="verse-line">
+      <div class="orig">von helden lobebæren, von grôzer arebeit,</div>
+      <div class="transl">von lobenswerten Helden, von großer Mühsal,</div>
+    </div>
+    <div class="verse-line">
+      <div class="orig">von fröuden, hôchgezîten, von weinen und von klagen,</div>
+      <div class="transl">von Freuden, Festen, von Weinen und von Klagen —</div>
+    </div>
+    <div class="verse-line">
+      <div class="orig">von küener recken strîten muget ir nu wunder hœren sagen.</div>
+      <div class="transl">von kühner Kämpfer Streit könnt ihr jetzt Erstaunliches erzählen hören.</div>
+    </div>
+
+    <div class="vocab-list">
+      <div><span class="term">mæren</span> „Erzählungen, Kunde" — steckt im nhd. „Märchen" (Verkleinerungsform).</div>
+      <div><span class="term">arebeit</span> heißt hier „Mühsal, Not", nicht „Arbeit" im heutigen Sinn — Bedeutungswandel (Modul 8).</div>
+      <div><span class="term">recken</span> „Krieger, Kämpfer" — heute nur noch in „Hüne und Recke" o. ä. erhalten.</div>
+    </div>
+  </div>
+
+  <!-- ================= ENHD: LUTHERBIBEL 1545 ================= -->
+  <div class="panel" id="panel-enhd">
+    <h2>Lutherbibel, Ausgabe letzter Hand (1545)</h2>
+    <p class="section-intro" style="color:var(--ink-soft); font-size:0.88rem;">„Biblia / das ist / die gantze Heilige Schrifft Deudsch", Wittenberg 1545. Zwei kurze, weithin bekannte Stellen zum Vergleich mit dem heutigen Standard.</p>
+
+    <h3>Vaterunser (Matthäus 6, 9–13)</h3>
+    <div class="verse-line">
+      <div class="orig">Vnser Vater in dem Himel. Dein Name werde geheiliget.</div>
+      <div class="transl">Unser Vater im Himmel. Dein Name werde geheiligt.</div>
+    </div>
+    <div class="verse-line">
+      <div class="orig">Dein Reich kome. Dein Wille geschehe / auff Erden / wie im Himel.</div>
+      <div class="transl">Dein Reich komme. Dein Wille geschehe auf Erden wie im Himmel.</div>
+    </div>
+    <div class="verse-line">
+      <div class="orig">Vnser teglich Brot gib vns heute.</div>
+      <div class="transl">Unser tägliches Brot gib uns heute.</div>
+    </div>
+    <div class="verse-line">
+      <div class="orig">Vnd vergib vns vnsere Schulde / wie wir vnsern Schüldigern vergeben.</div>
+      <div class="transl">Und vergib uns unsere Schuld, wie wir unseren Schuldigern vergeben.</div>
+    </div>
+    <div class="verse-line">
+      <div class="orig">Vnd füre vns nicht in versuchung. Sondern erlöse vns von dem vbel.</div>
+      <div class="transl">Und führe uns nicht in Versuchung, sondern erlöse uns von dem Übel.</div>
+    </div>
+
+    <h3>Genesis 1, 1–3</h3>
+    <div class="verse-line">
+      <div class="orig">Am anfang schuff Gott Himel vnd Erden.</div>
+      <div class="transl">Am Anfang schuf Gott Himmel und Erde.</div>
+    </div>
+    <div class="verse-line">
+      <div class="orig">Vnd die Erde war wüst vnd leer / vnd es war finster auff der Tieffe / Vnd der Geist Gottes schwebet auff dem Wasser.</div>
+      <div class="transl">Und die Erde war wüst und leer, und es war finster über der Tiefe, und der Geist Gottes schwebte über dem Wasser.</div>
+    </div>
+    <div class="verse-line">
+      <div class="orig">Vnd Gott sprach / Es werde Liecht / Vnd es ward Liecht.</div>
+      <div class="transl">Und Gott sprach: Es werde Licht. Und es ward Licht.</div>
+    </div>
+
+    <div class="vocab-list">
+      <div><span class="term">Vnser / vnd / auff</span> — v/u waren im Fraktursatz noch nicht als eigene Buchstaben getrennt; „vnd" = „und", „auff" = „auf" (Doppel-f statt Doppel-p, eine damals übliche Schreibvariante).</div>
+      <div><span class="term">schuff / Liecht / ward</span> — Konsonanten- und Vokalstand liegen dem Neuhochdeutschen schon sehr nahe; die zweite Lautverschiebung (Modul 5) ist hier längst abgeschlossen.</div>
+    </div>
+  </div>
+
+  <footer>
+    Modul 11, vertieft aus 4a &middot; Datengrundlage Abschnitt 6 (nur gemeinfreie Quellen) &middot; Übersetzungen und Glossierung eigenständig erstellt, nicht aus Sekundärliteratur übernommen. Als Nächstes laut Roadmap: Etymologie-Graph (Modul 8) — Datenbasis auf Grimm, Lexer und Kluge 1883 zu prüfen.
+  </footer>
+
+</div>
+
+<script>
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    tab.classList.add("active");
+    document.getElementById("panel-" + tab.dataset.panel).classList.add("active");
+  });
+});
+</script>
+</body>
+</html>

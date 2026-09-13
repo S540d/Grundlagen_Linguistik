@@ -1,0 +1,25 @@
+{
+  "name": "grundlagen_linguistik",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "eleventy",
+    "serve": "eleventy --serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/S540d/Grundlagen_Linguistik.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/S540d/Grundlagen_Linguistik/issues"
+  },
+  "homepage": "https://github.com/S540d/Grundlagen_Linguistik#readme",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.6"
+  }
+}

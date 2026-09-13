@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sprachstammbaum</title>
+<style>
+  :root{
+    --paper:#E7E1CE;
+    --paper-raised:#EFEADA;
+    --ink:#232F39;
+    --ink-soft:#57646E;
+    --ink-faint:#8A8F82;
+    --rust:#A0432B;
+    --rust-soft:#C97A5E;
+    --river:#2C6E7F;
+    --river-soft:#DCE9EA;
+    --line:#B9AF93;
+    --radius:10px;
+    --serif: Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--paper); color:var(--ink); font-family:var(--sans); line-height:1.5; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:480px; margin:0 auto; padding:22px 18px 60px;}
+  header{padding-bottom:18px; margin-bottom:22px; border-bottom:1px solid var(--line);}
+  header .kicker{font-size:0.8rem; color:var(--rust); margin:0 0 6px;}
+  h1{font-family:var(--serif); font-weight:600; font-size:clamp(1.4rem,6vw,1.8rem); margin:0 0 10px;}
+  header p{margin:0; color:var(--ink-soft); font-size:0.95rem;}
+  h2{font-family:var(--serif); font-size:1.15rem; font-weight:600; margin:0 0 4px;}
+  .section-intro{color:var(--ink-soft); font-size:0.9rem; margin:0 0 16px;}
+
+  .anchor-word{
+    background:var(--river-soft);
+    border-radius:8px;
+    padding:12px 14px;
+    font-size:0.88rem;
+    margin-bottom:20px;
+  }
+  .anchor-word strong{color:var(--river);}
+
+  .tree{list-style:none; margin:0; padding:0;}
+  .tree li{position:relative; margin:0; padding:0;}
+  .node{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    padding:10px 12px;
+    margin:4px 0;
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:8px;
+    cursor:pointer;
+  }
+  .node:hover{border-color:var(--river);}
+  .node.leaf{cursor:default;}
+  .node.leaf:hover{border-color:var(--line);}
+  .node .toggle{
+    font-size:0.7rem;
+    color:var(--ink-faint);
+    width:12px;
+    flex-shrink:0;
+  }
+  .node .name{font-family:var(--serif); font-size:1rem;}
+  .node .span{font-size:0.76rem; color:var(--ink-faint); margin-left:auto; white-space:nowrap;}
+  .children{
+    list-style:none;
+    margin:0 0 0 18px;
+    padding-left:12px;
+    border-left:1px dashed var(--line);
+    display:none;
+  }
+  .children.open{display:block;}
+  .detail{
+    display:none;
+    font-size:0.86rem;
+    color:var(--ink-soft);
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:10px 12px;
+    margin:2px 0 8px;
+  }
+  .detail.open{display:block;}
+  .detail .word{color:var(--rust); font-family:var(--serif); font-style:italic;}
+
+  footer{color:var(--ink-faint); font-size:0.8rem; border-top:1px solid var(--line); padding-top:16px; margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="kicker">Modul 2 &middot; Bauphase 5</p>
+    <h1>Sprachstammbaum</h1>
+    <p>Vom Indogermanischen über das Germanische bis zum Neuhochdeutschen &mdash; zum Antippen, nicht zum Durchlesen in einem Zug.</p>
+  </header>
+
+  <div class="anchor-word">
+    <strong>Leitwort:</strong> „Vater" begleitet den Baum durch alle Zweige &mdash; dieselbe idg. Wurzel, die das Einstiegsrätsel aus Modul 0 (Vater/Bruder) aufgelöst hat, s. Abschnitt 4.1.
+  </div>
+
+  <section>
+    <ul class="tree" id="tree"></ul>
+  </section>
+
+  <footer>
+    Modul 2 &middot; unabhängig von Bauphase 2–4, s. Abschnitt 7 &middot; Zeitangaben sind grobe Orientierung, keine scharfen Grenzen. Als Nächstes laut Roadmap: Ablautreihen-Trainer (Modul 7).
+  </footer>
+
+</div>
+
+<script>
+/* ======================================================================
+   Baumdaten. "word" markiert die jeweilige Reflexform des Leitworts
+   "Vater" auf dieser Stufe, wo gesichert rekonstruierbar/belegt.
+   ====================================================================== */
+const TREE = {
+  name:"Indogermanisch (Urindogermanisch)", span:"ca. 4500–2500 v. Chr. (Rekonstruktion)",
+  word:"*ph₂tḗr", note:"Rekonstruierte idg. Grundsprache — keine Schriftzeugnisse, nur über die komparative Methode erschlossen (s. Modul 2, Abschnitt 2).",
+  children:[
+    { name:"Germanisch (Urgermanisch)", span:"ca. 500 v. Chr. – 200 n. Chr.", word:"*fadēr",
+      note:"Entsteht durch die erste Lautverschiebung (Grimm/Verner, Modul 3) aus dem Idg.",
+      children:[
+        { name:"Nordgermanisch", span:"ab ca. 200 n. Chr.", word:"faðir (altnord.)",
+          note:"→ Isländisch, Norwegisch, Schwedisch, Dänisch, Färöisch.", children:[] },
+        { name:"Ostgermanisch", span:"ab ca. 200 n. Chr., ausgestorben", word:"fadar (got.)",
+          note:"Einziger direkt überlieferter Vertreter: Gotisch (Bibelübersetzung des Wulfila, 4. Jh.). Keine lebenden Nachfahren.", children:[] },
+        { name:"Westgermanisch", span:"ab ca. 200 n. Chr.", word:"*fader",
+          note:"Spaltet sich weiter in einen anglo-friesischen und einen kontinentalen Zweig.",
+          children:[
+            { name:"Anglo-Friesisch", span:"ab ca. 450 n. Chr.", word:"fæder (altengl.)",
+              note:"→ Englisch, Friesisch. Nimmt an der zweiten Lautverschiebung nicht teil — deshalb engl. father mit unverschobenem d/th-Reflex statt Vater.", children:[] },
+            { name:"Kontinentalwestgermanisch", span:"ab ca. 450 n. Chr.", word:"*fader",
+              note:"Die Region, in der die zweite Lautverschiebung ansetzt (Modul 5) — mit gestufter geographischer Reichweite.",
+              children:[
+                { name:"Niederdeutsch", span:"Altsächsisch ab ca. 800", word:"fader (asächs.)",
+                  note:"→ Plattdeutsch. Liegt nördlich der Benrather Linie — macht die zweite Verschiebung nicht mit.", children:[] },
+                { name:"Niederländisch", span:"Altniederfränkisch ab ca. 900", word:"vader (nl.)",
+                  note:"Ebenfalls nördlich/außerhalb der zweiten Verschiebung.", children:[] },
+                { name:"Hochdeutsch", span:"Althochdeutsch ab ca. 750", word:"fater (ahd.)",
+                  note:"Einzige Gruppe, die die zweite Lautverschiebung durchläuft — definiert die Grenze zu ihren Vorstufen (s. Abschnitt 3).",
+                  children:[
+                    { name:"Mittelhochdeutsch", span:"ca. 1050–1350", word:"vater (mhd.)", note:"Modul 4.", children:[] },
+                    { name:"Frühneuhochdeutsch", span:"ca. 1350–1650", word:"vater", note:"Modul 4.", children:[] },
+                    { name:"Neuhochdeutsch", span:"ab ca. 1650", word:"Vater", note:"Heutige Standardsprache.", children:[] }
+                  ]}
+              ]}
+          ]}
+      ]},
+    { name:"Weitere idg. Zweige (Auswahl)", span:"zum Vergleich, nicht Teil des Lernpfads", word:null,
+      note:"Zeigt, dass „Vater" kein germanisches Einzelwort ist, sondern ein gemeinsames idg. Erbe mit eigener Lautentwicklung pro Zweig.",
+      children:[
+        { name:"Italisch → Latein/Romanisch", span:"", word:"pater (lat.)", note:"Ohne erste Lautverschiebung: p bleibt p, t bleibt t.", children:[] },
+        { name:"Griechisch", span:"", word:"patḗr", note:"Ebenfalls ohne germanische Lautverschiebungen.", children:[] },
+        { name:"Indoiranisch", span:"", word:"pitṛ (sanskr.)", note:"Östlichster hier gezeigter Zweig, eigener Lautwandel (Ablaut e→i u. a.).", children:[] }
+      ]}
+  ]
+};
+
+function buildNode(node, depth){
+  const li = document.createElement("li");
+  const hasChildren = node.children && node.children.length > 0;
+
+  const row = document.createElement("div");
+  row.className = "node" + (hasChildren ? "" : " leaf");
+  row.innerHTML = `
+    <span class="toggle">${hasChildren ? "▸" : "·"}</span>
+    <span class="name">${node.name}</span>
+    <span class="span">${node.span || ""}</span>
+  `;
+
+  const detail = document.createElement("div");
+  detail.className = "detail";
+  detail.innerHTML = `
+    ${node.word ? `„Vater" hier: <span class="word">${node.word}</span><br>` : ""}
+    ${node.note}
+  `;
+
+  let childUl = null;
+  if (hasChildren){
+    childUl = document.createElement("ul");
+    childUl.className = "children";
+    node.children.forEach(c => childUl.appendChild(buildNode(c, depth + 1)));
+  }
+
+  row.addEventListener("click", () => {
+    detail.classList.toggle("open");
+    const toggle = row.querySelector(".toggle");
+    if (hasChildren){
+      childUl.classList.toggle("open");
+      toggle.textContent = childUl.classList.contains("open") ? "▾" : "▸";
+    }
+  });
+
+  li.appendChild(row);
+  li.appendChild(detail);
+  if (childUl) li.appendChild(childUl);
+  return li;
+}
+
+const rootUl = document.getElementById("tree");
+rootUl.appendChild(buildNode(TREE, 0));
+// Wurzelknoten und erste Ebene direkt geöffnet, Rest zum Entdecken
+rootUl.querySelector(".node").click();
+</script>
+</body>
+</html>

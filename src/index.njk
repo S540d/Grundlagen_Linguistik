@@ -1,0 +1,100 @@
+---
+layout: base.njk
+title: Übersicht
+---
+<header class="site">
+  <p class="kicker">Lernpfad</p>
+  <h1>Historische Linguistik</h1>
+  <p>Deutsche Sprachgeschichte vom Indogermanischen bis zum Neuhochdeutschen — interaktive Werkzeuge, gruppiert nach Bauphase.</p>
+</header>
+
+<style>
+  .phase{margin:0 0 28px;}
+  .phase h2{font-family:var(--serif); font-size:1.05rem; font-weight:600; margin:0 0 10px; color:var(--ink-soft);}
+  .tool{
+    display:block;
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:14px 16px;
+    margin:0 0 10px;
+    text-decoration:none;
+    color:inherit;
+  }
+  .tool:hover{border-color:var(--river);}
+  .tool.disabled{opacity:0.55; cursor:default;}
+  .tool.disabled:hover{border-color:var(--line);}
+  .tool .name{font-family:var(--serif); font-weight:600; font-size:1rem; color:var(--ink);}
+  .tool .modul{font-size:0.72rem; color:var(--rust); text-transform:uppercase; letter-spacing:0.02em;}
+  .tool .desc{font-size:0.88rem; color:var(--ink-soft); margin-top:4px;}
+</style>
+
+<section class="phase">
+  <h2>Bauphase 1–2 · noch offen</h2>
+  <span class="tool disabled">
+    <span class="modul">Modul 0</span>
+    <div class="name">Lautzeichen-Tafel</div>
+    <div class="desc">Konsonantengitter, Vokaltrapez, historische Rekonstruktionszeichen — in Arbeit.</div>
+  </span>
+  <span class="tool disabled">
+    <span class="modul">Modul 3</span>
+    <div class="name">Grimm & Verner</div>
+    <div class="desc">Regelwerkzeug zur ersten Lautverschiebung — in Arbeit.</div>
+  </span>
+  <span class="tool disabled">
+    <span class="modul">Modul 4</span>
+    <div class="name">Sprachstufen-Zeitstrahl</div>
+    <div class="desc">Sechs Sprachstufen von Urindogermanisch bis Neuhochdeutsch — in Arbeit.</div>
+  </span>
+  <span class="tool disabled">
+    <span class="modul">Modul 12</span>
+    <div class="name">Wörterbuch-Kompass</div>
+    <div class="desc">14 Wörterbücher/Korpora mit Lizenzstatus — in Arbeit.</div>
+  </span>
+</section>
+
+<section class="phase">
+  <h2>Bauphase 3 · Zweite Lautverschiebung</h2>
+  <a class="tool" href="/tools/zweite-lautverschiebung.html">
+    <span class="modul">Modul 5</span>
+    <div class="name">Zweite Lautverschiebung & Isoglossenkarte</div>
+    <div class="desc">Regelwerkzeug für Gmc. p/t/k/d, Benrather/Speyerer Linie, Rheinischer Fächer, 4 Übungsaufgaben.</div>
+  </a>
+</section>
+
+<section class="phase">
+  <h2>Bauphase 4 · Rückwärts-Rekonstruktion</h2>
+  <a class="tool" href="/tools/rueckwaerts-lautverschiebung.html">
+    <span class="modul">Modul 5</span>
+    <div class="name">Rückwärts-Lautverschiebungstool</div>
+    <div class="desc">Nhd. Wort → mögliche germ./idg. Vorformen; bricht bei Lehnwörtern bewusst ab, statt zu raten.</div>
+  </a>
+</section>
+
+<section class="phase">
+  <h2>Bauphase 5 · Stammbaum & Ablaut</h2>
+  <a class="tool" href="/tools/sprachstammbaum.html">
+    <span class="modul">Modul 2</span>
+    <div class="name">Sprachstammbaum</div>
+    <div class="desc">Klickbarer Baum Idg. → Germ. → Hochdeutsch, „Vater" als Leitwort durch alle Zweige.</div>
+  </a>
+  <a class="tool" href="/tools/ablautreihen-trainer.html">
+    <span class="modul">Modul 7</span>
+    <div class="name">Ablautreihen-Trainer</div>
+    <div class="desc">Referenz zu den 7 starken Ablautreihen + Karteikarten-Trainer.</div>
+  </a>
+</section>
+
+<section class="phase">
+  <h2>Bauphase 6 · Texte & Etymologie</h2>
+  <a class="tool" href="/tools/paralleltext-viewer.html">
+    <span class="modul">Modul 11</span>
+    <div class="name">Paralleltext-Viewer</div>
+    <div class="desc">Hildebrandslied/Nibelungenlied/Lutherbibel 1545 im Vergleich, eigene Übersetzung.</div>
+  </a>
+  <a class="tool" href="/tools/etymologie-graph.html">
+    <span class="modul">Modul 8</span>
+    <div class="name">Etymologie-Graph</div>
+    <div class="desc">Interaktiver Graph zu den Wortfamilien „Vater" und „Apfel", Belege aus dem ¹DWB.</div>
+  </a>
+</section>

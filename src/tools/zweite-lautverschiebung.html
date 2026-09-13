@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zweite Lautverschiebung &amp; Isoglossenkarte</title>
+<style>
+  :root{
+    --paper:#E7E1CE;
+    --paper-raised:#EFEADA;
+    --ink:#232F39;
+    --ink-soft:#57646E;
+    --ink-faint:#8A8F82;
+    --rust:#A0432B;
+    --rust-soft:#C97A5E;
+    --river:#2C6E7F;
+    --river-soft:#DCE9EA;
+    --line:#B9AF93;
+    --nd:#D8D2BB;
+    --md:#D8C39D;
+    --od:#C79E68;
+    --radius:10px;
+    --serif: Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{
+    max-width:480px;
+    margin:0 auto;
+    padding:22px 18px 60px;
+  }
+  header{
+    padding-bottom:18px;
+    margin-bottom:22px;
+    border-bottom:1px solid var(--line);
+  }
+  header .kicker{
+    font-size:0.8rem;
+    color:var(--rust);
+    letter-spacing:0.02em;
+    margin:0 0 6px;
+  }
+  h1{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(1.5rem,6vw,1.9rem);
+    margin:0 0 10px;
+    color:var(--ink);
+  }
+  header p{
+    margin:0;
+    color:var(--ink-soft);
+    font-size:0.95rem;
+  }
+  h2{
+    font-family:var(--serif);
+    font-size:1.25rem;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .section-intro{
+    color:var(--ink-soft);
+    font-size:0.92rem;
+    margin:0 0 16px;
+  }
+  section{
+    margin-bottom:42px;
+  }
+
+  /* ---- Regelwerkzeug ---- */
+  .chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:16px;
+  }
+  .chip{
+    font-family:var(--sans);
+    font-size:0.88rem;
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    color:var(--ink);
+    padding:7px 13px;
+    border-radius:999px;
+    cursor:pointer;
+  }
+  .chip:hover{border-color:var(--river);}
+  .chip.active{
+    background:var(--river);
+    border-color:var(--river);
+    color:#fff;
+  }
+  .rule-card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px;
+  }
+  .rule-forms{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:14px;
+  }
+  .form-block{
+    text-align:center;
+  }
+  .form-block .lang{
+    display:block;
+    font-size:0.72rem;
+    color:var(--ink-faint);
+    margin-bottom:3px;
+  }
+  .form-block .word{
+    font-family:var(--serif);
+    font-size:1.25rem;
+  }
+  .arrow{
+    color:var(--rust);
+    font-size:1.3rem;
+  }
+  .result-word{
+    color:var(--rust);
+    font-weight:600;
+  }
+  .rule-formula{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:1rem;
+    background:var(--river-soft);
+    border-radius:6px;
+    padding:10px 12px;
+    margin-bottom:10px;
+  }
+  .rule-note{
+    font-size:0.88rem;
+    color:var(--ink-soft);
+    margin:0;
+  }
+
+  /* ---- Karte ---- */
+  .map-shell{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:14px 14px 8px;
+    margin-bottom:14px;
+  }
+  .map-caption{
+    font-size:0.76rem;
+    color:var(--ink-faint);
+    text-align:center;
+    margin:8px 0 4px;
+  }
+  svg{display:block; width:100%; height:auto;}
+  .region-band{cursor:pointer; transition:opacity .15s ease;}
+  .region-band:hover{opacity:0.85;}
+  .region-band.selected{stroke:var(--rust); stroke-width:2.5;}
+  .isogloss{
+    fill:none;
+    stroke:var(--ink);
+    stroke-width:1.6;
+    stroke-dasharray:1,4;
+    stroke-linecap:round;
+  }
+  .facher-line{
+    fill:none;
+    stroke:var(--rust-soft);
+    stroke-width:1.1;
+  }
+  .city-dot{fill:var(--ink); }
+  .map-label{
+    font-family:var(--sans);
+    font-size:9px;
+    fill:var(--ink-soft);
+  }
+  .map-label-line{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:9.5px;
+    fill:var(--ink);
+  }
+  .region-pills{
+    display:flex;
+    gap:8px;
+    margin-bottom:16px;
+  }
+  .region-pill{
+    flex:1;
+    font-family:var(--sans);
+    font-size:0.86rem;
+    padding:9px 6px;
+    text-align:center;
+    border-radius:8px;
+    border:1px solid var(--line);
+    cursor:pointer;
+    background:var(--paper);
+  }
+  .region-pill.selected{
+    border-color:var(--rust);
+    background:var(--rust);
+    color:#fff;
+  }
+  table.word-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:0.9rem;
+  }
+  table.word-table th{
+    text-align:left;
+    font-weight:600;
+    font-size:0.76rem;
+    color:var(--ink-faint);
+    padding:5px 6px;
+    border-bottom:1px solid var(--line);
+  }
+  table.word-table td{
+    padding:8px 6px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  table.word-table td.form{
+    font-family:var(--serif);
+  }
+  table.word-table td.form.shifted{color:var(--rust); font-weight:600;}
+  table.word-table td.boundary{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+  }
+
+  /* ---- Uebungen ---- */
+  .ex-card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px;
+    margin-bottom:12px;
+  }
+  .ex-q{
+    font-size:0.95rem;
+    margin:0 0 10px;
+  }
+  .ex-q .num{
+    color:var(--rust);
+    font-family:var(--serif);
+    font-weight:600;
+    margin-right:6px;
+  }
+  .reveal-btn{
+    font-family:var(--sans);
+    font-size:0.82rem;
+    background:none;
+    border:1px solid var(--river);
+    color:var(--river);
+    padding:6px 12px;
+    border-radius:999px;
+    cursor:pointer;
+  }
+  .ex-solution{
+    display:none;
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px dashed var(--line);
+    font-size:0.9rem;
+    color:var(--ink);
+  }
+  .ex-solution.shown{display:block;}
+  .ex-card.solved .reveal-btn{display:none;}
+
+  footer{
+    color:var(--ink-faint);
+    font-size:0.8rem;
+    border-top:1px solid var(--line);
+    padding-top:16px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .region-band, .reveal-btn, .chip{transition:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="kicker">Modul 5 &middot; Bauphase 3</p>
+    <h1>Die zweite (hochdeutsche) Lautverschiebung</h1>
+    <p>Ein Regelwerkzeug für Gmc. <em>p, t, k, d</em> &mdash; und eine Karte, die zeigt, warum kein Dialekt die Verschiebung gleich weit mitgemacht hat.</p>
+  </header>
+
+  <section id="regelwerkzeug">
+    <h2>Regelwerkzeug</h2>
+    <p class="section-intro">Wähle ein Wort. Die Konsonantenposition entscheidet, ob Gmc. <em>p/t/k</em> zur Affrikate oder zur Frikative wird &mdash; Gmc. <em>d</em> kennt nur eine Regel.</p>
+
+    <div class="chips" id="wordChips"></div>
+    <div class="rule-card" id="ruleCard"></div>
+  </section>
+
+  <section id="karte">
+    <h2>Isoglossenkarte</h2>
+    <p class="section-intro">Schematische Karte, nicht maßstabsgetreu. Benrather Linie trennt Nieder- von Mitteldeutsch, Speyerer Linie Mittel- von Oberdeutsch &mdash; dazwischen fächert der Rheinische Fächer die Übergänge weiter auf.</p>
+
+    <div class="map-shell">
+      <svg viewBox="0 0 340 500" role="img" aria-label="Schematische Karte mit drei Dialektregionen">
+        <!-- Niederdeutsch band -->
+        <path class="region-band" data-region="nd" fill="var(--nd)" stroke="var(--line)" stroke-width="1"
+          d="M40,30 L300,30 L300,175 Q220,195 170,178 Q110,158 40,182 Z"/>
+        <!-- Mitteldeutsch band -->
+        <path class="region-band" data-region="md" fill="var(--md)" stroke="var(--line)" stroke-width="1"
+          d="M40,182 Q110,158 170,178 Q220,195 300,175 L300,330 Q210,352 150,332 Q95,314 40,336 Z"/>
+        <!-- Oberdeutsch band -->
+        <path class="region-band" data-region="od" fill="var(--od)" stroke="var(--line)" stroke-width="1"
+          d="M40,336 Q95,314 150,332 Q210,352 300,330 L300,460 L40,460 Z"/>
+
+        <!-- Benrather Linie -->
+        <path class="isogloss" d="M40,182 Q110,158 170,178 Q220,195 300,175"/>
+        <!-- Speyerer Linie -->
+        <path class="isogloss" d="M40,336 Q95,314 150,332 Q210,352 300,330"/>
+
+        <!-- Rheinischer Faecher -->
+        <path class="facher-line" d="M95,190 Q100,240 88,300"/>
+        <path class="facher-line" d="M110,186 Q118,240 112,318"/>
+        <path class="facher-line" d="M128,183 Q136,240 140,328"/>
+
+        <!-- Cities -->
+        <circle class="city-dot" cx="95" cy="62" r="2.6"/>
+        <text class="map-label" x="101" y="65">Hamburg</text>
+
+        <circle class="city-dot" cx="88" cy="188" r="2.6"/>
+        <text class="map-label" x="94" y="191">Köln (Benrath)</text>
+
+        <circle class="city-dot" cx="192" cy="222" r="2.6"/>
+        <text class="map-label" x="198" y="225">Kassel</text>
+
+        <circle class="city-dot" cx="118" cy="333" r="2.6"/>
+        <text class="map-label" x="124" y="336">Speyer</text>
+
+        <circle class="city-dot" cx="212" cy="418" r="2.6"/>
+        <text class="map-label" x="218" y="421">München</text>
+
+        <text class="map-label-line" x="184" y="150">Benrather Linie</text>
+        <text class="map-label-line" x="176" y="310">Speyerer Linie</text>
+        <text class="map-label" x="60" y="255" transform="rotate(-8 60 255)">Rhein. Fächer</text>
+
+        <text class="map-label" x="140" y="105" fill="#57646E">Niederdeutsch</text>
+        <text class="map-label" x="150" y="255" fill="#57646E">Mitteldeutsch</text>
+        <text class="map-label" x="150" y="400" fill="#57646E">Oberdeutsch</text>
+      </svg>
+      <p class="map-caption">Tippe eine Region auf der Karte oder unten an</p>
+    </div>
+
+    <div class="region-pills" id="regionPills">
+      <div class="region-pill" data-region="nd">Niederdeutsch</div>
+      <div class="region-pill" data-region="md">Mitteldeutsch</div>
+      <div class="region-pill" data-region="od">Oberdeutsch</div>
+    </div>
+
+    <table class="word-table">
+      <thead>
+        <tr><th>Wort</th><th>Form hier</th><th>Grenzlinie</th></tr>
+      </thead>
+      <tbody id="wordTableBody"></tbody>
+    </table>
+  </section>
+
+  <section id="uebungen">
+    <h2>Übungsaufgaben</h2>
+    <p class="section-intro">Aus Abschnitt 4.2 &mdash; erst selbst herleiten, dann aufdecken.</p>
+    <div id="exercises"></div>
+  </section>
+
+  <footer>
+    Modul 5, Abschnitt 4.2 &middot; Regel-Logik getrennt von der Darstellung gehalten (s. Abschnitt 9) &middot; nächster Schritt laut Roadmap: Bauphase 4, Rückwärts-Lautverschiebungstool.
+  </footer>
+
+</div>
+
+<script>
+/* ======================================================================
+   REGEL-LOGIK (getrennt von der Darstellung, s. Abschnitt 9 des Plans)
+   ====================================================================== */
+
+const CONSONANT_RULES = {
+  p: { affricate: "pf", fricative: "f" },
+  t: { affricate: "ts (z)", fricative: "s" },
+  k: { affricate: "kx (ch)", fricative: "ch" },
+  d: { special: "t" }
+};
+
+function formula(consonant, position){
+  if (consonant === "d") return "Gmc. *d* → hd. *t* (in jeder Position)";
+  const target = CONSONANT_RULES[consonant][position];
+  const ctx = position === "affricate"
+    ? "Anlaut / Gemination / nach Konsonant"
+    : "intervokalisch";
+  return `Gmc. *${consonant}* (${ctx}) → hd. *${target}*`;
+}
+
+const WORDS = [
+  { id:"pfeffer",  cognateLang:"engl./niederl.", cognate:"pepper / peper", consonant:"p", position:"affricate",
+    nhd:"Pfeffer", note:"p im Wortanlaut → Affrikate pf." },
+  { id:"apfel",    cognateLang:"engl./niederl.", cognate:"apple / appel",  consonant:"p", position:"affricate",
+    nhd:"Apfel",   note:"p nach Konsonant/in Gemination → ebenfalls Affrikate, wie im Anlaut." },
+  { id:"pfund",    cognateLang:"engl./niederl.", cognate:"pound / pond",   consonant:"p", position:"affricate",
+    nhd:"Pfund",   note:"Gleiches Muster wie bei Pfeffer: Anlaut-p → pf." },
+  { id:"offen",    cognateLang:"engl.", cognate:"open", consonant:"p", position:"fricative",
+    nhd:"offen",   note:"p zwischen Vokalen → Frikative f, keine Affrikate." },
+  { id:"schlafen", cognateLang:"engl./niederl.", cognate:"sleep / slapen", consonant:"p", position:"fricative",
+    nhd:"schlafen", note:"Auch hier: intervokalisches p → f." },
+  { id:"zeit",     cognateLang:"engl.", cognate:"tide", consonant:"t", position:"affricate",
+    nhd:"Zeit",    note:"t im Anlaut → Affrikate ts, geschrieben z." },
+  { id:"herz",     cognateLang:"engl.", cognate:"heart", consonant:"t", position:"affricate",
+    nhd:"Herz",    note:"Sonderfall: t nach r verhält sich wie im Anlaut, nicht intervokalisch — daher z/ts statt s." },
+  { id:"wasser",   cognateLang:"engl.", cognate:"water", consonant:"t", position:"fricative",
+    nhd:"Wasser",  note:"t zwischen Vokalen → Frikative s (hier als ss geschrieben)." },
+  { id:"machen",   cognateLang:"engl./niederl.", cognate:"make / maken", consonant:"k", position:"fricative",
+    nhd:"machen",  note:"k zwischen Vokalen → Frikative ch." },
+  { id:"tag",      cognateLang:"engl./niederl.", cognate:"day / dag", consonant:"d", position:"special",
+    nhd:"Tag",     note:"d verschiebt sich unabhängig von der Position immer zu t." }
+];
+
+const DIALECT_WORDS = [
+  { key:"apfel",  label:"Apfel",  nd:"Appel", md:"Appel",               od:"Apfel",  boundary:"Speyerer Linie" },
+  { key:"pfund",  label:"Pfund",  nd:"Pund",  md:"Pund",                od:"Pfund",  boundary:"Speyerer Linie" },
+  { key:"machen", label:"machen", nd:"maken", md:"machen",              od:"machen", boundary:"Benrather Linie" },
+  { key:"wasser", label:"Wasser", nd:"Water", md:"Wasser",              od:"Wasser", boundary:"Benrather Linie" },
+  { key:"zeit",   label:"Zeit",   nd:"Tid",   md:"Zeit",                od:"Zeit",   boundary:"Benrather Linie" },
+  { key:"das",    label:"das",    nd:"dat",   md:"das",                 od:"das",    boundary:"Benrather Linie" },
+  { key:"ich",    label:"ich",    nd:"ik",    md:"ich / ik (uneinheitlich)", od:"ich", boundary:"Rheinischer Fächer" }
+];
+
+const EXERCISES = [
+  { q:"Engl. <em>pepper</em> / niederl. <em>peper</em> → nhd.?",
+    a:"<strong>Pfeffer</strong> — p im Anlaut → pf." },
+  { q:"Engl. <em>open</em> → nhd.?",
+    a:"<strong>offen</strong> — p intervokalisch → f." },
+  { q:"Engl. <em>heart</em> → nhd.?",
+    a:"<strong>Herz</strong> — t intervokalisch/nach r → z (ts); Sonderfall der Anlautregel bei Konsonantenverbindung." },
+  { q:"Warum sagt ein Norddeutscher eher <em>maken</em>, ein Süddeutscher <em>machen</em>, aber beide <em>Appel</em> bzw. <em>Apfel</em> uneinheitlich je nach genauer Lage zur Speyerer Linie?",
+    a:"Gestufte Isoglossen: Die machen/maken-Grenze (Benrather Linie) liegt weiter nördlich als die Appel/Apfel-Grenze (Speyerer Linie) — dazwischen liegt der Rheinische Fächer mit mehreren gestaffelten Einzellinien, sodass k schon in Mitteldeutschland verschoben ist, p aber erst in Oberdeutschland." }
+];
+
+/* ======================================================================
+   DARSTELLUNG
+   ====================================================================== */
+
+let selectedWordId = WORDS[0].id;
+let selectedRegion = "md";
+
+function renderChips(){
+  const el = document.getElementById("wordChips");
+  el.innerHTML = "";
+  WORDS.forEach(w => {
+    const chip = document.createElement("div");
+    chip.className = "chip" + (w.id === selectedWordId ? " active" : "");
+    chip.textContent = w.nhd;
+    chip.addEventListener("click", () => { selectedWordId = w.id; renderChips(); renderRuleCard(); });
+    el.appendChild(chip);
+  });
+}
+
+function renderRuleCard(){
+  const w = WORDS.find(x => x.id === selectedWordId);
+  const el = document.getElementById("ruleCard");
+  el.innerHTML = `
+    <div class="rule-forms">
+      <div class="form-block">
+        <span class="lang">${w.cognateLang}</span>
+        <span class="word">${w.cognate}</span>
+      </div>
+      <span class="arrow">→</span>
+      <div class="form-block">
+        <span class="lang">Neuhochdeutsch</span>
+        <span class="word result-word">${w.nhd}</span>
+      </div>
+    </div>
+    <p class="rule-formula">${formula(w.consonant, w.position)}</p>
+    <p class="rule-note">${w.note}</p>
+  `;
+}
+
+function renderMap(){
+  document.querySelectorAll(".region-band").forEach(b => {
+    b.classList.toggle("selected", b.dataset.region === selectedRegion);
+  });
+  document.querySelectorAll(".region-pill").forEach(p => {
+    p.classList.toggle("selected", p.dataset.region === selectedRegion);
+  });
+}
+
+function renderWordTable(){
+  const body = document.getElementById("wordTableBody");
+  body.innerHTML = "";
+  DIALECT_WORDS.forEach(w => {
+    const form = w[selectedRegion];
+    const isShifted = form !== w.nd; // shifted relative to the unshifted (Niederdeutsch) baseline
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${w.label}</td>
+      <td class="form${isShifted ? " shifted" : ""}">${form}</td>
+      <td class="boundary">${w.boundary}</td>
+    `;
+    body.appendChild(tr);
+  });
+}
+
+function selectRegion(region){
+  selectedRegion = region;
+  renderMap();
+  renderWordTable();
+}
+
+function renderExercises(){
+  const el = document.getElementById("exercises");
+  el.innerHTML = "";
+  EXERCISES.forEach((ex, i) => {
+    const card = document.createElement("div");
+    card.className = "ex-card";
+    card.innerHTML = `
+      <p class="ex-q"><span class="num">${i + 1}.</span>${ex.q}</p>
+      <button class="reveal-btn" type="button">Lösung zeigen</button>
+      <div class="ex-solution">${ex.a}</div>
+    `;
+    const btn = card.querySelector(".reveal-btn");
+    const sol = card.querySelector(".ex-solution");
+    btn.addEventListener("click", () => {
+      sol.classList.add("shown");
+      card.classList.add("solved");
+    });
+    el.appendChild(card);
+  });
+}
+
+document.querySelectorAll(".region-band").forEach(b => {
+  b.addEventListener("click", () => selectRegion(b.dataset.region));
+});
+document.querySelectorAll(".region-pill").forEach(p => {
+  p.addEventListener("click", () => selectRegion(p.dataset.region));
+});
+
+renderChips();
+renderRuleCard();
+renderMap();
+renderWordTable();
+renderExercises();
+</script>
+</body>
+</html>

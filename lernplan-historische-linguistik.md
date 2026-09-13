@@ -200,3 +200,11 @@ Erneute Prüfung am 12.09.2026, nach Abschluss aller sechs Bauphasen: Das Wechse
 - **Neuer Fund:** ein MCP-Connector namens **Macaly Cloud** („Claude writes the code, Macaly runs it – a git repo, cloud sandbox, database, live preview and production hosting") wurde in der Registry gefunden und könnte die fehlende GitHub-Anbindung ersetzen, ohne dass ein lokaler Push nötig wäre.
 
 **Status:** Die Entscheidung zwischen Macaly Cloud (echtes Repo + Hosting, gemeinsame Navigation für alle neun Artefakte) und dem Verbleib bei einzelnen Claude Artifacts steht noch aus.
+
+## 18. Baustatus final: Migration nach GitHub Pages (Update, 13.09.2026)
+
+Macaly Cloud wurde ausprobiert und **verworfen** — der dort erzeugte Code ließ sich nicht exportieren/portieren, ein Ausschlusskriterium angesichts der in Abschnitt 9 verankerten Portabilitätsanforderung. Kein Fortführen dieses Ansatzes.
+
+Stattdessen: **GitHub + GitHub Pages**, per Eleventy als schlanker Static-Site-Generator. Alle zehn Artefakte aus Abschnitt 11–16 liegen jetzt als Dateien im Repo [S540d/Grundlagen_Linguistik](https://github.com/S540d/Grundlagen_Linguistik), unverändert übernommen (Phase 1/2 aus den in Abschnitt 11/12 verlinkten Claude Artifacts, die entgegen einer zwischenzeitlichen Annahme in einer späteren Sitzung doch noch zugänglich waren). Eine gemeinsame Übersichtsseite verlinkt alle zehn Tools nach Bauphase gruppiert; die zwei unterschiedlichen Design-Systeme (Phase 1/2: dunkle Palette mit Dark-Mode, Google Fonts; Phase 3–6: helle Palette, Systemfonts, s. Abschnitt 2 des Migrations-Briefings) wurden bewusst nicht vereinheitlicht, um den bestehenden, funktionierenden Code nicht anzufassen. Deploy automatisiert über GitHub Actions bei jedem Push auf `main`.
+
+**Damit ist die Migration abgeschlossen, alle zehn Module sind live.**

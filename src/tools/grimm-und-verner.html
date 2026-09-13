@@ -1,0 +1,876 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Grimm &amp; Verner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Gentium+Plus:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#EDEFE9;
+    --paper-raised:#FFFFFF;
+    --ink:#1B2426;
+    --ink-soft:#52605E;
+    --ink-faint:#7C8886;
+    --line:#C9CDC0;
+    --accent:#9B3226;
+    --accent-soft:#F1DAD2;
+    --verdigris:#3F6E64;
+    --verdigris-soft:#DCE7E1;
+    --focus:#2E6F92;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#14181A;
+      --paper-raised:#1D2320;
+      --ink:#E7E9E1;
+      --ink-soft:#AAB4AE;
+      --ink-faint:#7C8886;
+      --line:#343F3A;
+      --accent:#E08A72;
+      --accent-soft:#3A2621;
+      --verdigris:#8FC3B2;
+      --verdigris-soft:#20342E;
+      --focus:#6FB2D6;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#14181A;
+    --paper-raised:#1D2320;
+    --ink:#E7E9E1;
+    --ink-soft:#AAB4AE;
+    --ink-faint:#7C8886;
+    --line:#343F3A;
+    --accent:#E08A72;
+    --accent-soft:#3A2621;
+    --verdigris:#8FC3B2;
+    --verdigris-soft:#20342E;
+    --focus:#6FB2D6;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Gentium Plus', 'Times New Roman', serif;
+    padding-inline:16px;
+  }
+  .page{
+    max-width:980px;
+    margin:0 auto;
+    padding-block:32px 64px;
+  }
+
+  h1,h2,h3{ text-wrap:balance; }
+  .eyebrow{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--verdigris);
+    font-weight:600;
+  }
+  .title{
+    font-family:'UnifrakturMaguntia', serif;
+    font-weight:400;
+    font-size:clamp(2.4rem, 6vw, 3.6rem);
+    line-height:1.1;
+    margin:0.15em 0 0.1em;
+    color:var(--ink);
+  }
+  .subtitle{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.95rem;
+    color:var(--ink-soft);
+    margin:0 0 20px;
+  }
+  .lede{
+    font-size:1.08rem;
+    line-height:1.6;
+    max-width:65ch;
+    color:var(--ink);
+  }
+  .lede em{ font-style:italic; color:var(--accent); }
+
+  .layout{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:28px;
+  }
+  @media (min-width:900px){
+    .layout{ grid-template-columns:1fr 280px; align-items:start; }
+  }
+
+  section.block{ margin-bottom:40px; }
+  .block h2{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.78rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    font-weight:600;
+    border-bottom:1px solid var(--line);
+    padding-bottom:8px;
+    margin:0 0 6px;
+  }
+  .block h3{
+    font-family:'Gentium Plus', serif;
+    font-size:1.3rem;
+    font-weight:700;
+    margin:0 0 12px;
+    color:var(--ink);
+  }
+  .block > p.hint{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.83rem;
+    color:var(--ink-soft);
+    margin:0 0 16px;
+    max-width:62ch;
+  }
+
+  /* Galerie */
+  .gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(190px,1fr));
+    gap:12px;
+  }
+  .preset-card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px;
+    text-align:left;
+    cursor:pointer;
+    font-family:inherit;
+    color:var(--ink);
+  }
+  .preset-card:hover, .preset-card:focus-visible{ border-color:var(--verdigris); outline:none; }
+  .preset-card:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .preset-card .p-gloss{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--ink-faint);
+    font-weight:600;
+  }
+  .preset-card .p-idg{ font-size:1.15rem; margin-top:4px; }
+  .preset-card .p-arrow{ color:var(--ink-faint); margin:0 4px; }
+  .preset-card .p-gmc{ font-size:1.15rem; color:var(--verdigris); }
+
+  /* Werkstatt */
+  .composer{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:18px;
+  }
+  .slots{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:flex-start;
+  }
+  .slot{
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    gap:4px;
+    min-width:88px;
+  }
+  .slot .slot-tag{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.65rem;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--ink-faint);
+    font-weight:600;
+  }
+  .slot select{
+    font-family:'Gentium Plus', serif;
+    font-size:1.05rem;
+    padding:6px 6px;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .slot select:focus-visible{ outline:2px solid var(--focus); outline-offset:1px; }
+  .stress-btn{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.72rem;
+    padding:4px 6px;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:var(--paper);
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .stress-btn[aria-pressed="true"]{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+    font-weight:600;
+  }
+  .slot.v-slot.is-empty .stress-btn{ visibility:hidden; }
+
+  .composer-actions{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    margin-top:16px;
+    flex-wrap:wrap;
+  }
+  .run-btn{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.9rem;
+    font-weight:600;
+    padding:10px 18px;
+    border-radius:8px;
+    border:1px solid var(--accent);
+    background:var(--accent);
+    color:#fff;
+    cursor:pointer;
+  }
+  .run-btn:hover{ opacity:0.92; }
+  .run-btn:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .reset-btn{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    background:none;
+    border:none;
+    cursor:pointer;
+    text-decoration:underline;
+  }
+  .composer-hint{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.78rem;
+    color:var(--ink-faint);
+    margin-top:10px;
+  }
+
+  .result{
+    margin-top:22px;
+    padding-top:18px;
+    border-top:1px dashed var(--line);
+  }
+  .result-words{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    flex-wrap:wrap;
+    font-size:1.6rem;
+    margin-bottom:14px;
+  }
+  .result-words .rw-idg{ color:var(--ink); }
+  .result-words .rw-arrow{ color:var(--ink-faint); font-size:1.1rem; }
+  .result-words .rw-gmc{ color:var(--verdigris); font-weight:700; }
+  .result-placeholder{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    color:var(--ink-faint);
+    font-size:0.9rem;
+  }
+
+  .trace{ display:flex; flex-direction:column; gap:8px; }
+  .step-row{
+    display:grid;
+    grid-template-columns:minmax(4.6em, auto) 1fr auto;
+    gap:10px;
+    align-items:center;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:8px 12px;
+  }
+  @media (max-width:560px){
+    .step-row{ grid-template-columns:1fr; }
+    .step-row .st-badge{ justify-self:start; }
+  }
+  .step-row .st-sym{ font-size:1.3rem; text-align:center; white-space:nowrap; }
+  .step-row .st-text{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.83rem;
+    color:var(--ink-soft);
+    line-height:1.4;
+  }
+  .step-row .st-text b{ color:var(--ink); font-weight:600; }
+  .st-badge{
+    display:inline-block;
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.62rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    padding:3px 8px;
+    border-radius:999px;
+    font-weight:600;
+    white-space:nowrap;
+  }
+  .st-badge.grimm{ background:var(--verdigris-soft); color:var(--verdigris); }
+  .st-badge.verner-voiced{ background:var(--accent-soft); color:var(--accent); }
+  .st-badge.verner-stays{ background:var(--line); color:var(--ink-soft); }
+  .st-badge.pass{ background:var(--paper-raised); color:var(--ink-faint); border:1px solid var(--line); }
+  .st-badge.vowel{ background:var(--paper-raised); color:var(--ink-faint); border:1px dashed var(--line); }
+
+  /* Panel (Regel-Referenz) */
+  .panel{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:20px;
+  }
+  @media (min-width:900px){
+    .panel{ position:sticky; top:20px; }
+  }
+  .panel .eyebrow{ margin-bottom:8px; display:block; }
+  .panel h4{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.78rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--ink);
+    margin:16px 0 6px;
+  }
+  .panel h4:first-of-type{ margin-top:6px; }
+  .panel p{ font-size:0.9rem; line-height:1.5; margin:4px 0; color:var(--ink-soft); }
+  .panel .chain{ font-size:1rem; color:var(--ink); margin:4px 0; }
+  .panel .chain .p-arrow{ color:var(--ink-faint); margin:0 4px; }
+  .panel .formula{
+    font-family:'IBM Plex Sans', monospace, monospace;
+    font-size:0.8rem;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:8px 10px;
+    margin:8px 0;
+    color:var(--ink);
+    line-height:1.5;
+  }
+
+  /* Quiz */
+  .quiz-grid{ display:flex; flex-direction:column; gap:14px; }
+  .quiz-card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:16px 18px;
+  }
+  .quiz-card .qc-n{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--ink-faint);
+    font-weight:600;
+  }
+  .quiz-card .qc-q{ font-size:1.1rem; margin:6px 0 12px; }
+  .quiz-card .qc-actions{ display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+  .open-lab-btn{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.82rem;
+    font-weight:600;
+    padding:7px 12px;
+    border-radius:7px;
+    border:1px solid var(--verdigris);
+    background:var(--verdigris-soft);
+    color:var(--verdigris);
+    cursor:pointer;
+  }
+  .quiz-card details{ font-family:'IBM Plex Sans', system-ui, sans-serif; font-size:0.88rem; }
+  .quiz-card summary{
+    cursor:pointer;
+    color:var(--focus);
+    font-weight:600;
+    font-size:0.85rem;
+  }
+  .quiz-card .qc-solution{
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px dashed var(--line);
+    color:var(--ink-soft);
+    line-height:1.55;
+  }
+  .quiz-card .qc-solution b{ color:var(--verdigris); }
+
+  footer.tie-in{
+    margin-top:56px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    max-width:65ch;
+  }
+  footer.tie-in strong{ color:var(--ink); }
+</style>
+
+<div class="page lab" id="lab">
+
+  <p class="eyebrow">Historische Linguistik · Modul 3</p>
+  <h1 class="title">Grimm &amp; Verner</h1>
+  <p class="subtitle">Werkstatt zur ersten (germanischen) Lautverschiebung — idg. Wörter selbst durch die Regeln schleusen und sehen, warum <em>Vater</em> ein d hat, aber <em>Bruder</em> ein þ behält.</p>
+
+  <p class="lede">In der Lautzeichen-Tafel hast du gesehen: t, d und þ hängen über zwei Lautgesetze zusammen. Hier baust du dir ein idg. Wort aus einzelnen Lauten zusammen — inklusive Betonung — und die Werkstatt leitet Schritt für Schritt die urgermanische Form her, genau wie du es später selbst von Hand tun sollst.</p>
+
+  <section class="block">
+    <h2>Sechs Wörter, eine Regel</h2>
+    <h3>Galerie — anklicken lädt das Wort in die Werkstatt</h3>
+    <p class="hint">Alle sechs Beispiele durchlaufen dieselben zwei Gesetze. Nur die Position der Betonung entscheidet, ob ein Frikativ stimmlos bleibt oder stimmhaft wird.</p>
+    <div class="gallery" id="gallery"></div>
+  </section>
+
+  <div class="layout">
+    <div>
+      <section class="block" id="werkstatt-block">
+        <h2>Werkstatt</h2>
+        <h3>Eigenes Wort zusammensetzen</h3>
+        <p class="hint">Fünf Positionen, abwechselnd Konsonant (C) und Vokal (V). Nicht gebrauchte Positionen auf „– keiner –“ lassen. Der Stern ˈ markiert, welche Silbe im Urindogermanischen betont ist — das ist die einzige Information, die Verners Gesetz zusätzlich zu Grimms Gesetz braucht.</p>
+
+        <div class="composer" id="composer">
+          <div class="slots" id="slots"></div>
+          <div class="composer-actions">
+            <button class="run-btn" id="run-btn" type="button">Ableiten →</button>
+            <button class="reset-btn" id="reset-btn" type="button">Zurücksetzen</button>
+          </div>
+          <p class="composer-hint">Vokalqualität wird stark vereinfacht übernommen (nur idg. o → germ. a und die silbischen Sonanten m̥/n̥ → un werden nachvollzogen). Im Fokus stehen die Konsonanten — spätere Vokalwandel wie Monophthongierung gehören zu Modul 6.</p>
+
+          <div class="result" id="result">
+            <p class="result-placeholder" id="result-placeholder">Noch keine Ableitung — wähle oben Laute aus oder lade ein Beispiel aus der Galerie, dann klicke „Ableiten“.</p>
+            <div id="result-content" hidden>
+              <div class="result-words">
+                <span class="rw-idg" id="rw-idg">*wort</span>
+                <span class="rw-arrow">→</span>
+                <span class="rw-gmc" id="rw-gmc">*wort</span>
+              </div>
+              <div class="trace" id="trace"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>Übungsaufgaben (Modul 3)</h2>
+        <h3>Selbst herleiten, dann vergleichen</h3>
+        <p class="hint">Erst raten oder in der Werkstatt oben herleiten, dann aufdecken. Das ist wichtiger, als es klingt — Wissen, das du nur passiv gelesen hast, hält beim Prüfen selten stand.</p>
+        <div class="quiz-grid" id="quiz"></div>
+      </section>
+    </div>
+
+    <aside class="panel" id="panel">
+      <span class="eyebrow">Regel-Referenz</span>
+
+      <h4>Grimms Gesetz — drei Ketten</h4>
+      <p class="chain">p, t, k <span class="p-arrow">→</span> f, þ, h <span style="color:var(--ink-faint);">(Tenues → Frikative)</span></p>
+      <p class="chain">bʰ, dʰ, gʰ <span class="p-arrow">→</span> b, d, g <span style="color:var(--ink-faint);">(asp. Medien → Medien)</span></p>
+      <p class="chain">b, d, g <span class="p-arrow">→</span> p, t, k <span style="color:var(--ink-faint);">(Medien → Tenues)</span></p>
+      <p>Gilt unabhängig von Position und Betonung — jede idg. Tenuis/Media wird immer verschoben.</p>
+
+      <h4>Verners Gesetz</h4>
+      <div class="formula">[+frikativ, −stimmhaft] → [+stimmhaft]<br>/ falls die unmittelbar vorausgehende Silbe <u>nicht</u> den idg. Akzent trägt</div>
+      <p>Betrifft nur die aus Grimms erster Kette entstandenen Frikative (f, þ, h) sowie das ererbte s. Am Wortanfang gibt es keine vorausgehende Silbe — dort bleibt der Laut immer stimmlos.</p>
+      <p><b style="color:var(--ink);">Merksatz:</b> Betonung direkt davor → bleibt stimmlos. Betonung woanders → wird stimmhaft.</p>
+
+      <h4>Legende</h4>
+      <p><span class="st-badge grimm">Grimm</span> unkonditionierte Verschiebung</p>
+      <p><span class="st-badge verner-voiced">Verner: stimmhaft</span> Akzent nicht davor</p>
+      <p><span class="st-badge verner-stays">Verner: bleibt</span> Akzent unmittelbar davor</p>
+      <p><span class="st-badge pass">passiert unverändert</span> Sonorant/Glide, von keinem der beiden Gesetze betroffen</p>
+    </aside>
+  </div>
+
+  <footer class="tie-in">
+    <strong>Weiter im Lernplan:</strong> Diese Werkstatt behandelt nur die <em>erste</em> Lautverschiebung (Idg. → Urgermanisch). Modul 5 (zweite, hochdeutsche Lautverschiebung — Urgermanisch → Althochdeutsch, geografisch gestuft über Benrather und Speyerer Linie) folgt als nächstes Artefakt. IPA-Nachschlagen: <strong>Lautzeichen-Tafel</strong>. Zeitliche Einordnung: <strong>Sprachstufen-Zeitstrahl</strong>.
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ======================================================
+     REGEL-MODUL — reine Funktionen, keine DOM-Zugriffe.
+     (Bewusst getrennt gehalten, s. Lernplan Abschnitt 9 —
+     lässt sich 1:1 in eine eigene rules.js übernehmen.)
+     ====================================================== */
+  var RULES = (function(){
+
+    var GRIMM_MAP = {
+      p:'f', t:'þ', k:'h', 'ḱ':'h',
+      b:'p', d:'t', g:'k',
+      'bʰ':'b', 'dʰ':'d', 'gʰ':'g'
+    };
+    var CLUSTER_SPLIT = {
+      'sw':['s','w'], 'tr':['t','r'], 'bʰr':['bʰ','r']
+    };
+    var FRICATIVE_ELIGIBLE = { f:true, 'þ':true, h:true, s:true };
+    var VERNER_VOICE_MAP = { f:'b', 'þ':'d', h:'g', s:'z' };
+    var GMC_VOWEL_MAP = {
+      e:'e', o:'a', a:'a', 'ā':'a', 'ē':'ē', 'ō':'ō', 'ə':'a',
+      i:'i', 'ī':'ī', u:'u', 'ū':'ū', 'm̥':'un', 'n̥':'un'
+    };
+    var ACCENT = '́';
+
+    function headTail(v){
+      if (CLUSTER_SPLIT[v]) return CLUSTER_SPLIT[v];
+      return [v, ''];
+    }
+
+    function renderIdgVowel(v, stressed){
+      return stressed ? (v + ACCENT) : v;
+    }
+
+    // segments: [{type:'C', v:'p'} | {type:'V', v:'e', stressed:bool}, ...]
+    // leere Slots (v==='') werden vorab herausgefiltert.
+    function derive(rawSegments){
+      var segs = rawSegments.filter(function(s){ return s.v !== ''; });
+      var steps = [];
+      var idgParts = [];
+      var gmcParts = [];
+
+      for (var i = 0; i < segs.length; i++){
+        var seg = segs[i];
+
+        if (seg.type === 'V'){
+          idgParts.push(renderIdgVowel(seg.v, seg.stressed));
+          var gmcV = GMC_VOWEL_MAP[seg.v] || seg.v;
+          gmcParts.push(gmcV);
+          steps.push({
+            type:'V', sym: renderIdgVowel(seg.v, seg.stressed), out: gmcV,
+            badge: 'vowel', badgeLabel: seg.stressed ? 'betont' : 'unbetont',
+            text: seg.stressed
+              ? '<b>' + seg.v + '</b> trägt den idg. Akzent — entscheidend für Verner bei den Nachbarkonsonanten.'
+              : 'unbetonter Vokal, vereinfacht übernommen (→ ' + gmcV + ').'
+          });
+          continue;
+        }
+
+        // Konsonant
+        idgParts.push(seg.v);
+        var ht = headTail(seg.v);
+        var head = ht[0], tail = ht[1];
+
+        var grimmVal = GRIMM_MAP[head] || head;
+        var grimmApplied = !!GRIMM_MAP[head];
+        var eligible = !!FRICATIVE_ELIGIBLE[grimmVal];
+
+        var finalHead = grimmVal;
+        var badge = grimmApplied ? 'grimm' : 'pass';
+        var text = '';
+
+        if (grimmApplied){
+          text = head + ' → ' + grimmVal + ' (Grimms Gesetz)';
+        } else if (head === 's'){
+          text = 's bleibt von Grimms Gesetz unberührt, ist aber für Verner in Frage.';
+        } else {
+          text = head + ' ist Sonorant/Glide — von keinem der beiden Gesetze betroffen.';
+        }
+
+        if (eligible){
+          // vorausgehenden Vokal in der bereits gefilterten Liste suchen
+          var prevV = (i > 0 && segs[i-1].type === 'V') ? segs[i-1] : null;
+          if (!prevV){
+            badge = 'verner-stays';
+            text += ' Am Wortanfang keine vorausgehende Silbe → bleibt stimmlos.';
+          } else if (prevV.stressed){
+            badge = 'verner-stays';
+            text += ' Vorausgehende Silbe (' + prevV.v + ') trägt den Akzent → bleibt stimmlos.';
+          } else {
+            finalHead = VERNER_VOICE_MAP[grimmVal];
+            badge = 'verner-voiced';
+            text += ' Vorausgehende Silbe (' + prevV.v + ') ist unbetont → wird durch Verners Gesetz stimmhaft: ' + grimmVal + ' → ' + finalHead + '.';
+          }
+        }
+
+        var finalValue = finalHead + tail;
+        gmcParts.push(finalValue);
+        steps.push({
+          type:'C', sym: seg.v, out: finalValue,
+          badge: badge,
+          badgeLabel: badge === 'grimm' ? 'Grimm' : (badge === 'verner-voiced' ? 'Verner: stimmhaft' : (badge === 'verner-stays' ? 'Verner: bleibt' : 'passiert unverändert')),
+          text: text
+        });
+      }
+
+      return {
+        idg: '*' + idgParts.join(''),
+        gmc: '*' + gmcParts.join(''),
+        steps: steps,
+        empty: segs.length === 0
+      };
+    }
+
+    return { derive: derive };
+  })();
+
+  /* ======================================================
+     DATEN — Vorgaben für Galerie und Übungsaufgaben
+     ====================================================== */
+  var PRESETS = [
+    {
+      gloss:'Vater', segs:[
+        {type:'C', v:'p'}, {type:'V', v:'ə', stressed:false},
+        {type:'C', v:'t'}, {type:'V', v:'ē', stressed:true},
+        {type:'C', v:'r'}
+      ]
+    },
+    {
+      gloss:'drei', segs:[
+        {type:'C', v:'tr'}, {type:'V', v:'e', stressed:true},
+        {type:'C', v:'y'}, {type:'V', v:'e', stressed:false},
+        {type:'C', v:'s'}
+      ]
+    },
+    {
+      gloss:'Bruder', segs:[
+        {type:'C', v:'bʰr'}, {type:'V', v:'e', stressed:true},
+        {type:'C', v:'t'}, {type:'V', v:'ē', stressed:false},
+        {type:'C', v:'r'}
+      ]
+    },
+    {
+      gloss:'zehn', segs:[
+        {type:'C', v:'d'}, {type:'V', v:'e', stressed:true},
+        {type:'C', v:'ḱ'}, {type:'V', v:'m̥', stressed:false},
+        {type:'C', v:''}
+      ]
+    },
+    {
+      gloss:'hundert', segs:[
+        {type:'C', v:'ḱ'}, {type:'V', v:'m̥', stressed:false},
+        {type:'C', v:'t'}, {type:'V', v:'o', stressed:true},
+        {type:'C', v:'m'}
+      ]
+    },
+    {
+      gloss:'Schwester', segs:[
+        {type:'C', v:'sw'}, {type:'V', v:'e', stressed:true},
+        {type:'C', v:'s'}, {type:'V', v:'ō', stressed:false},
+        {type:'C', v:'r'}
+      ]
+    }
+  ];
+
+  var QUIZ = [
+    {
+      idg:'*ph₂tér-', segs:[
+        {type:'C', v:'p'}, {type:'V', v:'ə', stressed:false},
+        {type:'C', v:'t'}, {type:'V', v:'e', stressed:true},
+        {type:'C', v:''}
+      ],
+      q:'Idg. *ph₂tér- → Gmc.?',
+      solution:'<b>*fadēr</b> — Verner greift: der Akzent liegt nicht auf der Silbe unmittelbar vor t, also wird das aus Grimms Gesetz entstandene þ stimmhaft zu d.'
+    },
+    {
+      idg:'*ḱm̥tóm', segs:[
+        {type:'C', v:'ḱ'}, {type:'V', v:'m̥', stressed:false},
+        {type:'C', v:'t'}, {type:'V', v:'o', stressed:true},
+        {type:'C', v:'m'}
+      ],
+      q:'Idg. *ḱm̥tóm („hundert“) → Gmc.?',
+      solution:'<b>*hundam</b> — ḱ wird nach Grimm zu h (am Wortanfang ohnehin stimmlos), t liegt nach der unbetonten Silbe m̥ und wird durch Verner zu d. Genau dasselbe Wort wie in der Galerie oben.'
+    },
+    {
+      idg:'*swésōr', segs:[
+        {type:'C', v:'sw'}, {type:'V', v:'e', stressed:true},
+        {type:'C', v:'s'}, {type:'V', v:'ō', stressed:false},
+        {type:'C', v:'r'}
+      ],
+      q:'Idg. *swésōr („Schwester“) → Gmc.?',
+      solution:'<b>*swestēr</b> — das zweite s bleibt stimmlos, weil die unmittelbar vorausgehende Silbe (swé-) den Akzent trägt. Das t in swestēr ist eine spätere Einschubkonsonanz, kein Ergebnis von Grimm/Verner.'
+    },
+    {
+      idg:null, segs:null,
+      q:'Warum bleibt in *brōþēr das þ stimmlos, in *fadēr wird das entsprechende þ aber zu d — obwohl beide aus derselben Grimm-Kette (t → þ) stammen?',
+      solution:'Die Akzentposition im Idg. entscheidet: In *bʰréh₂tēr liegt der Akzent unmittelbar vor dem t (auf der ersten Silbe) → bleibt stimmlos (þ). In *pətḗr liegt der Akzent auf der zweiten Silbe, also nicht unmittelbar vor dem t → wird stimmhaft (d). Das ist Verners Gesetz in Reinform: dieselbe Grimm-Ausgangslage, aber ein anderes Ergebnis je nach Betonung.'
+    }
+  ];
+
+  var C_OPTIONS = ['', 'p','t','k','ḱ','b','d','g','bʰ','dʰ','gʰ','s','w','y','r','l','m','n','sw','tr','bʰr'];
+  var V_OPTIONS = ['', 'e','o','a','ē','ō','ā','ə','i','ī','u','ū','m̥','n̥'];
+  var V_LABELS = { 'm̥':'m̥ (silbisch)', 'n̥':'n̥ (silbisch)' };
+
+  /* ======================================================
+     DOM — Komponist (Werkstatt)
+     ====================================================== */
+  var slotsEl = document.getElementById('slots');
+  var slotDefs = [ {type:'C'}, {type:'V'}, {type:'C'}, {type:'V'}, {type:'C'} ];
+  var slotEls = [];
+
+  slotDefs.forEach(function(def, idx){
+    var wrap = document.createElement('div');
+    wrap.className = 'slot ' + (def.type === 'V' ? 'v-slot' : 'c-slot');
+
+    var tag = document.createElement('span');
+    tag.className = 'slot-tag';
+    tag.textContent = def.type + (idx+1);
+    wrap.appendChild(tag);
+
+    var select = document.createElement('select');
+    var options = def.type === 'V' ? V_OPTIONS : C_OPTIONS;
+    options.forEach(function(optVal){
+      var opt = document.createElement('option');
+      opt.value = optVal;
+      opt.textContent = optVal === '' ? '– keiner –' : (V_LABELS[optVal] || optVal);
+      select.appendChild(opt);
+    });
+    wrap.appendChild(select);
+
+    var stressBtn = null;
+    if (def.type === 'V'){
+      stressBtn = document.createElement('button');
+      stressBtn.type = 'button';
+      stressBtn.className = 'stress-btn';
+      stressBtn.setAttribute('aria-pressed', 'false');
+      stressBtn.textContent = 'ˈ betont';
+      stressBtn.addEventListener('click', function(){
+        var pressed = stressBtn.getAttribute('aria-pressed') === 'true';
+        if (!pressed){
+          // nur eine betonte Silbe zulassen
+          slotEls.forEach(function(s){
+            if (s.stressBtn) s.stressBtn.setAttribute('aria-pressed', 'false');
+          });
+        }
+        stressBtn.setAttribute('aria-pressed', pressed ? 'false' : 'true');
+      });
+      wrap.appendChild(stressBtn);
+    } else {
+      // unsichtbarer Platzhalter, damit C- und V-Spalten gleich hoch bleiben
+      var spacer = document.createElement('span');
+      spacer.className = 'stress-btn';
+      spacer.style.visibility = 'hidden';
+      spacer.setAttribute('aria-hidden', 'true');
+      spacer.textContent = 'ˈ betont';
+      wrap.appendChild(spacer);
+    }
+
+    function syncEmpty(){
+      if (def.type === 'V'){
+        wrap.classList.toggle('is-empty', select.value === '');
+      }
+    }
+    select.addEventListener('change', syncEmpty);
+    syncEmpty();
+
+    slotsEl.appendChild(wrap);
+    slotEls.push({ type: def.type, select: select, stressBtn: stressBtn });
+  });
+
+  function readSegments(){
+    return slotEls.map(function(s){
+      if (s.type === 'V'){
+        return { type:'V', v: s.select.value, stressed: s.stressBtn.getAttribute('aria-pressed') === 'true' };
+      }
+      return { type:'C', v: s.select.value };
+    });
+  }
+
+  function loadSegments(segs){
+    slotEls.forEach(function(s, i){
+      var seg = segs[i] || { v:'' };
+      s.select.value = seg.v || '';
+      if (s.type === 'V'){
+        if (s.stressBtn) s.stressBtn.setAttribute('aria-pressed', seg.stressed ? 'true' : 'false');
+        s.select.dispatchEvent(new Event('change'));
+      }
+    });
+  }
+
+  var resultPlaceholder = document.getElementById('result-placeholder');
+  var resultContent = document.getElementById('result-content');
+  var rwIdg = document.getElementById('rw-idg');
+  var rwGmc = document.getElementById('rw-gmc');
+  var traceEl = document.getElementById('trace');
+
+  function runDerivation(){
+    var segs = readSegments();
+    var res = RULES.derive(segs);
+    if (res.empty){
+      resultPlaceholder.hidden = false;
+      resultPlaceholder.textContent = 'Bitte mindestens einen Laut auswählen.';
+      resultContent.hidden = true;
+      return;
+    }
+    resultPlaceholder.hidden = true;
+    resultContent.hidden = false;
+    rwIdg.textContent = res.idg;
+    rwGmc.textContent = res.gmc;
+
+    traceEl.innerHTML = '';
+    res.steps.forEach(function(step){
+      var row = document.createElement('div');
+      row.className = 'step-row';
+      row.innerHTML =
+        '<span class="st-sym">' + step.sym + ' → ' + step.out + '</span>' +
+        '<span class="st-text">' + step.text + '</span>' +
+        '<span class="st-badge ' + step.badge + '">' + step.badgeLabel + '</span>';
+      traceEl.appendChild(row);
+    });
+
+    document.getElementById('werkstatt-block').scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  document.getElementById('run-btn').addEventListener('click', runDerivation);
+  document.getElementById('reset-btn').addEventListener('click', function(){
+    loadSegments([{v:''},{v:''},{v:''},{v:''},{v:''}]);
+    resultPlaceholder.hidden = false;
+    resultPlaceholder.textContent = 'Noch keine Ableitung — wähle oben Laute aus oder lade ein Beispiel aus der Galerie, dann klicke „Ableiten“.';
+    resultContent.hidden = true;
+  });
+
+  /* ======================================================
+     DOM — Galerie
+     ====================================================== */
+  var galleryEl = document.getElementById('gallery');
+  PRESETS.forEach(function(preset){
+    var res = RULES.derive(preset.segs);
+    var card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'preset-card';
+    card.innerHTML =
+      '<span class="p-gloss">' + preset.gloss + '</span><br>' +
+      '<span class="p-idg">' + res.idg + '</span>' +
+      '<span class="p-arrow">→</span>' +
+      '<span class="p-gmc">' + res.gmc + '</span>';
+    card.addEventListener('click', function(){
+      loadSegments(preset.segs);
+      runDerivation();
+    });
+    galleryEl.appendChild(card);
+  });
+
+  /* ======================================================
+     DOM — Übungsaufgaben
+     ====================================================== */
+  var quizEl = document.getElementById('quiz');
+  QUIZ.forEach(function(item, idx){
+    var card = document.createElement('div');
+    card.className = 'quiz-card';
+
+    var openBtnHtml = item.segs
+      ? '<button class="open-lab-btn" type="button" data-idx="' + idx + '">In der Werkstatt öffnen</button>'
+      : '';
+
+    card.innerHTML =
+      '<p class="qc-n">Aufgabe ' + (idx+1) + '</p>' +
+      '<p class="qc-q">' + item.q + '</p>' +
+      '<div class="qc-actions">' + openBtnHtml +
+        '<details><summary>Lösung anzeigen</summary><div class="qc-solution">' + item.solution + '</div></details>' +
+      '</div>';
+
+    quizEl.appendChild(card);
+
+    var btn = card.querySelector('.open-lab-btn');
+    if (btn){
+      btn.addEventListener('click', function(){
+        loadSegments(item.segs);
+        resultPlaceholder.hidden = false;
+        resultPlaceholder.textContent = 'Wort geladen — klicke „Ableiten“, um deine eigene Herleitung zu prüfen.';
+        resultContent.hidden = true;
+        document.getElementById('werkstatt-block').scrollIntoView({ behavior:'smooth', block:'start' });
+      });
+    }
+  });
+
+})();
+</script>
+
+</body></html>

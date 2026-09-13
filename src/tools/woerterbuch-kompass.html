@@ -1,0 +1,232 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Wörterbuch-Kompass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Gentium+Plus:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#EDEFE9; --paper-raised:#FFFFFF; --ink:#1B2426; --ink-soft:#52605E; --ink-faint:#7C8886;
+    --line:#C9CDC0; --accent:#9B3226; --accent-soft:#F1DAD2; --verdigris:#3F6E64; --verdigris-soft:#DCE7E1; --focus:#2E6F92;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#14181A; --paper-raised:#1D2320; --ink:#E7E9E1; --ink-soft:#AAB4AE; --ink-faint:#7C8886;
+      --line:#343F3A; --accent:#E08A72; --accent-soft:#3A2621; --verdigris:#8FC3B2; --verdigris-soft:#20342E; --focus:#6FB2D6;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#14181A; --paper-raised:#1D2320; --ink:#E7E9E1; --ink-soft:#AAB4AE; --ink-faint:#7C8886;
+    --line:#343F3A; --accent:#E08A72; --accent-soft:#3A2621; --verdigris:#8FC3B2; --verdigris-soft:#20342E; --focus:#6FB2D6;
+  }
+
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:'Gentium Plus','Times New Roman',serif; padding-inline:16px; }
+  .page{ max-width:920px; margin:0 auto; padding-block:32px 64px; }
+  h1,h2{ text-wrap:balance; }
+  .eyebrow{ font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--verdigris); font-weight:600; }
+  .title{ font-family:'UnifrakturMaguntia',serif; font-weight:400; font-size:clamp(2.2rem,5.5vw,3.4rem); line-height:1.1; margin:0.15em 0 0.1em; }
+  .subtitle{ font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.95rem; color:var(--ink-soft); margin:0 0 20px; max-width:70ch; }
+  .lede{ font-size:1.08rem; line-height:1.6; max-width:68ch; }
+
+  .filters{
+    display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+    margin:24px 0 32px; padding:14px 16px; background:var(--paper-raised); border:1px solid var(--line); border-radius:10px;
+  }
+  .filters .flabel{ font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.8rem; color:var(--ink-soft); margin-right:4px; }
+  .fbtn{
+    font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.78rem; font-weight:500;
+    padding:6px 12px; border-radius:999px; border:1px solid var(--line); background:var(--paper);
+    color:var(--ink-soft); cursor:pointer;
+  }
+  .fbtn:hover{ border-color:var(--verdigris); }
+  .fbtn.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .fbtn .swatch{ display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+
+  .kat{ margin:0 0 40px; }
+  .kat h2{
+    font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.78rem; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--ink-faint); font-weight:600; border-bottom:1px solid var(--line); padding-bottom:8px; margin:0 0 16px;
+  }
+  .entries{ display:flex; flex-direction:column; gap:10px; }
+  .entry{
+    display:grid; grid-template-columns:1fr auto; gap:6px 16px; align-items:start;
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:10px; padding:14px 16px;
+  }
+  @media (max-width:600px){
+    .entry{ grid-template-columns:1fr; }
+    .entry-meta{ justify-self:start; }
+  }
+  .entry[hidden]{ display:none; }
+  .entry-name{ font-family:'Gentium Plus',serif; font-weight:700; font-size:1.05rem; }
+  .entry-name a{ color:var(--ink); text-decoration:none; border-bottom:1px solid var(--verdigris); }
+  .entry-name a:hover{ color:var(--verdigris); }
+  .entry-desc{ grid-column:1 / -1; font-size:0.96rem; line-height:1.5; color:var(--ink); }
+  .entry-meta{ display:flex; gap:6px; align-items:start; justify-self:end; flex-wrap:wrap; }
+  .badge{
+    display:inline-block; font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.65rem; text-transform:uppercase;
+    letter-spacing:0.04em; padding:3px 8px; border-radius:999px; font-weight:600; white-space:nowrap;
+  }
+  .badge.gemeinfrei{ background:var(--verdigris-soft); color:var(--verdigris); }
+  .badge.frei{ background:var(--paper); color:var(--ink-soft); border:1px solid var(--line); }
+  .badge.geschuetzt{ background:var(--accent-soft); color:var(--accent); }
+  .badge.modul{ background:transparent; color:var(--ink-faint); border:1px dashed var(--line); }
+  .entry-note{
+    grid-column:1 / -1; font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.82rem; color:var(--ink-soft);
+    background:var(--paper); border-left:2px solid var(--accent); padding:8px 10px; margin-top:2px; line-height:1.5;
+  }
+
+  footer.tie-in{ margin-top:48px; padding-top:20px; border-top:1px solid var(--line); font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.85rem; color:var(--ink-soft); max-width:68ch; }
+  footer.tie-in strong{ color:var(--ink); }
+</style>
+
+<div class="page" id="kompass">
+
+  <p class="eyebrow">Historische Linguistik · Modul 12 (Basisnutzung: 12a)</p>
+  <h1 class="title">Wörterbuch&#8209;Kompass</h1>
+  <p class="subtitle">Vierzehn Nachschlagewerke und Textsammlungen für die deutsche Sprachgeschichte, sortiert nach Zweck — und mit klarem Lizenzstatus, weil das für alle Artefakte dieses Projekts entscheidet, was wir zitieren und was wir übernehmen dürfen.</p>
+
+  <p class="lede">Grün markierte Werke sind gemeinfrei und dürfen in eigenen Artefakten (Etymologie-Graph, Rückwärts-Tool, Primärtext-Reader) als Datenbasis reproduziert werden. Rot markierte sind urheberrechtlich geschützt — hier wird verlinkt, nicht kopiert. Dazwischen liegen frei zugängliche, aber nicht gemeinfreie Angebote: zum Nachschlagen uneingeschränkt nutzbar, für eigene Datenbanken nicht ohne Weiteres.</p>
+
+  <div class="filters" id="filters">
+    <span class="flabel">Filtern:</span>
+    <button class="fbtn active" data-filter="alle">Alle</button>
+    <button class="fbtn" data-filter="gemeinfrei"><span class="swatch" style="background:var(--verdigris);"></span>Gemeinfrei</button>
+    <button class="fbtn" data-filter="frei"><span class="swatch" style="background:var(--ink-faint);"></span>Frei zugänglich</button>
+    <button class="fbtn" data-filter="geschuetzt"><span class="swatch" style="background:var(--accent);"></span>Geschützt</button>
+  </div>
+
+  <section class="kat">
+    <h2>Wörterbücher — heutiges Deutsch</h2>
+    <div class="entries">
+      <div class="entry" data-lic="frei">
+        <span class="entry-name"><a href="https://www.dwds.de/" target="_blank" rel="noopener">DWDS — Digitales Wörterbuch der deutschen Sprache</a></span>
+        <span class="entry-meta"><span class="badge frei">Frei zugänglich</span><span class="badge modul">Modul 8, 12</span></span>
+        <p class="entry-desc">Bedeutung, Belege, Häufigkeit und ein eigener etymologischer Teil (Pfeifer) unter <em>dwds.de/d/wb-etymwb</em>. Nachschlagen ist frei; die zugrunde liegenden Daten sind es nicht durchgehend.</p>
+      </div>
+      <div class="entry" data-lic="geschuetzt">
+        <span class="entry-name"><a href="https://www.duden.de/" target="_blank" rel="noopener">Duden online</a></span>
+        <span class="entry-meta"><span class="badge geschuetzt">Geschützt</span><span class="badge modul">Modul 10, 12</span></span>
+        <p class="entry-desc">Rechtschreibung, Bedeutung und Grammatik im heutigen Standard — guter Kontrast, um zu sehen, was von den Lautgesetzen bis heute normiert wurde.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="kat">
+    <h2>Historische Wörterbücher — Wortgeschichte &amp; ältere Sprachstufen</h2>
+    <div class="entries">
+      <div class="entry" data-lic="gemeinfrei">
+        <span class="entry-name"><a href="https://www.woerterbuchnetz.de/DWB" target="_blank" rel="noopener">Grimm'sches Wörterbuch (Deutsches Wörterbuch)</a></span>
+        <span class="entry-meta"><span class="badge gemeinfrei">Gemeinfrei</span><span class="badge modul">Modul 8, 12</span></span>
+        <p class="entry-desc">Jacob und Wilhelm Grimms Lebenswerk (1854–1961 vollendet), auf woerterbuchnetz.de digitalisiert. Das Standardwerk für Wortgeschichte und ältere Bedeutungen — und gemeinfrei nutzbar.</p>
+      </div>
+      <div class="entry" data-lic="gemeinfrei">
+        <span class="entry-name"><a href="https://www.woerterbuchnetz.de/Lexer" target="_blank" rel="noopener">Lexer — Mittelhochdeutsches Handwörterbuch</a></span>
+        <span class="entry-meta"><span class="badge gemeinfrei">Gemeinfrei</span><span class="badge modul">Modul 4, 11, 12</span></span>
+        <p class="entry-desc">Matthias von Lexers Handwörterbuch (1872–78), Standardnachschlagewerk für mhd. Primärtexte wie das Nibelungenlied.</p>
+      </div>
+      <div class="entry" data-lic="gemeinfrei">
+        <span class="entry-name"><a href="https://www.woerterbuchnetz.de/BMZ" target="_blank" rel="noopener">Benecke/Müller/Zarncke (BMZ)</a></span>
+        <span class="entry-meta"><span class="badge gemeinfrei">Gemeinfrei</span><span class="badge modul">Modul 11, 12</span></span>
+        <p class="entry-desc">Das ausführlichere, ältere mittelhochdeutsche Wörterbuch (1854–66) — sinnvolle Ergänzung zu Lexer bei selteneren Wörtern.</p>
+      </div>
+      <div class="entry" data-lic="frei">
+        <span class="entry-name"><a href="https://www.mhdwb-online.de/" target="_blank" rel="noopener">Mittelhochdeutsches Wörterbuch (Neubearbeitung, Trier/Göttingen)</a></span>
+        <span class="entry-meta"><span class="badge frei">Frei zugänglich</span><span class="badge modul">Modul 4, 11</span></span>
+        <p class="entry-desc">Laufendes Neubearbeitungsprojekt seit 2006, online frei nutzbar, aber selbst noch urheberrechtlich laufendes Werk — nicht als Datenbasis für eigene Tools gemeinfrei.</p>
+      </div>
+      <div class="entry" data-lic="frei">
+        <span class="entry-name"><a href="https://www.koeblergerhard.de/" target="_blank" rel="noopener">Köblers Wörterbücher (Ahd., Germanisch, Gotisch, Altnordisch)</a></span>
+        <span class="entry-meta"><span class="badge frei">Frei zugänglich</span><span class="badge modul">Modul 2, 3, 4</span></span>
+        <p class="entry-desc">Gerhard Köbler stellt seine eigenen Wörterbücher zu praktisch jeder älteren germanischen Sprachstufe kostenlos als PDF/HTML bereit — die breiteste frei zugängliche Abdeckung für Modul 2–4.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="kat">
+    <h2>Etymologie in der Tiefe — bis zum Indogermanischen</h2>
+    <div class="entries">
+      <div class="entry" data-lic="geschuetzt">
+        <span class="entry-name">Kluge/Seebold — Etymologisches Wörterbuch der deutschen Sprache (aktuelle Auflage)</span>
+        <span class="entry-meta"><span class="badge geschuetzt">Geschützt</span><span class="badge modul">Modul 8</span></span>
+        <p class="entry-desc">Das Standardwerk der deutschen Etymologie, De Gruyter Verlag. Nur über Kauf oder Bibliothekszugang — nicht frei online, nicht als Datenbasis nutzbar.</p>
+      </div>
+      <div class="entry" data-lic="gemeinfrei">
+        <span class="entry-name"><a href="https://archive.org/details/etymologischesw05kluggoog" target="_blank" rel="noopener">Kluge, 1. Auflage (1883)</a></span>
+        <span class="entry-meta"><span class="badge gemeinfrei">Gemeinfrei</span><span class="badge modul">Modul 8 · Bauphase 6</span></span>
+        <p class="entry-desc">Die Erstauflage vor 1928 veröffentlicht und damit gemeinfrei, vollständig auf archive.org. Genau die Ausgabe, auf die sich Abschnitt 6 des Lernplans als Datenbasis für den Etymologie-Graphen bezieht.</p>
+      </div>
+      <div class="entry" data-lic="geschuetzt">
+        <span class="entry-name"><a href="https://de.wikipedia.org/wiki/Julius_Pokorny" target="_blank" rel="noopener">Pokorny — Indogermanisches etymologisches Wörterbuch (1959)</a></span>
+        <span class="entry-meta"><span class="badge geschuetzt">Geschützt</span><span class="badge modul">Modul 2</span></span>
+        <p class="entry-desc">Das Standardwerk zum idg. Wortschatz. Pokorny starb 1970, das Werk bleibt in der EU bis ca. 2040 geschützt.</p>
+        <p class="entry-note">Im Netz kursieren zahlreiche vollständige Scans und PDF-Nachdrucke — deren Rechtslage ist ungeklärt bis fragwürdig. Zum Nachschlagen für den eigenen Lernfortschritt unproblematisch, aber keine Quelle, aus der wir für ein Artefakt zitieren oder Daten übernehmen sollten.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="kat">
+    <h2>Textkorpora &amp; Primärtexte</h2>
+    <div class="entries">
+      <div class="entry" data-lic="gemeinfrei">
+        <span class="entry-name"><a href="https://www.deutschestextarchiv.de/" target="_blank" rel="noopener">Deutsches Textarchiv (DTA)</a></span>
+        <span class="entry-meta"><span class="badge gemeinfrei">Meist gemeinfrei</span><span class="badge modul">Modul 4, 11 · Bauphase 6</span></span>
+        <p class="entry-desc">Über 4.000 historische Texte vom 16. bis 20. Jahrhundert, größtenteils gemeinfrei oder unter offener Lizenz (CC BY-SA) kuratiert. Die zentrale Quelle für den geplanten Primärtext-Reader.</p>
+      </div>
+      <div class="entry" data-lic="gemeinfrei">
+        <span class="entry-name"><a href="https://de.wikisource.org/" target="_blank" rel="noopener">Wikisource (deutsch)</a></span>
+        <span class="entry-meta"><span class="badge gemeinfrei">Gemeinfrei</span><span class="badge modul">Modul 11</span></span>
+        <p class="entry-desc">Ergänzt das DTA um weitere gemeinfreie Editionen, u. a. Luthers Bibelübersetzung in verschiedenen Ausgaben.</p>
+      </div>
+      <div class="entry" data-lic="frei">
+        <span class="entry-name"><a href="https://www.linguistics.rub.de/rem/" target="_blank" rel="noopener">Referenzkorpus Mittelhochdeutsch (ReM)</a></span>
+        <span class="entry-meta"><span class="badge frei">Wissenschaftl. Nutzung frei</span><span class="badge modul">Modul 11</span></span>
+        <p class="entry-desc">Linguistisch annotiertes Korpus mhd. Texte (Ruhr-Universität Bochum) — für die vertiefte Editionsarbeit in Modul 11 gedacht, nicht für Laien-Lektüre.</p>
+      </div>
+      <div class="entry" data-lic="frei">
+        <span class="entry-name"><a href="https://titus.uni-frankfurt.de/" target="_blank" rel="noopener">TITUS — Thesaurus Indogermanischer Text- und Sprachmaterialien</a></span>
+        <span class="entry-meta"><span class="badge frei">Frei zugänglich</span><span class="badge modul">Modul 2, 11</span></span>
+        <p class="entry-desc">Textsammlung und Sprachmaterialien quer durch die indogermanischen Sprachen (Uni Frankfurt) — nützlich, sobald Vergleiche über das Germanische hinausgehen sollen.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="kat">
+    <h2>Grammatik &amp; Sprachwandel — Kontrastfolie zum heutigen Deutsch</h2>
+    <div class="entries">
+      <div class="entry" data-lic="frei">
+        <span class="entry-name"><a href="https://grammis.ids-mannheim.de/" target="_blank" rel="noopener">grammis (IDS Mannheim)</a></span>
+        <span class="entry-meta"><span class="badge frei">Frei zugänglich</span><span class="badge modul">Modul 9</span></span>
+        <p class="entry-desc">Das grammatische Informationssystem des Leibniz-Instituts für Deutsche Sprache — die beste frei zugängliche Referenz für die heutige Grammatik, gegen die sich der Wandel in Modul 9 (Syntaxwandel) abzeichnet.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="tie-in">
+    <strong>Zusammenspiel mit den anderen Artefakten:</strong> Die Lizenz-Einteilung hier folgt Abschnitt 6 des Lernplans. Grün markierte Werke sind die einzigen zulässigen Datenquellen für den Etymologie-Graphen (Bauphase 6) und den Primärtext-Reader — nicht die aktuellen, geschützten Standardwerke, so nützlich sie zum Nachschlagen sind.
+  </footer>
+</div>
+
+<script>
+(function(){
+  var root = document.getElementById('kompass');
+  var buttons = root.querySelectorAll('.fbtn');
+  var entries = root.querySelectorAll('.entry');
+  var kats = root.querySelectorAll('.kat');
+
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      buttons.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var f = btn.getAttribute('data-filter');
+      entries.forEach(function(e){
+        e.hidden = !(f === 'alle' || e.getAttribute('data-lic') === f);
+      });
+      kats.forEach(function(k){
+        var visible = k.querySelectorAll('.entry:not([hidden])').length > 0;
+        k.hidden = !visible;
+      });
+    });
+  });
+})();
+</script>
+
+</body></html>

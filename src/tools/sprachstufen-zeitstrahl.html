@@ -1,0 +1,307 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Sprachstufen-Zeitstrahl</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Gentium+Plus:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#EDEFE9;
+    --paper-raised:#FFFFFF;
+    --ink:#1B2426;
+    --ink-soft:#52605E;
+    --ink-faint:#7C8886;
+    --line:#C9CDC0;
+    --accent:#9B3226;
+    --accent-soft:#F1DAD2;
+    --verdigris:#3F6E64;
+    --verdigris-soft:#DCE7E1;
+    --focus:#2E6F92;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#14181A; --paper-raised:#1D2320; --ink:#E7E9E1; --ink-soft:#AAB4AE; --ink-faint:#7C8886;
+      --line:#343F3A; --accent:#E08A72; --accent-soft:#3A2621; --verdigris:#8FC3B2; --verdigris-soft:#20342E; --focus:#6FB2D6;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#14181A; --paper-raised:#1D2320; --ink:#E7E9E1; --ink-soft:#AAB4AE; --ink-faint:#7C8886;
+    --line:#343F3A; --accent:#E08A72; --accent-soft:#3A2621; --verdigris:#8FC3B2; --verdigris-soft:#20342E; --focus:#6FB2D6;
+  }
+
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:'Gentium Plus','Times New Roman',serif; padding-inline:16px; }
+  .page{ max-width:1080px; margin:0 auto; padding-block:32px 64px; }
+  h1,h2,h3{ text-wrap:balance; }
+  .eyebrow{ font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--verdigris); font-weight:600; }
+  .title{ font-family:'UnifrakturMaguntia',serif; font-weight:400; font-size:clamp(2.2rem,5.5vw,3.4rem); line-height:1.1; margin:0.15em 0 0.1em; }
+  .subtitle{ font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.95rem; color:var(--ink-soft); margin:0 0 20px; max-width:70ch; }
+  .lede{ font-size:1.08rem; line-height:1.6; max-width:68ch; }
+  .lede em{ font-style:italic; color:var(--accent); }
+  .scale-note{ font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.78rem; color:var(--ink-faint); margin:10px 0 0; }
+
+  .layout{ display:grid; grid-template-columns:1fr; gap:28px; margin-top:28px; }
+  @media (min-width:900px){ .layout{ grid-template-columns:1fr 300px; align-items:start; } }
+
+  .block h2{ font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.78rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-faint); font-weight:600; border-bottom:1px solid var(--line); padding-bottom:8px; margin:0 0 16px; }
+
+  .timeline{ display:flex; align-items:stretch; gap:0; }
+  @media (max-width:780px){ .timeline{ flex-direction:column; } }
+
+  .era{
+    flex:1 1 0;
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 12px;
+    cursor:pointer;
+    min-width:0;
+  }
+  .era:hover{ border-color:var(--verdigris); }
+  .era:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .era.selected{ background:var(--accent); border-color:var(--accent); }
+  .era.selected .era-name, .era.selected .era-dates, .era.selected .era-leit{ color:#fff; }
+  .era-name{ font-family:'Gentium Plus',serif; font-weight:700; font-size:1.08rem; display:block; margin-bottom:2px; }
+  .era-dates{ font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.72rem; color:var(--ink-soft); display:block; font-variant-numeric:tabular-nums; }
+  .era-leit{ font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.75rem; color:var(--ink-faint); display:block; margin-top:6px; line-height:1.3; }
+
+  .connector{
+    flex:0 0 84px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    padding:0 4px;
+  }
+  @media (max-width:780px){ .connector{ flex-basis:auto; width:100%; height:56px; padding:0; } }
+  .connector::before{
+    content:"";
+    position:absolute;
+    top:50%; left:0; right:0; height:2px;
+    background:var(--line);
+    transform:translateY(-50%);
+  }
+  @media (max-width:780px){ .connector::before{ top:0; bottom:0; left:50%; right:auto; width:2px; height:auto; transform:translateX(-50%); } }
+  .event{
+    position:relative;
+    z-index:1;
+    background:var(--verdigris-soft);
+    color:var(--verdigris);
+    border:1px solid var(--verdigris);
+    border-radius:14px;
+    font-family:'IBM Plex Sans',system-ui,sans-serif;
+    font-size:0.62rem;
+    font-weight:600;
+    letter-spacing:0.02em;
+    line-height:1.2;
+    padding:5px 8px;
+    white-space:normal;
+    max-width:78px;
+    cursor:pointer;
+    text-align:center;
+  }
+  .event:hover{ background:var(--verdigris); color:#fff; }
+  .event.selected{ background:var(--accent); border-color:var(--accent); color:#fff; }
+  .event.minor{
+    position:absolute;
+    bottom:-10px;
+    right:8px;
+    font-size:0.6rem;
+  }
+
+  .legend{ display:flex; gap:18px; flex-wrap:wrap; font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.78rem; color:var(--ink-soft); margin:16px 0 0; }
+  .legend .dot{ display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px; }
+  .legend .dot.era-dot{ background:var(--ink); }
+  .legend .dot.event-dot{ background:var(--verdigris); }
+
+  .panel{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; padding:20px; }
+  @media (min-width:900px){ .panel{ position:sticky; top:20px; } }
+  .panel .eyebrow{ margin-bottom:8px; display:block; }
+  .panel h3{ font-family:'Gentium Plus',serif; font-size:1.5rem; margin:0 0 4px; }
+  .panel .pdates{ font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.8rem; color:var(--ink-soft); font-variant-numeric:tabular-nums; margin:0 0 14px; }
+  .panel dl{ margin:0; }
+  .panel dt{ font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-faint); margin-top:12px; }
+  .panel dd{ margin:2px 0 0; font-size:0.98rem; line-height:1.5; }
+  .panel .example{
+    margin-top:14px; padding:12px; background:var(--paper); border-radius:8px; border:1px dashed var(--line);
+    font-style:italic; font-size:1rem; line-height:1.5;
+  }
+  .panel .example .gloss{ display:block; margin-top:6px; font-style:normal; font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.78rem; color:var(--ink-soft); }
+  .panel .module-tag{
+    display:inline-block; margin-top:14px; font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.72rem;
+    background:var(--verdigris-soft); color:var(--verdigris); padding:3px 9px; border-radius:999px; font-weight:600;
+  }
+
+  footer.tie-in{ margin-top:48px; padding-top:20px; border-top:1px solid var(--line); font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.85rem; color:var(--ink-soft); max-width:68ch; }
+  footer.tie-in strong{ color:var(--ink); }
+  footer.tie-in a{ color:var(--verdigris); }
+</style>
+
+<div class="page" id="zeitstrahl">
+
+  <p class="eyebrow">Historische Linguistik · Orientierung vor Modul 0</p>
+  <h1 class="title">Sprachstufen&#8209;Zeitstrahl</h1>
+  <p class="subtitle">Die mentale Landkarte für alles Weitere: sechs Sprachstufen von der urindogermanischen Rekonstruktion bis zum heutigen Deutsch — und die vier Lautgesetz-Ereignisse, die zwischen ihnen liegen.</p>
+
+  <p class="lede">Die Module dieses Kurses werden nicht in dieser Reihenfolge durchlaufen — Modul&nbsp;3 (Erste Lautverschiebung) kommt vor Modul&nbsp;4 (Perioden), Modul&nbsp;5 (Zweite Lautverschiebung) danach. Damit du trotzdem immer weißt, <em>wo</em> du dich gerade befindest, dient dieser Zeitstrahl als Übersicht: einmal anschauen, dann bei jedem Modul kurz zurückkommen.</p>
+  <p class="scale-note">Die Breiten sind nicht maßstabsgetreu — Urindogermanisch und Urgermanisch umfassen jeweils Jahrhunderte bis Jahrtausende mit unsicherer Datierung, die deutschen Sprachstufen wenige Jahrhunderte. Genaue Zeiträume stehen in den Karten und im Detail rechts.</p>
+
+  <div class="layout">
+    <div>
+      <section class="block">
+        <h2>Sechs Sprachstufen, vier Lautgesetz-Ereignisse</h2>
+
+        <div class="timeline">
+          <div class="era" tabindex="0"
+            data-name="Urindogermanisch" data-dates="ca. 4500–2500 v. Chr. (geschätzt, in der Forschung umstritten)"
+            data-leit="Nicht belegt, sondern durch Sprachvergleich rekonstruiert. Freier (mobiler) Wortakzent — Grundlage für Verners Gesetz. Aspirierte Verschlusslaute bʰ, dʰ, ɡʰ."
+            data-example="*ph₂tér-" data-gloss="Rekonstruierte Form, kein belegter Text — der Asterisk markiert das."
+            data-module="Modul 2 · Indogermanistik-Basics">
+            <span class="era-name">Urindogermanisch</span>
+            <span class="era-dates">ca. 4500–2500 v. Chr.</span>
+            <span class="era-leit">rekonstruiert, kein Text</span>
+          </div>
+
+          <div class="connector">
+            <span class="event" tabindex="0"
+              data-name="Erste Lautverschiebung" data-dates="ca. 500 v. Chr."
+              data-leit="Grimms Gesetz (drei Verschiebungsketten) und Verners Gesetz (Ausnahme je nach idg. Akzentlage) trennen das Urgermanische vom Rest des Indogermanischen."
+              data-example="idg. *tréyes → germ. *þrīz" data-gloss="→ nhd. drei. Details und Übungsaufgaben in der Lautzeichen-Tafel / Modul 3."
+              data-module="Modul 3 · Erste Lautverschiebung">Erste LV</span>
+          </div>
+
+          <div class="era" tabindex="0"
+            data-name="Urgermanisch" data-dates="ca. 500 v. Chr. – 200 n. Chr."
+            data-leit="Entstanden durch die Erste Lautverschiebung. Fester Wortakzent auf der ersten (Stamm-)Silbe — anders als im beweglich betonten Urindogermanischen. Älteste Belege: Runeninschriften ab ca. 200 n. Chr."
+            data-example="ek hlewagastiz holtijaz horna tawido" data-gloss="„Ich, Hlewagastiz, Sohn des Holt, machte das Horn.“ — Goldhorn von Gallehus, ca. 400 n. Chr., eine der ältesten zusammenhängenden germanischen Runeninschriften."
+            data-module="Modul 2/3 · Grundlage für die Lautgesetze">
+            <span class="era-name">Urgermanisch</span>
+            <span class="era-dates">ca. 500 v.Chr.–200 n.Chr.</span>
+            <span class="era-leit">feste Anfangsbetonung</span>
+          </div>
+
+          <div class="connector">
+            <span class="event" tabindex="0"
+              data-name="Zweite Lautverschiebung" data-dates="ca. 500–750 n. Chr."
+              data-leit="Definiert die Grenze zwischen Germanisch und Althochdeutsch: p/t/k werden je nach Position zu Affrikaten (pf, ts, kx) oder Frikativen (f, s, ch). Geographisch gestuft (Benrather/Speyerer Linie, Rheinischer Fächer) — im Niederdeutschen blieb sie aus."
+              data-example="niederl. maken → nhd. machen" data-gloss="k → ch, klassisches Beispiel für die geographische Streuung. Details in Modul 5."
+              data-module="Modul 5 · Zweite Lautverschiebung">Zweite LV</span>
+          </div>
+
+          <div class="era" tabindex="0" style="position:relative;"
+            data-name="Althochdeutsch" data-dates="ca. 750–1050"
+            data-leit="Erste zusammenhängende deutsche Texte (Glossen, Hildebrandslied, Tatian, Otfrid von Weißenburg). Noch volle Nebensilbenvokale (a, i, o, u in Endungen erhalten) — anders als im Mittelhochdeutschen."
+            data-example="Ik gihorta ðat seggen, ðat sih urhettun ænon muotin" data-gloss="„Ich hörte das sagen, dass sich Herausforderer allein trafen.“ — Hildebrandslied, ca. 810."
+            data-module="Modul 4 · Sprachperioden, 4a Primärtext-Vorgeschmack">
+            <span class="era-name">Althochdeutsch</span>
+            <span class="era-dates">ca. 750–1050</span>
+            <span class="era-leit">volle Nebensilbenvokale</span>
+            <span class="event minor" tabindex="0"
+              data-name="i-Umlaut" data-dates="bereits vorahd., in der Schrift ab dem 9./10. Jh. sichtbar"
+              data-leit="Ein folgendes i oder j färbt einen vorausgehenden Vokal um (a→e, u→ü etc.) — der früheste der beiden großen Vokalphänomene, deutlich vor der viel späteren nhd. Diphthongierung."
+              data-example="gasti (Ahd., vor Umlaut) → Gäste" data-gloss="Umlaut a→e/ä, im Deutschen bis heute produktiv (Plural, Komparativ)."
+              data-module="Modul 6 · Vokalismus">i-Umlaut</span>
+          </div>
+
+          <div class="era" tabindex="0"
+            data-name="Mittelhochdeutsch" data-dates="ca. 1050–1350"
+            data-leit="Höfische Blütezeit (Minnesang, Nibelungenlied, Walther von der Vogelweide). Nebensilbenvokale zu Schwa [ə] abgeschwächt. Die späteren nhd. Diphthonge existieren noch als lange Monophthonge î, û, iu."
+            data-example="Uns ist in alten mæren wunders vil geseit" data-gloss="„Uns ist in alten Erzählungen viel Wunderbares berichtet worden.“ — Nibelungenlied, ca. 1200."
+            data-module="Modul 4 · Sprachperioden">
+            <span class="era-name">Mittelhochdeutsch</span>
+            <span class="era-dates">ca. 1050–1350</span>
+            <span class="era-leit">Nebensilben zu Schwa</span>
+          </div>
+
+          <div class="connector">
+            <span class="event" tabindex="0"
+              data-name="Diphthongierung / Monophthongierung" data-dates="ca. 1350–1600, regional gestreut"
+              data-leit="Mhd. î, û, iu werden zu den heutigen Diphthongen ei, au, eu/äu (nhd. Diphthongierung); gleichzeitig werden mhd. ie, uo, üe zu den langen Monophthongen ie [iː], u, ü (mhd. Monophthongierung). Beide Prozesse breiten sich von unterschiedlichen Ausgangspunkten aus und erreichen nicht alle Dialekte."
+              data-example="mhd. lîp, hûs, liute → nhd. Leib, Haus, Leute" data-gloss="Die drei Standardbeispiele der nhd. Diphthongierung. Details in Modul 6."
+              data-module="Modul 6 · Vokalismus">Diphth./Monophth.</span>
+          </div>
+
+          <div class="era" tabindex="0"
+            data-name="Frühneuhochdeutsch" data-dates="ca. 1350–1650"
+            data-leit="Kanzleisprachen vereinheitlichen die Schreibung überregional, Buchdruck ab ca. 1450 (Gutenberg) beschleunigt das. Luthers Bibelübersetzung wirkt sprachgeschichtlich normbildend, ohne dass er eine Sprache „erfunden“ hätte."
+            data-example="Im anfang war das Wort" data-gloss="Johannes 1,1, Luther-Übersetzung 1545."
+            data-module="Modul 4 · Sprachperioden">
+            <span class="era-name">Frühneuhochdeutsch</span>
+            <span class="era-dates">ca. 1350–1650</span>
+            <span class="era-leit">Kanzleisprachen, Buchdruck</span>
+          </div>
+
+          <div class="connector"><span style="width:100%;height:2px;"></span></div>
+
+          <div class="era" tabindex="0"
+            data-name="Neuhochdeutsch" data-dates="ca. 1650–heute"
+            data-leit="Diphthongierung und Monophthongierung sind abgeschlossen. Grammatiker (Gottsched, Adelung) und später der Duden (ab 1880) standardisieren Grammatik und Schreibung; Orthographiereformen 1901 und 1996."
+            data-example="Warum heißt es Vater, aber father auf Englisch?" data-gloss="Der Ausgangspunkt der Lautzeichen-Tafel — die Antwort liegt in der Ersten Lautverschiebung, ganz links auf diesem Zeitstrahl."
+            data-module="Modul 0–12 · dein aktueller Standort">
+            <span class="era-name">Neuhochdeutsch</span>
+            <span class="era-dates">ca. 1650–heute</span>
+            <span class="era-leit">standardisierte Schreibung</span>
+          </div>
+        </div>
+
+        <div class="legend">
+          <span><span class="dot era-dot"></span>Sprachstufe</span>
+          <span><span class="dot event-dot"></span>Lautgesetz-Ereignis</span>
+        </div>
+      </section>
+    </div>
+
+    <aside class="panel" id="panel">
+      <span class="eyebrow">Ausgewählt</span>
+      <h3 id="p-name">Neuhochdeutsch</h3>
+      <p class="pdates" id="p-dates">ca. 1650–heute</p>
+      <dl>
+        <dt>Leitmerkmale</dt>
+        <dd id="p-leit">Diphthongierung und Monophthongierung sind abgeschlossen. Grammatiker (Gottsched, Adelung) und später der Duden (ab 1880) standardisieren Grammatik und Schreibung; Orthographiereformen 1901 und 1996.</dd>
+      </dl>
+      <div class="example">
+        <span id="p-example">Warum heißt es Vater, aber father auf Englisch?</span>
+        <span class="gloss" id="p-gloss">Der Ausgangspunkt der Lautzeichen-Tafel — die Antwort liegt in der Ersten Lautverschiebung, ganz links auf diesem Zeitstrahl.</span>
+      </div>
+      <span class="module-tag" id="p-module">Modul 0–12 · dein aktueller Standort</span>
+    </aside>
+  </div>
+
+  <footer class="tie-in">
+    <strong>Zusammenspiel mit der Lautzeichen-Tafel:</strong> Wer die Zeichen t, d, þ, ð aus der Lautzeichen-Tafel schon kennt, findet hier, wo im Zeitstrahl Verners Gesetz genau ansetzt (Übergang Idg. → Urgermanisch). Beide Artefakte zusammen decken die Grundlage für Modul&nbsp;3 ab.
+  </footer>
+</div>
+
+<script>
+(function(){
+  var root = document.getElementById('zeitstrahl');
+  var pName = document.getElementById('p-name');
+  var pDates = document.getElementById('p-dates');
+  var pLeit = document.getElementById('p-leit');
+  var pExample = document.getElementById('p-example');
+  var pGloss = document.getElementById('p-gloss');
+  var pModule = document.getElementById('p-module');
+
+  function select(el){
+    var prevSel = root.querySelectorAll('.selected');
+    prevSel.forEach(function(p){ p.classList.remove('selected'); });
+    el.classList.add('selected');
+
+    pName.textContent = el.getAttribute('data-name') || '';
+    pDates.textContent = el.getAttribute('data-dates') || '';
+    pLeit.textContent = el.getAttribute('data-leit') || '';
+    pExample.textContent = el.getAttribute('data-example') || '';
+    pGloss.textContent = el.getAttribute('data-gloss') || '';
+    pModule.textContent = el.getAttribute('data-module') || '';
+  }
+
+  var clickable = root.querySelectorAll('.era, .event');
+  clickable.forEach(function(el){
+    if(!el.hasAttribute('data-name')) return;
+    el.addEventListener('click', function(){ select(el); });
+    el.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); select(el); }
+    });
+  });
+})();
+</script>
+
+</body></html>

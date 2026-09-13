@@ -1,0 +1,650 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Lautzeichen-Tafel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Gentium+Plus:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#EDEFE9;
+    --paper-raised:#FFFFFF;
+    --ink:#1B2426;
+    --ink-soft:#52605E;
+    --ink-faint:#7C8886;
+    --line:#C9CDC0;
+    --accent:#9B3226;
+    --accent-soft:#F1DAD2;
+    --verdigris:#3F6E64;
+    --verdigris-soft:#DCE7E1;
+    --focus:#2E6F92;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#14181A;
+      --paper-raised:#1D2320;
+      --ink:#E7E9E1;
+      --ink-soft:#AAB4AE;
+      --ink-faint:#7C8886;
+      --line:#343F3A;
+      --accent:#E08A72;
+      --accent-soft:#3A2621;
+      --verdigris:#8FC3B2;
+      --verdigris-soft:#20342E;
+      --focus:#6FB2D6;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#14181A;
+    --paper-raised:#1D2320;
+    --ink:#E7E9E1;
+    --ink-soft:#AAB4AE;
+    --ink-faint:#7C8886;
+    --line:#343F3A;
+    --accent:#E08A72;
+    --accent-soft:#3A2621;
+    --verdigris:#8FC3B2;
+    --verdigris-soft:#20342E;
+    --focus:#6FB2D6;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Gentium Plus', 'Times New Roman', serif;
+    padding-inline:16px;
+  }
+  .page{
+    max-width:980px;
+    margin:0 auto;
+    padding-block:32px 64px;
+  }
+
+  h1,h2,h3{ text-wrap:balance; }
+  .eyebrow{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--verdigris);
+    font-weight:600;
+  }
+  .title{
+    font-family:'UnifrakturMaguntia', serif;
+    font-weight:400;
+    font-size:clamp(2.4rem, 6vw, 3.6rem);
+    line-height:1.1;
+    margin:0.15em 0 0.1em;
+    color:var(--ink);
+  }
+  .subtitle{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.95rem;
+    color:var(--ink-soft);
+    margin:0 0 20px;
+  }
+  .lede{
+    font-size:1.08rem;
+    line-height:1.6;
+    max-width:65ch;
+    color:var(--ink);
+  }
+  .lede em{ font-style:italic; color:var(--accent); }
+
+  .howto{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    align-items:center;
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 16px;
+    margin:24px 0 36px;
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+  }
+  .howto strong{ color:var(--ink); }
+
+  .switch-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-left:auto;
+  }
+  .switch{
+    position:relative;
+    width:42px;
+    height:24px;
+    flex:none;
+  }
+  .switch input{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    margin:0;
+    cursor:pointer;
+  }
+  .switch .track{
+    position:absolute;
+    inset:0;
+    background:var(--line);
+    border-radius:999px;
+    transition:background .15s ease;
+  }
+  .switch .thumb{
+    position:absolute;
+    top:3px; left:3px;
+    width:18px; height:18px;
+    border-radius:50%;
+    background:var(--paper-raised);
+    box-shadow:0 1px 2px rgba(0,0,0,.3);
+    transition:transform .15s ease;
+  }
+  .switch input:checked + .track{ background:var(--verdigris); }
+  .switch input:checked + .track + .thumb{ transform:translateX(18px); }
+  .switch input:focus-visible + .track{ outline:2px solid var(--focus); outline-offset:2px; }
+
+  .layout{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:28px;
+  }
+  @media (min-width:900px){
+    .layout{ grid-template-columns:1fr 300px; align-items:start; }
+  }
+
+  section.block{ margin-bottom:40px; }
+  .block h2{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.78rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    font-weight:600;
+    border-bottom:1px solid var(--line);
+    padding-bottom:8px;
+    margin:0 0 6px;
+  }
+  .block h3{
+    font-family:'Gentium Plus', serif;
+    font-size:1.3rem;
+    font-weight:700;
+    margin:0 0 12px;
+    color:var(--ink);
+  }
+  .block > p.hint{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.83rem;
+    color:var(--ink-soft);
+    margin:0 0 16px;
+    max-width:60ch;
+  }
+
+  .table-scroll{ overflow-x:auto; border-radius:10px; border:1px solid var(--line); }
+  table.grid{
+    border-collapse:collapse;
+    width:100%;
+    min-width:640px;
+    background:var(--paper-raised);
+  }
+  table.grid th, table.grid td{
+    border:1px solid var(--line);
+    padding:10px 8px;
+    text-align:center;
+    vertical-align:middle;
+  }
+  table.grid thead th{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.68rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    font-weight:600;
+    background:var(--paper);
+  }
+  table.grid tbody th{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.72rem;
+    color:var(--ink-soft);
+    text-align:left;
+    white-space:nowrap;
+    background:var(--paper);
+    font-weight:500;
+  }
+  table.grid td.empty{ color:var(--line); }
+  tr[data-historical="true"]{ background:var(--verdigris-soft); }
+
+  .sym{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:1.9em;
+    padding:2px 6px;
+    margin:1px;
+    border-radius:6px;
+    font-size:1.15rem;
+    cursor:pointer;
+    background:none;
+    border:1px solid transparent;
+    color:var(--ink);
+    font-family:'Gentium Plus', serif;
+    line-height:1.3;
+  }
+  .sym:hover{ border-color:var(--verdigris); }
+  .sym:focus-visible{ outline:2px solid var(--focus); outline-offset:1px; }
+  .sym[data-historical="true"]{ color:var(--verdigris); }
+  .sym.selected{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .tafel:not(.show-historical) .sym[data-historical="true"]{ display:none; }
+  .tafel:not(.show-historical) tr[data-historical="true"]{ display:none; }
+  .empty-fallback{ color:var(--line); }
+  .tafel.show-historical .empty-fallback{ display:none; }
+
+  .legend{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    margin:12px 0 0;
+  }
+  .legend .dot{
+    display:inline-block;
+    width:9px; height:9px;
+    border-radius:50%;
+    margin-right:6px;
+  }
+  .legend .dot.modern{ background:var(--ink); }
+  .legend .dot.hist{ background:var(--verdigris); }
+
+  .vowel-wrap{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:16px;
+  }
+  svg.trapezoid{ width:100%; height:auto; display:block; max-width:560px; margin:0 auto; }
+  .vpoint circle{ fill:var(--paper-raised); stroke:var(--ink); stroke-width:1.6; cursor:pointer; }
+  .vpoint text{ font-family:'Gentium Plus', serif; font-size:13px; fill:var(--ink); pointer-events:none; }
+  .vpoint:hover circle{ stroke:var(--accent); }
+  .vpoint.selected circle{ fill:var(--accent); stroke:var(--accent); }
+  .vpoint.selected text{ fill:#fff; }
+  .vpoint.historical circle{ fill:var(--verdigris-soft); stroke:var(--verdigris); stroke-dasharray:2 2; }
+  .vpoint.historical text{ fill:var(--verdigris); font-size:11px; }
+  .historical-group{ display:none; }
+  .tafel.show-historical .historical-group{ display:inline; }
+  .diph-path{ fill:none; stroke:var(--accent); stroke-width:1.4; stroke-dasharray:3 3; opacity:0.75; marker-end:url(#arrow); pointer-events:none; }
+  .trapezoid-frame{ fill:none; stroke:var(--line); stroke-width:1; }
+  .diph-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin-top:14px;
+    padding-top:14px;
+    border-top:1px dashed var(--line);
+  }
+  .diph-row .sym{
+    font-size:1.1rem;
+    color:var(--accent);
+    border:1px solid var(--accent-soft);
+    padding:5px 12px;
+  }
+  .diph-row .sym.selected{ background:var(--accent); color:#fff; }
+  .trapezoid-label{ font-family:'IBM Plex Sans', sans-serif; font-size:10px; fill:var(--ink-faint); letter-spacing:0.04em; }
+
+  .special-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(220px,1fr));
+    gap:12px;
+  }
+  .special-card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px;
+  }
+  .special-card .sym-big{
+    font-size:1.6rem;
+    display:block;
+    margin-bottom:4px;
+  }
+  .special-card .sym-name{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.78rem;
+    font-weight:600;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
+  .special-card p{ margin:6px 0 0; font-size:0.95rem; line-height:1.45; }
+  .badge{
+    display:inline-block;
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.65rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    padding:2px 7px;
+    border-radius:999px;
+    background:var(--verdigris-soft);
+    color:var(--verdigris);
+    font-weight:600;
+    margin-left:6px;
+  }
+
+  .panel{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:20px;
+  }
+  @media (min-width:900px){
+    .panel{ position:sticky; top:20px; }
+  }
+  .panel .eyebrow{ margin-bottom:8px; display:block; }
+  .panel .psym{
+    font-size:3rem;
+    line-height:1;
+    margin:0 0 10px;
+    color:var(--ink);
+  }
+  .panel dl{ margin:14px 0 0; }
+  .panel dt{
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--ink-faint);
+    margin-top:10px;
+  }
+  .panel dd{ margin:2px 0 0; font-size:0.98rem; line-height:1.45; }
+  .panel .pnote{
+    margin-top:14px;
+    padding-top:12px;
+    border-top:1px dashed var(--line);
+    font-size:0.88rem;
+    color:var(--ink-soft);
+    line-height:1.5;
+  }
+
+  footer.tie-in{
+    margin-top:56px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    max-width:65ch;
+  }
+  footer.tie-in strong{ color:var(--ink); }
+</style>
+
+<div class="page tafel" id="tafel">
+
+  <p class="eyebrow">Historische Linguistik · Modul 0</p>
+  <h1 class="title">Lautzeichen&#8209;Tafel</h1>
+  <p class="subtitle">IPA für die deutsche Sprachgeschichte — keine Weltsprachen-Tabelle, sondern genau die Zeichen, die in Grimms und Verners Gesetz, der zweiten Lautverschiebung und den Rekonstruktionen des Urgermanischen und Urindogermanischen tatsächlich vorkommen.</p>
+
+  <p class="lede">Warum heißt es englisch <em>father</em>, aber deutsch <em>Vater</em> — während <em>brother</em> und <em>Bruder</em> denselben Anlaut behalten? Beide Wörter stammen aus derselben Lautkette, aber ein Betonungsunterschied im Urindogermanischen hat sie unterschiedlich weiterentwickelt. Um das aufzulösen, reichen wenige Zeichen dieser Tafel: t, d, þ — und ein Betonungszeichen. Der Rest dient als Nachschlagewerk für später.</p>
+
+  <div class="howto">
+    <span><strong>Anklicken</strong> zeigt Artikulationsort, -art und ein Beispiel rechts.</span>
+    <div class="switch-row">
+      <label for="hist-toggle" style="cursor:pointer;">Historische &amp; Rekonstruktions&#8209;Zeichen</label>
+      <span class="switch">
+        <input type="checkbox" id="hist-toggle">
+        <span class="track"></span>
+        <span class="thumb"></span>
+      </span>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div>
+
+      <section class="block">
+        <h2>Konsonanten</h2>
+        <h3>Nach Artikulationsort &amp; -art</h3>
+        <p class="hint">Zeilen ohne passenden Laut sind grau ausgeblendet. Türkisfarbene Zeichen existieren nicht im heutigen Deutsch — sie stammen aus dem Urgermanischen oder Urindogermanischen und werden für Modul 3–5 gebraucht.</p>
+
+        <div class="table-scroll">
+          <table class="grid">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Labial</th>
+                <th>Labiodental</th>
+                <th>Dental/Alveolar</th>
+                <th>Postalveolar</th>
+                <th>Palatal</th>
+                <th>Velar</th>
+                <th>Glottal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Plosive</th>
+                <td><span class="sym" data-s="p" data-art="Plosiv" data-ort="Labial" data-stimm="stimmlos" data-bsp="Pferd [pfeːɐ̯t]">p</span><span class="sym" data-s="b" data-art="Plosiv" data-ort="Labial" data-stimm="stimmhaft" data-bsp="Bruder [ˈbʁuːdɐ]">b</span></td>
+                <td class="empty">—</td>
+                <td><span class="sym selected" data-s="t" data-art="Plosiv" data-ort="Dental/Alveolar" data-stimm="stimmlos" data-bsp="Tag [taːk]" data-note="Löst das Verner-Rätsel mit auf: idg. t wird zu germ. þ, und – bei falscher Betonung – weiter zu d.">t</span><span class="sym" data-s="d" data-art="Plosiv" data-ort="Dental/Alveolar" data-stimm="stimmhaft" data-bsp="drei [dʁaɪ̯]" data-note="In Vater aus idg. t über Verners Gesetz entstanden.">d</span></td>
+                <td class="empty">—</td>
+                <td class="empty">—</td>
+                <td><span class="sym" data-s="k" data-art="Plosiv" data-ort="Velar" data-stimm="stimmlos" data-bsp="kalt [kalt]">k</span><span class="sym" data-s="g" data-art="Plosiv" data-ort="Velar" data-stimm="stimmhaft" data-bsp="gut [ɡuːt]">g</span></td>
+                <td><span class="sym" data-s="ʔ" data-art="Plosiv (Knacklaut)" data-ort="Glottal" data-stimm="stimmlos" data-bsp="beobachten [bəˈʔoːbaxtn̩]" data-note="Kein eigenes Phonem, aber im Deutschen ein sehr häufiger fester Vokaleinsatz vor betontem Anlautvokal.">ʔ</span></td>
+              </tr>
+              <tr data-historical="true">
+                <th>Aspirierte Plosive<br><span style="font-weight:400;">(nur Idg.)</span></th>
+                <td><span class="sym" data-historical="true" data-s="bʰ" data-art="Plosiv, aspiriert" data-ort="Labial" data-stimm="stimmhaft" data-bsp="*bʰréh₂tēr → Bruder" data-note="Durch Grimms Gesetz zu germ. b, unverändert bis heute.">bʰ</span></td>
+                <td class="empty">—</td>
+                <td><span class="sym" data-historical="true" data-s="dʰ" data-art="Plosiv, aspiriert" data-ort="Dental/Alveolar" data-stimm="stimmhaft" data-bsp="idg. *dʰeh₁- „setzen“ → germ. *dōn → tun" data-note="Durch Grimms Gesetz zu germ. d.">dʰ</span></td>
+                <td class="empty">—</td>
+                <td class="empty">—</td>
+                <td><span class="sym" data-historical="true" data-s="ɡʰ" data-art="Plosiv, aspiriert" data-ort="Velar" data-stimm="stimmhaft" data-bsp="idg. *ǵʰans- → germ. *gans → Gans" data-note="Durch Grimms Gesetz zu germ. g.">ɡʰ</span></td>
+                <td class="empty">—</td>
+              </tr>
+              <tr>
+                <th>Nasale</th>
+                <td><span class="sym" data-s="m" data-art="Nasal" data-ort="Labial" data-stimm="stimmhaft" data-bsp="Mutter [ˈmʊtɐ]">m</span></td>
+                <td class="empty">—</td>
+                <td><span class="sym" data-s="n" data-art="Nasal" data-ort="Dental/Alveolar" data-stimm="stimmhaft" data-bsp="Nacht [naxt]">n</span><span class="sym" data-historical="true" data-s="m̥" data-art="Nasal, silbisch" data-ort="Dental/Alveolar" data-stimm="stimmhaft" data-bsp="*déḱm̥ → zehn" data-note="Der Ring markiert in der allgemeinen IPA eigentlich Stimmlosigkeit – die Indogermanistik verwendet ihn abweichend für „silbisch“: m̥ bildet hier den Silbenkern, es folgt kein Vokal.">m̥</span></td>
+                <td class="empty">—</td>
+                <td class="empty">—</td>
+                <td><span class="sym" data-s="ŋ" data-art="Nasal" data-ort="Velar" data-stimm="stimmhaft" data-bsp="singen [ˈzɪŋən]">ŋ</span></td>
+                <td class="empty">—</td>
+              </tr>
+              <tr>
+                <th>Frikative</th>
+                <td class="empty">—</td>
+                <td><span class="sym" data-s="f" data-art="Frikativ" data-ort="Labiodental" data-stimm="stimmlos" data-bsp="Vater [ˈfaːtɐ]" data-note="Aus idg. p über Grimms Gesetz — vergleiche engl. father, beide p → f.">f</span><span class="sym" data-s="v" data-art="Frikativ" data-ort="Labiodental" data-stimm="stimmhaft" data-bsp="Wasser [ˈvasɐ]">v</span></td>
+                <td><span class="sym" data-s="s" data-art="Frikativ" data-ort="Dental/Alveolar" data-stimm="stimmlos" data-bsp="Haus [haʊ̯s]">s</span><span class="sym" data-s="z" data-art="Frikativ" data-ort="Dental/Alveolar" data-stimm="stimmhaft" data-bsp="Sonne [ˈzɔnə]">z</span><span class="sym" data-historical="true" data-s="þ" data-art="Frikativ" data-ort="Dental" data-stimm="stimmlos" data-bsp="*þrīz → drei (vgl. engl. three)" data-note="Germanisch/altenglisch/altnordisch; im Deutschen später zu d geworden.">þ</span><span class="sym" data-historical="true" data-s="ð" data-art="Frikativ" data-ort="Dental" data-stimm="stimmhaft" data-bsp="*fadēr → Vater" data-note="Verner-Ergebnis: þ wird stimmhaft, wenn der idg. Akzent nicht unmittelbar davor liegt.">ð</span></td>
+                <td><span class="sym" data-s="ʃ" data-art="Frikativ" data-ort="Postalveolar" data-stimm="stimmlos" data-bsp="Schiff [ʃɪf]">ʃ</span><span class="sym" data-s="ʒ" data-art="Frikativ" data-ort="Postalveolar" data-stimm="stimmhaft" data-bsp="Genie [ʒeˈniː]" data-note="Nur in Lehnwörtern aus dem Französischen.">ʒ</span></td>
+                <td><span class="sym" data-s="ç" data-art="Frikativ" data-ort="Palatal" data-stimm="stimmlos" data-bsp="ich [ɪç]">ç</span></td>
+                <td><span class="sym" data-s="x" data-art="Frikativ" data-ort="Velar" data-stimm="stimmlos" data-bsp="Bach [bax]" data-note="Entsteht aus germ. k über die zweite Lautverschiebung, z. B. engl. make → dt. machen.">x</span><span class="sym" data-historical="true" data-s="ɣ" data-art="Frikativ" data-ort="Velar" data-stimm="stimmhaft" data-bsp="Verner-Ergebnis zu germ. *h" data-note="Im Deutschen nicht erhalten, aber Zwischenstufe in Verner-bedingten Formen.">ɣ</span></td>
+                <td><span class="sym" data-s="h" data-art="Frikativ" data-ort="Glottal" data-stimm="stimmlos" data-bsp="Haus [haʊ̯s]">h</span></td>
+              </tr>
+              <tr>
+                <th>Affrikaten</th>
+                <td><span class="sym" data-s="pf" data-art="Affrikate" data-ort="Labial" data-stimm="stimmlos" data-bsp="Pfeffer [ˈpfɛfɐ]" data-note="Ergebnis der zweiten Lautverschiebung im Anlaut; vgl. engl./niederl. pepper/peper.">pf</span></td>
+                <td class="empty">—</td>
+                <td><span class="sym" data-s="ts" data-art="Affrikate" data-ort="Dental/Alveolar" data-stimm="stimmlos" data-bsp="Zeit [tsaɪ̯t]" data-note="Orthografisch z; vgl. engl. tide.">ts</span></td>
+                <td><span class="sym" data-s="tʃ" data-art="Affrikate" data-ort="Postalveolar" data-stimm="stimmlos" data-bsp="Deutsch [dɔɪ̯tʃ]">tʃ</span></td>
+                <td class="empty">—</td>
+                <td><span class="empty-fallback">—</span><span class="sym" data-historical="true" data-s="kx" data-art="Affrikate" data-ort="Velar" data-stimm="stimmlos" data-bsp="alemannisch Khind (vgl. nhd. Kind)" data-note="Seltenste, unvollständig durchgeführte Stufe der zweiten Lautverschiebung — nur in oberdeutschen/alemannischen Dialekten.">kx</span></td>
+                <td class="empty">—</td>
+              </tr>
+              <tr>
+                <th>Approximanten</th>
+                <td><span class="empty-fallback">—</span><span class="sym" data-historical="true" data-s="w" data-art="Approximant" data-ort="Labial-Velar" data-stimm="stimmhaft" data-bsp="*swestēr → Schwester" data-note="Germanisches *w; im heutigen Deutsch als orthografisches w zu [v] geworden (vgl. engl. water, das den Konsonanten noch als [w] hat).">w</span></td>
+                <td class="empty">—</td>
+                <td><span class="sym" data-s="l" data-art="Approximant/Liquid" data-ort="Alveolar" data-stimm="stimmhaft" data-bsp="Licht [lɪçt]">l</span></td>
+                <td class="empty">—</td>
+                <td><span class="sym" data-s="j" data-art="Approximant" data-ort="Palatal" data-stimm="stimmhaft" data-bsp="ja [jaː]">j</span></td>
+                <td><span class="sym" data-s="ʁ" data-art="Approximant/Liquid" data-ort="Uvular" data-stimm="stimmhaft" data-bsp="rot [ʁoːt]" data-note="Standardaussprache im Deutschen; alveolares gerolltes [r] ist regional (v. a. süddeutsch/österreichisch) verbreitet.">ʁ</span></td>
+                <td class="empty">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="legend">
+          <span><span class="dot modern"></span>heutiges Deutsch</span>
+          <span><span class="dot hist"></span>historisch / Rekonstruktion (Idg., Germanisch, Dialekt)</span>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>Vokale</h2>
+        <h3>Vokaltrapez mit den drei Diphthongen</h3>
+        <p class="hint">Waagerecht: vorne–hinten. Senkrecht: geschlossen–offen. Gestrichelte türkise Kreise (bei eingeschalteten historischen Zeichen) sind mittelhochdeutsche Monophthonge, aus denen die heutigen Diphthonge entstanden sind.</p>
+        <div class="vowel-wrap">
+          <svg class="trapezoid" viewBox="0 0 400 300" role="img" aria-label="Vokaltrapez des Deutschen">
+            <defs>
+              <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                <path d="M0,0 L6,3 L0,6 Z" fill="var(--accent)"></path>
+              </marker>
+            </defs>
+            <polygon class="trapezoid-frame" points="40,20 320,20 380,270 20,270"></polygon>
+            <text class="trapezoid-label" x="20" y="14">vorne</text>
+            <text class="trapezoid-label" x="340" y="14">hinten</text>
+            <text class="trapezoid-label" x="4" y="150" transform="rotate(-90 12 150)">geschlossen ↑</text>
+            <text class="trapezoid-label" x="4" y="285">offen</text>
+
+            <path class="diph-path" aria-hidden="true" d="M160,255 Q90,150 78,86"></path>
+            <path class="diph-path" aria-hidden="true" d="M160,255 Q260,150 300,86"></path>
+            <path class="diph-path" aria-hidden="true" d="M288,190 Q190,120 146,86"></path>
+
+            <g class="vpoint" data-s="i" data-art="Vokal, ungerundet" data-ort="vorne, geschlossen" data-stimm="lang: [iː]" data-bsp="ihm [iːm]"><circle cx="78" cy="40" r="12"></circle><text x="78" y="45" text-anchor="middle">i</text></g>
+            <g class="vpoint" data-s="ɪ" data-art="Vokal, ungerundet" data-ort="vorne, fast geschlossen" data-stimm="kurz" data-bsp="ich [ɪç]"><circle cx="108" cy="80" r="12"></circle><text x="108" y="85" text-anchor="middle">ɪ</text></g>
+            <g class="vpoint" data-s="y" data-art="Vokal, gerundet" data-ort="vorne, geschlossen" data-stimm="lang: [yː]" data-bsp="früh [fʁyː]"><circle cx="120" cy="40" r="12"></circle><text x="120" y="45" text-anchor="middle">y</text></g>
+            <g class="vpoint" data-s="ʏ" data-art="Vokal, gerundet" data-ort="vorne, fast geschlossen" data-stimm="kurz" data-bsp="fünf [fʏnf]"><circle cx="146" cy="80" r="12"></circle><text x="146" y="85" text-anchor="middle">ʏ</text></g>
+            <g class="vpoint" data-s="e" data-art="Vokal, ungerundet" data-ort="vorne, halbgeschlossen" data-stimm="lang: [eː]" data-bsp="Beet [beːt]"><circle cx="90" cy="140" r="12"></circle><text x="90" y="145" text-anchor="middle">e</text></g>
+            <g class="vpoint" data-s="ø" data-art="Vokal, gerundet" data-ort="vorne, halbgeschlossen" data-stimm="lang: [øː]" data-bsp="schön [ʃøːn]"><circle cx="128" cy="140" r="12"></circle><text x="128" y="145" text-anchor="middle">ø</text></g>
+            <g class="vpoint" data-s="ə" data-art="Vokal, Schwa" data-ort="Mitte" data-stimm="stets unbetont" data-bsp="bitte [ˈbɪtə]"><circle cx="200" cy="165" r="12"></circle><text x="200" y="170" text-anchor="middle">ə</text></g>
+            <g class="vpoint" data-s="ɛ" data-art="Vokal, ungerundet" data-ort="vorne, halboffen" data-stimm="kurz" data-bsp="Bett [bɛt]"><circle cx="100" cy="200" r="12"></circle><text x="100" y="205" text-anchor="middle">ɛ</text></g>
+            <g class="vpoint" data-s="œ" data-art="Vokal, gerundet" data-ort="vorne, halboffen" data-stimm="kurz" data-bsp="können [ˈkœnən]"><circle cx="134" cy="200" r="12"></circle><text x="134" y="205" text-anchor="middle">œ</text></g>
+            <g class="vpoint" data-s="ɐ" data-art="Vokal, zentral" data-ort="fast offen, Mitte" data-stimm="stets unbetont" data-bsp="Vater [ˈfaːtɐ]" data-note="Vokalisiertes r am Silbenende."><circle cx="230" cy="225" r="12"></circle><text x="230" y="230" text-anchor="middle">ɐ</text></g>
+            <g class="vpoint" data-s="a" data-art="Vokal, ungerundet" data-ort="offen" data-stimm="kurz/lang [aː]" data-bsp="Mann [man]"><circle cx="160" cy="255" r="12"></circle><text x="160" y="260" text-anchor="middle">a</text></g>
+            <g class="vpoint" data-s="u" data-art="Vokal, gerundet" data-ort="hinten, geschlossen" data-stimm="lang: [uː]" data-bsp="Buch [buːx]"><circle cx="330" cy="40" r="12"></circle><text x="330" y="45" text-anchor="middle">u</text></g>
+            <g class="vpoint" data-s="ʊ" data-art="Vokal, gerundet" data-ort="hinten, fast geschlossen" data-stimm="kurz" data-bsp="und [ʊnt]"><circle cx="300" cy="80" r="12"></circle><text x="300" y="85" text-anchor="middle">ʊ</text></g>
+            <g class="vpoint" data-s="o" data-art="Vokal, gerundet" data-ort="hinten, halbgeschlossen" data-stimm="lang: [oː]" data-bsp="rot [ʁoːt]"><circle cx="300" cy="140" r="12"></circle><text x="300" y="145" text-anchor="middle">o</text></g>
+            <g class="vpoint" data-s="ɔ" data-art="Vokal, gerundet" data-ort="hinten, halboffen" data-stimm="kurz" data-bsp="Sonne [ˈzɔnə]"><circle cx="288" cy="200" r="12"></circle><text x="288" y="205" text-anchor="middle">ɔ</text></g>
+
+            <g class="vpoint historical historical-group" data-s="î" data-art="Vokal, Monophthong (Mhd.)" data-ort="vorne, geschlossen" data-stimm="lang" data-bsp="mhd. lîp → nhd. Leib" data-note="Mittelhochdeutsches langes geschlossenes i; wird in der nhd. Diphthongierung zu ei/ai."><circle cx="60" cy="60" r="10"></circle><text x="60" y="64" text-anchor="middle">î</text></g>
+            <g class="vpoint historical historical-group" data-s="û" data-art="Vokal, Monophthong (Mhd.)" data-ort="hinten, geschlossen" data-stimm="lang" data-bsp="mhd. hûs → nhd. Haus" data-note="Mittelhochdeutsches langes geschlossenes u; wird zu au."><circle cx="348" cy="60" r="10"></circle><text x="348" y="64" text-anchor="middle">û</text></g>
+            <g class="vpoint historical historical-group" data-s="iu" data-art="Vokal, Monophthong-Schreibung (Mhd.)" data-ort="vorne, geschlossen, gerundet" data-stimm="lang" data-bsp="mhd. liute → nhd. Leute" data-note="Mittelhochdeutsche Schreibung für langes ü; wird zu eu/äu."><circle cx="96" cy="52" r="10"></circle><text x="96" y="56" text-anchor="middle">iu</text></g>
+          </svg>
+        </div>
+        <div class="diph-row">
+          <span class="sym" data-s="aɪ̯" data-art="Diphthong" data-ort="Gleitlaut a → ɪ" data-stimm="—" data-bsp="mein [maɪ̯n]" data-note="Nhd. Diphthongierung aus mhd. î (historische Zeichen oben einschalten).">aɪ̯</span>
+          <span class="sym" data-s="aʊ̯" data-art="Diphthong" data-ort="Gleitlaut a → ʊ" data-stimm="—" data-bsp="Haus [haʊ̯s]" data-note="Nhd. Diphthongierung aus mhd. û.">aʊ̯</span>
+          <span class="sym" data-s="ɔʏ̯" data-art="Diphthong" data-ort="Gleitlaut ɔ → ʏ" data-stimm="—" data-bsp="Leute [ˈlɔʏ̯tə]" data-note="Nhd. Diphthongierung aus mhd. iu.">ɔʏ̯</span>
+        </div>
+        <div class="legend">
+          <span><span class="dot modern"></span>heutiges Deutsch</span>
+          <span><span class="dot hist"></span>mittelhochdeutscher Monophthong</span>
+          <span>Gestrichelte Pfeile: Diphthongierungsrichtung</span>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>Sonderzeichen &amp; Diakritika</h2>
+        <h3>Für Betonung, Länge und Rekonstruktion</h3>
+        <p class="hint">Diese Zeichen kommen im Fließtext der Lautgesetz-Formeln laufend vor — vor allem das Betonungszeichen, ohne das sich Verners Gesetz nicht erklären lässt.</p>
+        <div class="special-grid">
+          <div class="special-card">
+            <span class="sym-big">a<b style="font-weight:400;">ː</b></span>
+            <span class="sym-name">Längezeichen</span>
+            <p>Markiert einen langen Vokal, z. B. Vater [ˈfaːtɐ]. Ohne das Zeichen ist die Dauer nicht unterschieden.</p>
+          </div>
+          <div class="special-card">
+            <span class="sym-big">ˈpa.tər <span class="badge">zentral</span></span>
+            <span class="sym-name">Haupt&#8209;/Nebenakzent</span>
+            <p>ˈ markiert die betonte Silbe. Entscheidend für Verners Gesetz: Lag der idg. Akzent nicht unmittelbar vor dem Frikativ, wurde dieser stimmhaft — <em>pə<u>t</u>ḗr</em> → <em>fadēr</em>, aber <em>bʰréh₂<u>t</u>ēr</em> → <em>brōþēr</em>.</p>
+          </div>
+          <div class="special-card">
+            <span class="sym-big">bʰ <span class="badge">Idg.</span></span>
+            <span class="sym-name">Aspiration ʰ</span>
+            <p>Hauchlaut nach einem Verschlusslaut, nur in idg. Rekonstruktionen relevant (bʰ, dʰ, ɡʰ), s. Konsonantentafel.</p>
+          </div>
+          <div class="special-card">
+            <span class="sym-big">h₁ h₂ h₃ <span class="badge">Idg.</span></span>
+            <span class="sym-name">Laryngale</span>
+            <p>Theoretische urindogermanische Konsonanten, deren genaue Aussprache unsicher ist; h₂ färbt einen benachbarten Vokal zu a, wie in *ph₂tér- → Vater.</p>
+          </div>
+          <div class="special-card">
+            <span class="sym-big">m̥ <span class="badge">Idg.</span></span>
+            <span class="sym-name">Silbischer Sonant</span>
+            <p>Der Ring markiert in der allgemeinen IPA Stimmlosigkeit — die Indogermanistik verwendet ihn abweichend für „silbisch“: *déḱm̥ → zehn, m̥ bildet hier den Silbenkern.</p>
+          </div>
+          <div class="special-card">
+            <span class="sym-big">*wort</span>
+            <span class="sym-name">Asterisk *</span>
+            <p>Kennzeichnet eine nicht belegte, sondern rekonstruierte Form — Standardkonvention in der gesamten historischen Linguistik.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <aside class="panel" id="panel">
+      <span class="eyebrow">Ausgewähltes Zeichen</span>
+      <p class="psym" id="p-sym">t</p>
+      <dl>
+        <dt>Art</dt><dd id="p-art">Plosiv</dd>
+        <dt>Ort</dt><dd id="p-ort">Dental/Alveolar</dd>
+        <dt>Stimmhaftigkeit</dt><dd id="p-stimm">stimmlos</dd>
+        <dt>Beispiel</dt><dd id="p-bsp">Tag [taːk]</dd>
+      </dl>
+      <p class="pnote" id="p-note">Löst das Verner-Rätsel mit auf: idg. t wird zu germ. þ, und – bei falscher Betonung – weiter zu d.</p>
+    </aside>
+
+  </div>
+
+  <footer class="tie-in">
+    <strong>Weiter im Lernplan:</strong> Mit diesen Zeichen lässt sich Modul&nbsp;3 (Erste Lautverschiebung, Grimm &amp; Verner) vollständig lesen und die Übungsaufgaben dort selbst lösen. Die vollständige Tafel bleibt Nachschlagewerk — für den Einstieg reichen t, d, þ, ð und das Betonungszeichen.
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var root = document.getElementById('tafel');
+  var toggle = document.getElementById('hist-toggle');
+  toggle.addEventListener('change', function(){
+    root.classList.toggle('show-historical', toggle.checked);
+  });
+
+  var panelSym = document.getElementById('p-sym');
+  var panelArt = document.getElementById('p-art');
+  var panelOrt = document.getElementById('p-ort');
+  var panelStimm = document.getElementById('p-stimm');
+  var panelBsp = document.getElementById('p-bsp');
+  var panelNote = document.getElementById('p-note');
+
+  function selectEl(el){
+    var prev = root.querySelector('.selected');
+    if(prev) prev.classList.remove('selected');
+    el.classList.add('selected');
+
+    panelSym.textContent = el.getAttribute('data-s') || '';
+    panelArt.textContent = el.getAttribute('data-art') || '—';
+    panelOrt.textContent = el.getAttribute('data-ort') || '—';
+    panelStimm.textContent = el.getAttribute('data-stimm') || '—';
+    panelBsp.textContent = el.getAttribute('data-bsp') || '—';
+    var note = el.getAttribute('data-note');
+    panelNote.textContent = note ? note : '';
+    panelNote.style.display = note ? 'block' : 'none';
+  }
+
+  var clickable = root.querySelectorAll('.sym, .vpoint');
+  clickable.forEach(function(el){
+    el.setAttribute('tabindex', '0');
+    el.addEventListener('click', function(){ selectEl(el); });
+    el.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); selectEl(el); }
+    });
+  });
+})();
+</script>
+
+</body></html>

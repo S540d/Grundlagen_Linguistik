@@ -1,3 +1,5 @@
+private Zusammenstellung öffentlicher Inhalte. 
+
 # Grundlagen Linguistik
 
 Lernpfad „Historische Linguistik" — deutsche Sprachgeschichte vom Indogermanischen bis zum Neuhochdeutschen, als interaktive Werkzeuge.

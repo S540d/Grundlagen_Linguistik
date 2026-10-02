@@ -1,19 +1,9 @@
-private Zusammenstellung öffentlicher Inhalte. 
+private Zusammenstellung öffentlicher Inhalte.
 
 # Grundlagen Linguistik
 
-Lernpfad „Historische Linguistik" — deutsche Sprachgeschichte vom Indogermanischen bis zum Neuhochdeutschen, als interaktive Werkzeuge.
+Lernpfad „Historische Linguistik“: die Geschichte der deutschen Sprache vom Indogermanischen bis zum Neuhochdeutschen, aufbereitet als interaktive Werkzeuge.
 
-**Live:** https://s540d.github.io/Grundlagen_Linguistik/
+**[→ Zum Lernpfad](https://s540d.github.io/Grundlagen_Linguistik/)**
 
-## Entwicklung
-
-```bash
-npm install
-npm run serve   # lokaler Dev-Server
-npm run build   # Build nach _site/
-```
-
-Basiert auf [Eleventy](https://www.11ty.dev/). Die HTML-Lernpfad-Tools liegen unverändert in `src/tools/` (Passthrough-Copy), die Startseite mit Tool-Übersicht ist `src/index.njk`.
-
-Deploy erfolgt automatisch via GitHub Actions bei jedem Push auf `main` (siehe `.github/workflows/`).
+Die Startseite bietet eine Übersicht aller Werkzeuge; jedes lässt sich direkt im Browser nutzen.

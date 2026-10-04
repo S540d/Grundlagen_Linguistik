@@ -67,6 +67,7 @@
   .col .e{display:block;} .col .r{display:block; color:var(--ink-soft); border-top:1px dashed var(--line); margin-top:2px; padding-top:2px;}
   .col.ok{border-color:var(--ok); background:#E3EBDD;}
   .col.bad{border-color:var(--rust); background:#F1DDD3;}
+  .sep{flex:0 0 10px;}
   .col.extra,.col.miss{border-style:dashed; color:var(--ink-faint);}
   .legend{font-size:0.76rem; color:var(--ink-faint); margin:0 0 6px;}
   .hint{font-size:0.85rem; color:var(--ink-soft); margin:4px 0 0;}
@@ -107,9 +108,9 @@
   <header>
     <p class="kicker">Bauphase 4 &middot; Rückwärts-Rekonstruktion</p>
     <h1>Rückwärts-Lautverschiebung</h1>
-    <p>Beliebiges neuhochdeutsches Wort eingeben: Die Lautgesetze laufen rückwärts, jeder Schritt ist sichtbar. Am Ende siehst du, wie nah das Ergebnis an der bekannten Urform liegt.</p>
+    <p>Beliebiges neuhochdeutsches Wort eingeben: Die Lautgesetze laufen rückwärts, jeder Schritt ist sichtbar. Am Ende siehst du, wie nah das Ergebnis an der urgermanischen Form liegt.</p>
     <div class="caveat">
-      <strong>Grenzen:</strong> Lautgesetze sind nicht eindeutig umkehrbar. Wo die Regel mehrere Lesarten zulässt, steht die wahrscheinlichste vorn &mdash; die Alternativen kannst du selbst umschalten. Rekonstruiert werden nur <em>Konsonanten</em> (Vokalwandel, Umlaut und der idg. Akzent für Verners Gesetz fehlen).
+      <strong>Grenzen:</strong> Lautgesetze sind nicht eindeutig umkehrbar. Wo die Regel mehrere Lesarten zulässt, steht die wahrscheinlichste vorn &mdash; die Alternativen kannst du selbst umschalten. Bei den Vokalen wird nur der <em>Stammvokal</em> (erste Silbe) rekonstruiert; Endungsvokale erscheinen als „·“. Der idg. Akzent für Verners Gesetz fehlt.
     </div>
   </header>
 
@@ -125,7 +126,7 @@
   </section>
 
   <footer>
-    Regeln: 2. Lautverschiebung (nhd. → urgerm.), Grimms Gesetz (urgerm. → idg.); Verner nur als Alternative. Urformen nach gängigen Rekonstruktionen &mdash; im <a href="woerterbuch-kompass.html">Wörterbuch-Kompass</a> nachprüfbar.
+    Regeln: 2. Lautverschiebung (nhd. → urgerm.), Grimms Gesetz (urgerm. → idg.); Verner nur als Alternative. Urformen nach gängigen Rekonstruktionen, noch nicht gegen Quellen geprüft &mdash; im <a href="woerterbuch-kompass.html">Wörterbuch-Kompass</a> nachprüfbar.
   </footer>
 
 </div>
@@ -254,6 +255,33 @@ function rev2(T, i){
   }
 }
 
+/* Stammvokal (erste Silbe): Kandidaten nach Häufigkeit, nicht eindeutig umkehrbar */
+function revV(g){
+  const C = (out, cert, note) => ({ out: out.normalize("NFC"), cert, note });
+  const R = (rule, cands) => ({ rule, cands });
+  switch (g){
+    case "a": return R("a → a", [C("a","wahrscheinlich","a bleibt meist a (Hand, Tag)."), C("ē","möglich","Altes ē wurde zu a (schlafen ← *slēpaną).")]);
+    case "ä": return R("ä → a (Umlaut)", [C("a","wahrscheinlich","ä ist meist umgelautetes a (Gäste ← Gast)."), C("ē","möglich","Nicht ausschließbar: ä aus altem ē.")]);
+    case "e": return R("e → e", [C("e","wahrscheinlich","e bleibt meist e (Herz, Feld)."), C("a","möglich","i-Umlaut: e kann umgelautetes a sein (Bett ← *badją).")]);
+    case "i": return R("i → i", [C("i","wahrscheinlich","i bleibt meist i (Wind, Ding)."), C("e","möglich","e wurde in manchen Stellungen zu i (Milch ← *meluks)."), C("eu","möglich","eu wurde über iu zu i (Licht ← *leuhtą).")]);
+    case "ie": return R("ie → eu", [C("eu","wahrscheinlich","ie geht oft auf eu zurück (tief ← *deupaz, ziehen ← *teuhaną)."), C("e","möglich","Auch gedehntes e wird ie (sieben ← *sebun).")]);
+    case "ei": return R("ei → ai / ī", [C("ai","wahrscheinlich","nhd. ei vereint mhd. ei (← ai: Stein) und mhd. ī (← ī: Zeit) — nicht unterscheidbar."), C("ī","wahrscheinlich","Siehe oben: ei kann auch auf ī zurückgehen.")]);
+    case "au": return R("au → au / ū", [C("au","wahrscheinlich","au kann alt au sein (Auge)."), C("ū","wahrscheinlich","au geht auch auf ū zurück (Haus ← *hūs) — nicht unterscheidbar.")]);
+    case "eu": return R("eu → iu / eu", [C("iu","wahrscheinlich","eu geht auf iu oder eu zurück."), C("eu","möglich","Siehe oben.")]);
+    case "äu": return R("äu → au / ū (Umlaut)", [C("au","wahrscheinlich","Umlaut von au (Bäume ← Baum)."), C("ū","möglich","Umlaut von ū (Häuser ← Haus).")]);
+    case "o": return R("o → u / au", [
+      C("u","wahrscheinlich","a-Umlaut: u vor a/e/o der Folgesilbe wurde o (Holz ← *hultą, Gold ← *gulþą, Dorf ← *þurpą)."),
+      C("au","möglich","au wurde zu ō (Brot ← *braudą, groß ← *grautaz)."),
+      C("o","möglich","Altes o (selten, v. a. Lehnwörter)."),
+      C("i","möglich","Seltener Wandel über die Folgesilbe (Woche ← *wikōn).")
+    ]);
+    case "ö": return R("ö → u / au (Umlaut)", [C("u","wahrscheinlich","Umlaut von o ← u."), C("au","möglich","Umlaut von au → ō (schön)."), C("ō","möglich","Umlaut von ō.")]);
+    case "u": return R("u → u / ō", [C("u","wahrscheinlich","u bleibt meist u (Hund, Zunge)."), C("ō","möglich","ō wurde zu uo, dann u (Mutter ← *mōdēr, gut, Fuß).")]);
+    case "ü": return R("ü → u / ō (Umlaut)", [C("u","wahrscheinlich","Umlaut von u."), C("ō","möglich","Umlaut von uo ← ō (Brüder ← *brōþēr).")]);
+    default: return { rule:null, cands:[C(g,"sicher","")] };
+  }
+}
+
 /* ======================================================================
    SCHRITT B: Grimms Gesetz rückwärts (urgerm. -> idg.), Verner als Alternative
    ====================================================================== */
@@ -314,9 +342,10 @@ function rev1(sym, prev, next){
 function analyse(word, ch){
   ch = ch || { a:{}, b:{} };
   const T = tokenize(word);
+  const rootI = T.findIndex(t => t.k === "V");
   const A = T.map((t,i) => {
-    if (t.k === "V") return { t, i, out:t.g };
-    const r = rev2(T, i);
+    if (t.k === "V" && i !== rootI) return { t, i, out:t.g, weak:true };
+    const r = t.k === "V" ? revV(t.g) : rev2(T, i);
     const idx = Math.min(ch.a[i] || 0, r.cands.length - 1);
     return { t, i, rule:r.rule, cands:r.cands, idx, out:r.cands[idx].out };
   });
@@ -339,10 +368,9 @@ function analyse(word, ch){
   const EG = G.filter(g => !g.V).map(g => ({
     sym:norm(g.sym), disp:g.sym, cands:g.a.cands, idx:g.a.idx, sub:g.sub, stage:"a", ti:g.ti
   }));
-  const EP = loan ? [] : B.filter(b => !b.g.V).map(b => ({
-    sym:norm(b.out), disp:b.out, cands:b.cands, idx:b.idx, sub:0, stage:"b", key:b.key
-  }));
-  return { T, A, G, B, EG, EP, loan };
+  const ra = A[rootI];
+  const EV = ra ? { disp:ra.out, cands:ra.cands, idx:ra.idx, ti:ra.i, stage:"a" } : null;
+  return { T, A, G, B, EG, EV, loan };
 }
 
 /* ======================================================================
@@ -389,76 +417,84 @@ function compare(E, skel){
   return { rows, hit, total:R.length };
 }
 
+function compareVowel(EV, rootV){
+  if (!EV) return null;
+  const ok = EV.disp === rootV;
+  let alt = null;
+  if (!ok) EV.cands.forEach((c, ci) => { if (!alt && ci !== EV.idx && c.out === rootV) alt = { ci, out:c.out }; });
+  return { e:EV, r:rootV, st: ok ? "ok" : "bad", alt };
+}
+
 /* ======================================================================
-   DATEN: Urformen (urgerm. nach gängigen Rekonstruktionen, idg. wo gesichert).
-   skG/skI = Konsonantengerüst des Teils, der im nhd. Wort noch steckt.
-   Format: nhd | urgerm. | skG | idg. | skI
+   DATEN: urgerm. Urformen (nach gängigen Rekonstruktionen, noch nicht gegen Quellen geprüft).
+   skG = Konsonantengerüst des Teils, der im nhd. Wort noch steckt; Stammvokal = betonter Vokal der ersten Silbe.
+   Format: nhd | urgerm. | skG | Stammvokal
    ====================================================================== */
 const WORD_DATA = `
-Wasser|*watōr|w t r|*wódr̥|w d r
-Vater|*fadēr|f d r|*ph₂tḗr|p t r
-Mutter|*mōdēr|m d r|*méh₂tēr|m t r
-Bruder|*brōþēr|b r þ r|*bʰréh₂tēr|b r t r
-Tochter|*duhtēr|d h t r|*dʰugh₂tḗr|d g t r
-Schwester|*swestēr|s w s t r|*swésōr|s w s r
-Herz|*hertōn|h r t|*ḱerd-|k r d
-Nacht|*nahts|n h t|*nókʷts|n k t
-sechs|*sehs|s h s|*swéḱs|s k s
-Zahn|*tanþs|t n|*h₁dónts|d n
-Zunge|*tungōn|t n g|*dn̥ǵʰwéh₂s|d n g
-Knie|*knewą|k n|*ǵénu|g n
-Fuß|*fōts|f t|*pṓds|p d
-zwei|*twai|t w|*dwóh₁|d w
-drei|*þrīz|þ r|*tréyes|t r
-Zeit|*tīdiz|t d||
-tun|*dōną|d n||
-tief|*deupaz|d p||
-Tag|*dagaz|d g||
-Dach|*þaką|þ k||
-Ding|*þingą|þ n g||
-danken|*þankōną|þ n k n||
-Dorf|*þurpą|þ r p||
-Hund|*hundaz|h n d||
-Hand|*handuz|h n d||
-Land|*landą|l n d||
-Wind|*windaz|w n d||
-Gold|*gulþą|g l þ||
-Feld|*felþuz|f l þ||
-Wald|*walþuz|w l þ||
-alt|*aldaz|l d||
-kalt|*kaldaz|k l d||
-Wort|*wurdą|w r d||
-Brot|*braudą|b r d||
-Bett|*badją|b d||
-Salz|*saltą|s l t||
-Holz|*hultą|h l t||
-Stein|*stainaz|s t n||
-heiß|*haitaz|h t||
-groß|*grautaz|g r t||
-beißen|*bītaną|b t n||
-essen|*etaną|t n||
-sitzen|*sitjaną|s t n||
-ziehen|*teuhaną|t h n||
-sieben|*sebun|s b n||
-Licht|*leuhtą|l h t||
-Wachs|*wahsą|w h s||
-Woche|*wikōn|w k||
-Milch|*meluks|m l k||
-machen|*makōną|m k n||
-brechen|*brekaną|b r k n||
-suchen|*sōkijaną|s k n||
-Schiff|*skipą|s k p||
-Schaf|*skēpą|s k p||
-scharf|*skarpaz|s k r p||
-schlafen|*slēpaną|s l p n||
-helfen|*helpaną|h l p n||
-offen|*upanaz|p n||
-Apfel|*aplaz|p l||
-Pfund|*pundą|p n d||
-Wolf|*wulfaz|w l f||
+Wasser|*watōr|w t r|a
+Vater|*fadēr|f d r|a
+Mutter|*mōdēr|m d r|ō
+Bruder|*brōþēr|b r þ r|ō
+Tochter|*duhtēr|d h t r|u
+Schwester|*swestēr|s w s t r|e
+Herz|*hertōn|h r t|e
+Nacht|*nahts|n h t|a
+sechs|*sehs|s h s|e
+Zahn|*tanþs|t n|a
+Zunge|*tungōn|t n g|u
+Knie|*knewą|k n|e
+Fuß|*fōts|f t|ō
+zwei|*twai|t w|ai
+drei|*þrīz|þ r|ī
+Zeit|*tīdiz|t d|ī
+tun|*dōną|d n|ō
+tief|*deupaz|d p|eu
+Tag|*dagaz|d g|a
+Dach|*þaką|þ k|a
+Ding|*þingą|þ n g|i
+danken|*þankōną|þ n k n|a
+Dorf|*þurpą|þ r p|u
+Hund|*hundaz|h n d|u
+Hand|*handuz|h n d|a
+Land|*landą|l n d|a
+Wind|*windaz|w n d|i
+Gold|*gulþą|g l þ|u
+Feld|*felþuz|f l þ|e
+Wald|*walþuz|w l þ|a
+alt|*aldaz|l d|a
+kalt|*kaldaz|k l d|a
+Wort|*wurdą|w r d|u
+Brot|*braudą|b r d|au
+Bett|*badją|b d|a
+Salz|*saltą|s l t|a
+Holz|*hultą|h l t|u
+Stein|*stainaz|s t n|ai
+heiß|*haitaz|h t|ai
+groß|*grautaz|g r t|au
+beißen|*bītaną|b t n|ī
+essen|*etaną|t n|e
+sitzen|*sitjaną|s t n|i
+ziehen|*teuhaną|t h n|eu
+sieben|*sebun|s b n|e
+Licht|*leuhtą|l h t|eu
+Wachs|*wahsą|w h s|a
+Woche|*wikōn|w k|i
+Milch|*meluks|m l k|e
+machen|*makōną|m k n|a
+brechen|*brekaną|b r k n|e
+suchen|*sōkijaną|s k n|ō
+Schiff|*skipą|s k p|i
+Schaf|*skēpą|s k p|ē
+scharf|*skarpaz|s k r p|a
+schlafen|*slēpaną|s l p n|ē
+helfen|*helpaną|h l p n|e
+offen|*upanaz|p n|u
+Apfel|*aplaz|p l|a
+Pfund|*pundą|p n d|u
+Wolf|*wulfaz|w l f|u
 `.trim().split("\n").map(l => {
-  const [nhd, pgmc, skG, pie, skI] = l.split("|");
-  return { nhd, pgmc, skG, pie, skI };
+  const [nhd, pgmc, skG, rootV] = l.split("|");
+  return { nhd, pgmc, skG, rootV: rootV.normalize("NFC") };
 });
 
 const WORDS = {};
@@ -497,23 +533,31 @@ function altButtons(cands, idx, attrs){
     `<button type="button" class="alt${ci === idx ? " on" : ""}" ${attrs} data-ci="${ci}" aria-pressed="${ci === idx}">${esc(c.out === "" ? "∅" : c.out)}<span class="c">${c.cert}</span></button>`).join("") + `</div>`;
 }
 
-function compareCard(title, form, cmp){
-  const full = cmp.hit === cmp.total;
+function compareCard(title, form, cmp, vow){
+  const total = cmp.total + (vow ? 1 : 0), hit = cmp.hit + (vow && vow.st === "ok" ? 1 : 0);
+  const full = hit === total;
+  const tryBtn = (e, alt, k) => `<button type="button" class="try" data-stage="a" data-k="${k}" data-ci="${alt.ci}">Testen</button>`;
   let hints = "";
+  if (vow && vow.st === "bad"){
+    hints += vow.alt
+      ? `<p class="hint">Stammvokal: Regel liefert »${esc(vow.e.disp)}«, Original hat »${esc(vow.r)}« — die Alternativ-Lesart »${esc(vow.alt.out)}« würde passen.${tryBtn(vow.e, vow.alt, vow.e.ti)}</p>`
+      : `<p class="hint">Stammvokal: Regel liefert »${esc(vow.e.disp)}«, Original hat »${esc(vow.r)}« — keine Lesart passt (Vokalwandel außerhalb der hier abgebildeten Regeln).</p>`;
+  }
   cmp.rows.forEach(w => {
     if (w.st === "bad"){
       hints += w.alt
-        ? `<p class="hint">Regel liefert »${esc(w.e.disp)}«, Original hat »${esc(w.r)}« — die Alternativ-Lesart »${esc(w.alt.out)}« würde passen.<button type="button" class="try" data-stage="${w.e.stage}" data-k="${w.e.stage === "a" ? w.e.ti : w.e.key}" data-ci="${w.alt.ci}">Testen</button></p>`
+        ? `<p class="hint">Regel liefert »${esc(w.e.disp)}«, Original hat »${esc(w.r)}« — die Alternativ-Lesart »${esc(w.alt.out)}« würde passen.${tryBtn(w.e, w.alt, w.e.ti)}</p>`
         : `<p class="hint">Regel liefert »${esc(w.e.disp)}«, Original hat »${esc(w.r)}« — keine Lesart passt: Ausnahme, Lehnwort oder Lautwandel außerhalb dieses Werkzeugs.</p>`;
     } else if (w.st === "miss"){
       hints += `<p class="hint">Original hat »${esc(w.r)}«, im Ergebnis fehlt dieser Laut.</p>`;
     }
   });
+  const col = w => `<div class="col ${w.st}"><span class="e">${w.e ? esc(w.e.disp) : "·"}</span><span class="r">${w.r !== null ? esc(w.r) : "·"}</span></div>`;
   return `<div class="card">
     <div class="cmp-head"><h3>${title} <span class="orig">${esc(form)}</span></h3>
-      <span class="score ${full ? "full" : "part"}">${cmp.hit} von ${cmp.total} Konsonanten getroffen</span></div>
-    <p class="legend">oben: dein Ergebnis · unten: Original</p>
-    <div class="align">${cmp.rows.map(w => `<div class="col ${w.st}"><span class="e">${w.e ? esc(w.e.disp) : "·"}</span><span class="r">${w.r !== null ? esc(w.r) : "·"}</span></div>`).join("")}</div>
+      <span class="score ${full ? "full" : "part"}">${hit} von ${total} Lauten getroffen</span></div>
+    <p class="legend">oben: dein Ergebnis · unten: Original · links: Stammvokal, rechts: Konsonanten</p>
+    <div class="align">${vow ? col(vow) + '<span class="sep"></span>' : ""}${cmp.rows.map(col).join("")}</div>
     ${hints}</div>`;
 }
 
@@ -541,16 +585,15 @@ function render(animate){
   /* Ergebnis */
   html += `<div class="card">
     <div class="row"><span class="lab">nhd.</span><span class="seq">${seq(r.T.map(t => ({ s:t.g, v:t.k === "V" })))}</span></div>
-    <div class="row"><span class="lab">urgerm.</span><span class="seq">${seq(r.A.map(a => ({ s:a.out, v:a.t.k === "V", chg:a.out !== a.t.g })), true)}</span></div>
-    <div class="row"><span class="lab">idg.</span><span class="seq">${r.loan ? "—" : seq(r.B.map(b => ({ s:b.out, v:b.g.V, chg:b.out !== b.g.sym })), true)}</span></div>
+    <div class="row"><span class="lab">urgerm.</span><span class="seq">${seq(r.A.map(a => ({ s:a.weak ? "·" : a.out, v:a.t.k === "V" && a.weak, chg:a.out !== a.t.g })), true)}</span></div>
+    <div class="row"><span class="lab">idg.</span><span class="seq">${r.loan ? "—" : seq(r.B.map(b => ({ s:b.g.V ? "·" : b.out, v:b.g.V, chg:!b.g.V && b.out !== b.g.sym })), true)}</span></div>
   </div>`;
 
   /* Vergleich */
   if (ref){
-    html += compareCard("Urgermanisch", ref.pgmc, compare(r.EG, ref.skG));
-    if (ref.pie && !r.loan) html += compareCard("Indogermanisch", ref.pie, compare(r.EP, ref.skI));
+    html += compareCard("Urgermanisch", ref.pgmc, compare(r.EG, ref.skG), compareVowel(r.EV, ref.rootV));
   } else {
-    html += `<div class="info"><strong>Keine Urform hinterlegt.</strong> Das Ergebnis ist ein reines Regelergebnis ohne Gegenprobe. Nachschlagen im <a href="woerterbuch-kompass.html">Wörterbuch-Kompass</a> (z. B. Wiktionary, Kluge). Vorschläge im Eingabefeld: ${WORD_DATA.length} Wörter mit Urform.</div>`;
+    html += `<div class="info"><strong>Keine Urform hinterlegt.</strong> Das Ergebnis ist ein reines Regelergebnis ohne Gegenprobe. Nachschlagen im <a href="woerterbuch-kompass.html">Wörterbuch-Kompass</a> (z. B. Wiktionary, Kluge). Vorschläge im Eingabefeld: ${WORD_DATA.length} Wörter mit urgerm. Form.</div>`;
   }
 
   /* Schritt A */

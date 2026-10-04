@@ -12,9 +12,9 @@
     --ink-soft:#57646E;
     --ink-faint:#8A8F82;
     --rust:#A0432B;
-    --rust-soft:#C97A5E;
     --river:#2C6E7F;
     --river-soft:#DCE9EA;
+    --ok:#3E7B4F;
     --line:#B9AF93;
     --radius:10px;
     --serif: Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif;
@@ -22,357 +22,633 @@
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
-  body{
-    background:var(--paper);
-    color:var(--ink);
-    font-family:var(--sans);
-    line-height:1.5;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:480px; margin:0 auto; padding:22px 18px 60px;}
+  body{background:var(--paper); color:var(--ink); font-family:var(--sans); line-height:1.5; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:640px; margin:0 auto; padding:22px 18px 60px;}
   header{padding-bottom:18px; margin-bottom:22px; border-bottom:1px solid var(--line);}
   header .kicker{font-size:0.8rem; color:var(--rust); margin:0 0 6px;}
   h1{font-family:var(--serif); font-weight:600; font-size:clamp(1.4rem,6vw,1.8rem); margin:0 0 10px;}
   header p{margin:0; color:var(--ink-soft); font-size:0.95rem;}
-  .caveat{
-    background:var(--river-soft);
-    border-radius:8px;
-    padding:12px 14px;
-    font-size:0.87rem;
-    color:var(--ink);
-    margin-top:14px;
-  }
+  .caveat{background:var(--river-soft); border-radius:8px; padding:12px 14px; font-size:0.87rem; margin-top:14px;}
   .caveat strong{color:var(--river);}
-
   h2{font-family:var(--serif); font-size:1.2rem; font-weight:600; margin:0 0 4px;}
-  .section-intro{color:var(--ink-soft); font-size:0.9rem; margin:0 0 16px;}
-  section{margin-bottom:38px;}
+  h3{font-family:var(--serif); font-size:1rem; font-weight:600; margin:0 0 6px;}
+  .section-intro{color:var(--ink-soft); font-size:0.9rem; margin:0 0 14px;}
+  section{margin-bottom:34px;}
 
-  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px;}
-  .chip{
-    font-size:0.88rem; background:var(--paper-raised); border:1px solid var(--line);
-    color:var(--ink); padding:7px 13px; border-radius:999px; cursor:pointer;
+  form{display:flex; gap:8px; margin-bottom:12px;}
+  input[type=text]{
+    flex:1; min-width:0; font:inherit; font-family:var(--serif); font-size:1.15rem;
+    padding:9px 12px; border:1px solid var(--line); border-radius:var(--radius);
+    background:var(--paper-raised); color:var(--ink);
   }
+  input[type=text]:focus{outline:2px solid var(--river); outline-offset:1px;}
+  .go{font:inherit; font-size:0.9rem; background:var(--river); color:#fff; border:0; border-radius:var(--radius); padding:0 16px; cursor:pointer;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;}
+  .chip{font:inherit; font-size:0.85rem; background:var(--paper-raised); border:1px solid var(--line); color:var(--ink); padding:5px 12px; border-radius:999px; cursor:pointer;}
   .chip:hover{border-color:var(--river);}
-  .chip.active{background:var(--river); border-color:var(--river); color:#fff;}
+  .msg{color:var(--rust); font-size:0.88rem; margin:0 0 12px; min-height:1em;}
 
-  .observation{
-    background:var(--paper-raised);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:16px;
-    margin-bottom:16px;
-  }
-  .observation .word{font-family:var(--serif); font-size:1.4rem; margin-bottom:4px;}
-  .observation .meta{font-size:0.85rem; color:var(--ink-soft);}
+  .card{background:var(--paper-raised); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; margin-bottom:14px;}
+  .row{display:flex; align-items:baseline; gap:12px; padding:4px 0;}
+  .row .lab{flex:0 0 64px; font-size:0.78rem; color:var(--ink-faint);}
+  .seq{font-family:var(--serif); font-size:1.35rem; letter-spacing:0.02em; overflow-wrap:anywhere;}
+  .seq .v{color:var(--ink-faint);}
+  .seq .c{color:var(--ink);}
+  .seq .chg{color:var(--rust); font-weight:600;}
+  .seq .star{color:var(--ink-faint); margin-right:1px;}
 
-  .stage{margin-bottom:16px;}
-  .stage-label{
-    font-size:0.78rem;
-    color:var(--ink-faint);
-    text-transform:none;
-    margin:0 0 8px;
-  }
+  .cmp-head{display:flex; justify-content:space-between; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:8px;}
+  .cmp-head .orig{font-family:var(--serif); font-style:italic;}
+  .score{font-size:0.8rem; padding:2px 10px; border-radius:999px; border:1px solid currentColor;}
+  .score.full{color:var(--ok);}
+  .score.part{color:var(--rust);}
+  .align{display:flex; flex-wrap:wrap; gap:6px; margin:6px 0 8px;}
+  .col{text-align:center; border-radius:8px; border:1px solid var(--line); min-width:38px; padding:4px 6px; font-family:var(--serif); font-size:1.05rem; line-height:1.35;}
+  .col .e{display:block;} .col .r{display:block; color:var(--ink-soft); border-top:1px dashed var(--line); margin-top:2px; padding-top:2px;}
+  .col.ok{border-color:var(--ok); background:#E3EBDD;}
+  .col.bad{border-color:var(--rust); background:#F1DDD3;}
+  .sep{flex:0 0 10px;}
+  .col.extra,.col.miss{border-style:dashed; color:var(--ink-faint);}
+  .legend{font-size:0.76rem; color:var(--ink-faint); margin:0 0 6px;}
+  .hint{font-size:0.85rem; color:var(--ink-soft); margin:4px 0 0;}
+  .hint button{font:inherit; font-size:0.78rem; margin-left:6px; background:none; border:1px solid var(--river); color:var(--river); border-radius:999px; padding:1px 9px; cursor:pointer;}
 
-  .candidate{
-    background:var(--paper-raised);
-    border:1px solid var(--line);
-    border-left:3px solid var(--river);
-    border-radius:0 8px 8px 0;
-    padding:12px 14px;
-    margin-bottom:10px;
-  }
-  .candidate.alt{border-left-color:var(--ink-faint);}
-  .candidate .form-line{
-    display:flex; align-items:center; gap:8px; flex-wrap:wrap;
-    margin-bottom:6px;
-  }
-  .candidate .form{font-family:var(--serif); font-size:1.1rem;}
-  .badge{
-    font-size:0.7rem;
-    padding:2px 8px;
-    border-radius:999px;
-    border:1px solid currentColor;
-  }
+  .info{border:1px dashed var(--line); border-radius:8px; padding:12px 14px; font-size:0.87rem; color:var(--ink-soft); margin-bottom:14px;}
+  .info strong{color:var(--ink);}
+  .info a{color:var(--river);}
+
+  .stage-title{font-size:0.85rem; color:var(--river); margin:22px 0 10px; font-weight:600;}
+  .step{background:var(--paper-raised); border:1px solid var(--line); border-left:3px solid var(--river); border-radius:0 8px 8px 0; padding:10px 14px; margin-bottom:9px;}
+  .animate .step{animation:rise .45s ease both; animation-delay:calc(var(--i) * .3s);}
+  @keyframes rise{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+  .step-head{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .step-head .num{font-size:0.75rem; color:var(--ink-faint);}
+  .step-head .rule{font-family:var(--serif); font-size:1rem;}
+  .wordnow{font-family:var(--serif); font-size:1.05rem; margin:4px 0 2px;}
+  .wordnow mark{background:none; color:var(--rust); font-weight:600;}
+  .step .note{font-size:0.86rem; color:var(--ink-soft); margin:2px 0 0;}
+  .alts{margin-top:8px; display:flex; flex-wrap:wrap; gap:6px; align-items:center; font-size:0.78rem; color:var(--ink-faint);}
+  .alt{font:inherit; font-family:var(--serif); font-size:0.95rem; background:none; border:1px solid var(--line); color:var(--ink); border-radius:999px; padding:1px 11px; cursor:pointer;}
+  .alt.on{background:var(--river); border-color:var(--river); color:#fff;}
+  .alt .c{font-family:var(--sans); font-size:0.68rem; opacity:.8; margin-left:5px;}
+  .untouched{font-size:0.82rem; color:var(--ink-faint); margin:4px 0 0;}
+  .badge{font-size:0.7rem; padding:2px 8px; border-radius:999px; border:1px solid currentColor;}
   .badge.sicher{color:var(--river);}
   .badge.wahrscheinlich{color:var(--rust);}
   .badge.moeglich{color:var(--ink-soft);}
   .badge.unwahrscheinlich{color:var(--ink-faint); border-style:dashed;}
-  .candidate .note{font-size:0.88rem; color:var(--ink-soft); margin:0;}
-
-  .limit-box{
-    background:none;
-    border:1px dashed var(--line);
-    border-radius:8px;
-    padding:14px;
-    font-size:0.88rem;
-    color:var(--ink-soft);
-  }
-  .limit-box strong{color:var(--ink);}
-
-  .idg-candidate{
-    background:var(--paper-raised);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:14px;
-    margin-bottom:12px;
-  }
-  .idg-candidate .form-line{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px;}
-  .idg-candidate .form{font-family:var(--serif); font-style:italic; font-size:1.15rem;}
-  .chain{
-    font-family:var(--serif);
-    font-style:italic;
-    font-size:0.86rem;
-    color:var(--ink);
-    background:var(--river-soft);
-    border-radius:6px;
-    padding:8px 10px;
-    margin-bottom:8px;
-  }
-  .check-btn{
-    font-size:0.8rem;
-    background:none;
-    border:1px solid var(--river);
-    color:var(--river);
-    padding:5px 11px;
-    border-radius:999px;
-    cursor:pointer;
-  }
-  .check-result{
-    display:none;
-    margin-top:8px;
-    font-size:0.87rem;
-    padding-top:8px;
-    border-top:1px dashed var(--line);
-  }
-  .check-result.shown{display:block;}
-  .check-result .mark{color:var(--river); font-weight:600;}
-
-  .legend{
-    display:flex; flex-wrap:wrap; gap:10px;
-    font-size:0.78rem; color:var(--ink-soft);
-    margin-top:14px;
-  }
-  .legend span{display:flex; align-items:center; gap:5px;}
 
   footer{color:var(--ink-faint); font-size:0.8rem; border-top:1px solid var(--line); padding-top:16px;}
-
-  @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+  @media (prefers-reduced-motion: reduce){ .animate .step{animation:none;} }
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <header>
-    <p class="kicker">Bauphase 4 &middot; technisch anspruchsvollste Komponente</p>
-    <h1>Rückwärts-Lautverschiebungstool</h1>
-    <p>Neuhochdeutsches Wort rein, mögliche urgermanische und indogermanische Vorformen raus &mdash; mit Regelkette statt einer einzigen „Antwort".</p>
+    <p class="kicker">Bauphase 4 &middot; Rückwärts-Rekonstruktion</p>
+    <h1>Rückwärts-Lautverschiebung</h1>
+    <p>Beliebiges neuhochdeutsches Wort eingeben: Die Lautgesetze laufen rückwärts, jeder Schritt ist sichtbar. Am Ende siehst du, wie nah das Ergebnis an der urgermanischen Form liegt.</p>
     <div class="caveat">
-      <strong>Zur Vorsicht (Abschnitt 8):</strong> Lautgesetze sind nicht eindeutig umkehrbar. Dieses Werkzeug zeigt deshalb alle Kandidaten, die das Regelsystem zulässt &mdash; auch dort, wo nur einer davon der in der Forschung bevorzugten Etymologie entspricht &mdash; und lässt sich per Vorwärts-Check gegenprüfen.
+      <strong>Grenzen:</strong> Lautgesetze sind nicht eindeutig umkehrbar. Wo die Regel mehrere Lesarten zulässt, steht die wahrscheinlichste vorn &mdash; die Alternativen kannst du selbst umschalten. Bei den Vokalen wird nur der <em>Stammvokal</em> (erste Silbe) rekonstruiert; Endungsvokale erscheinen als „·“. Der idg. Akzent für Verners Gesetz fehlt.
     </div>
   </header>
 
-  <section id="tool">
-    <h2>Wort wählen</h2>
-    <p class="section-intro">Wörter aus Modul 5 (Abschnitt 4.2) &mdash; dieselbe Regel-Engine wie im Lautverschiebungswerkzeug aus Bauphase 3.</p>
-    <div class="chips" id="wordChips"></div>
-
-    <div class="observation" id="observation"></div>
-
-    <div class="stage">
-      <p class="stage-label">Schritt 1 &middot; zurück zur urgermanischen Stufe (2. Lautverschiebung rückgängig gemacht)</p>
-      <div id="stage1"></div>
-    </div>
-
-    <div class="stage">
-      <p class="stage-label">Schritt 2 &middot; zurück zur indogermanischen Stufe (1. Lautverschiebung / Verners Gesetz rückgängig gemacht)</p>
-      <div id="stage2"></div>
-    </div>
-
-    <div class="legend">
-      <span><span class="badge sicher">sicher</span> eindeutig aus der Regel ableitbar</span>
-      <span><span class="badge wahrscheinlich">wahrscheinlich</span> Regel-Standardfall</span>
-      <span><span class="badge moeglich">möglich</span> Alternative, nicht ausschließbar</span>
-      <span><span class="badge unwahrscheinlich">unwahrscheinlich</span> nur mit Zusatzannahme erklärbar</span>
-    </div>
+  <section>
+    <form id="form" autocomplete="off">
+      <input type="text" id="word" list="wordlist" value="Wasser" maxlength="30" aria-label="Neuhochdeutsches Wort" autocapitalize="off" spellcheck="false">
+      <button class="go" type="submit">Zurückrechnen</button>
+    </form>
+    <datalist id="wordlist"></datalist>
+    <div class="chips" id="chips"></div>
+    <p class="msg" id="msg" role="status"></p>
+    <div id="out"></div>
   </section>
 
   <footer>
-    Modul 5, Abschnitt 8 &middot; Regel-Engine aus Bauphase 2/3 weiterverwendet (s. Abschnitt 9) &middot; nächster Schritt laut Roadmap: Bauphase 5, Stammbaum-Visualisierung und Ablautreihen-Trainer.
+    Regeln: 2. Lautverschiebung (nhd. → urgerm.), Grimms Gesetz (urgerm. → idg.); Verner nur als Alternative. Urformen nach gängigen Rekonstruktionen, noch nicht gegen Quellen geprüft &mdash; im <a href="woerterbuch-kompass.html">Wörterbuch-Kompass</a> nachprüfbar.
   </footer>
 
 </div>
 
 <script>
+/*ENGINE-START*/
 /* ======================================================================
-   SCHRITT 1: generische, rein strukturelle Regel-Umkehr der zweiten
-   Lautverschiebung. Macht keine Aussage über konkrete Etymologien —
-   nur darüber, welche Gmc.-Konsonanten dieselbe hd. Oberfläche ergeben
-   können (s. Abschnitt 9: Regel-Logik getrennt von Wortdaten).
+   TOKENISIERUNG: nhd. Schreibung -> Grapheme (Konsonant 'C' / Vokal 'V')
    ====================================================================== */
-const STAGE1_REVERSE = {
-  p: {
-    affricate: [
-      { form:"p", certainty:"sicher", note:"pf entsteht ausschließlich durch die zweite Verschiebung aus Gmc. p im Anlaut/nach Konsonant." }
-    ],
-    fricative: [
-      { form:"p", certainty:"wahrscheinlich", note:"f kann aus der zweiten Verschiebung von intervokalischem Gmc. p stammen." },
-      { form:"f (unverschoben)", certainty:"möglich", note:"Gmc. f existierte auch unabhängig von der zweiten Verschiebung und bleibt von ihr unberührt — von außen nicht unterscheidbar." }
-    ]
-  },
-  t: {
-    affricate: [
-      { form:"t", certainty:"sicher", note:"ts/z entsteht durch die zweite Verschiebung aus Gmc. t im Anlaut oder im Sonderfall nach r/l/n." }
-    ],
-    fricative: [
-      { form:"t", certainty:"wahrscheinlich", note:"s/ß kann aus der zweiten Verschiebung von intervokalischem Gmc. t stammen." },
-      { form:"s (unverschoben)", certainty:"möglich", note:"Gmc. s bleibt von der zweiten Verschiebung unberührt — ebenfalls nicht von außen unterscheidbar." }
-    ]
-  },
-  k: {
-    affricate: [
-      { form:"k", certainty:"sicher", note:"kx/ch (Affrikate) entsteht durch die zweite Verschiebung aus Gmc. k im Anlaut/nach Konsonant." }
-    ],
-    fricative: [
-      { form:"k", certainty:"wahrscheinlich", note:"ch kann aus der zweiten Verschiebung von intervokalischem Gmc. k stammen." },
-      { form:"h (unverschoben)", certainty:"möglich", note:"Gmc. h bleibt von der zweiten Verschiebung unberührt." }
-    ]
-  },
-  d: {
-    special: [
-      { form:"d", certainty:"sicher", note:"t entsteht regelmäßig aus Gmc. d, unabhängig von der Position." },
-      { form:"t (unverschoben, unregelmäßig)", certainty:"unwahrscheinlich", note:"Reguläres Gmc. t wäre bereits in der ersten Verschiebung zu þ geworden — ein unverschobenes t hier wäre nur durch Entlehnung/Analogie erklärbar." }
-    ]
+const V_DIGRAPHS = ["ie","ei","au","eu","äu"];
+const C_DIGRAPHS = ["sch","ch","ck","pf","tz","ss","ff","tt","pp","ll","mm","nn","rr","qu"];
+const VOWELS = "aeiouäöüy";
+
+function tokenize(word){
+  const w = word.toLowerCase(), out = [];
+  let i = 0;
+  while (i < w.length){
+    let m = null;
+    for (const d of V_DIGRAPHS) if (w.startsWith(d, i)) { m = [d,"V"]; break; }
+    if (!m) for (const d of C_DIGRAPHS) if (w.startsWith(d, i)) { m = [d,"C"]; break; }
+    if (!m) m = [w[i], VOWELS.includes(w[i]) ? "V" : "C"];
+    out.push({ g:m[0], k:m[1] });
+    i += m[0].length;
   }
-};
-
-/* ======================================================================
-   SCHRITT 2: kuratierte idg.-Rekonstruktionen. Nur dort ausgefüllt, wo
-   die Wortgeschichte sicher genug ist, um über die reine Lautregel
-   hinauszugehen — sonst ein expliziter Stopp statt einer erfundenen
-   Vorform (s. Abschnitt 8, "falsche Präzision").
-   ====================================================================== */
-const WORDS = [
-  { id:"pfeffer", nhd:"Pfeffer", cognate:"engl. pepper / niederl. peper", consonant:"p", position:"affricate",
-    stage2:{ limitNote:"Lehnwort über lat./griech. <em>piper</em>, letztlich aus dem Sanskrit — erst nach Abschluss der ersten Lautverschiebung ins Germanische entlehnt. Das unverschobene p (vgl. engl. <em>pepper</em>, nicht ×<em>fefer</em>) ist der Beleg dafür. Keine idg. Vorform über Grimms Gesetz rekonstruierbar." } },
-
-  { id:"apfel", nhd:"Apfel", cognate:"engl. apple / niederl. appel", consonant:"p", position:"affricate",
-    stage2:{ limitNote:"Herkunft umstritten — vermutlich ein vorindogermanisches Substratwort (ähnlich „Wein\"). Keine gesicherte idg. Wurzel, daher endet die Rückführung auf der urgermanischen Stufe." } },
-
-  { id:"pfund", nhd:"Pfund", cognate:"engl. pound / niederl. pond", consonant:"p", position:"affricate",
-    stage2:{ limitNote:"Lehnwort aus lat. <em>pondo</em>, wie Pfeffer erst nach der ersten Lautverschiebung entlehnt (unverschobenes p, vgl. engl. <em>pound</em>). Keine idg. Vorform." } },
-
-  { id:"offen", nhd:"offen", cognate:"engl. open", consonant:"p", position:"fricative",
-    stage2:{ limitNote:"Weitere idg. Herkunft in der Forschung nicht einheitlich genug für eine belastbare Rückführung. Wir bleiben auf der urgermanischen Stufe." } },
-
-  { id:"schlafen", nhd:"schlafen", cognate:"engl. sleep / niederl. slapen", consonant:"p", position:"fricative",
-    stage2:{ limitNote:"Idg. Herkunft ungeklärt. Die Rückführung bleibt auf der urgermanischen Stufe." } },
-
-  { id:"zeit", nhd:"Zeit", cognate:"engl. tide", consonant:"t", position:"fricative",
-    stage2:{ candidates:[
-      { idg:"*deh₂- („teilen, abschneiden“)", certainty:"sicher",
-        chain:"idg. *d → (Grimm: Medien → Tenues) → Gmc. *t → (2. LV, intervokalisch) → hd. z",
-        check:"Ergibt „Zeit“ — stimmt." }
-    ]}},
-
-  { id:"herz", nhd:"Herz", cognate:"engl. heart", consonant:"t", position:"affricate",
-    stage2:{ candidates:[
-      { idg:"*ḱerd- („Herz“)", certainty:"sicher",
-        chain:"idg. *d → (Grimm: Medien → Tenues) → Gmc. *t → (2. LV, Sonderfall nach r) → hd. z",
-        check:"Ergibt „Herz“ — stimmt; vgl. lat. cor/cord-, griech. kardía." }
-    ]}},
-
-  { id:"wasser", nhd:"Wasser", cognate:"engl. water", consonant:"t", position:"fricative",
-    stage2:{ candidates:[
-      { idg:"*ud- („Wasser“)", certainty:"sicher",
-        chain:"idg. *d → (Grimm: Medien → Tenues) → Gmc. *t → (2. LV, intervokalisch) → hd. ss",
-        check:"Ergibt „Wasser“ — stimmt." }
-    ]}},
-
-  { id:"machen", nhd:"machen", cognate:"engl. make / niederl. maken", consonant:"k", position:"fricative",
-    stage2:{ limitNote:"Eine mögliche Verbindung zu einer idg. Wurzel *maǵ- („kneten, passen“) wird diskutiert, gilt aber nicht als gesichert. Wir bleiben vorsichtshalber auf der urgermanischen Stufe." } },
-
-  { id:"tag", nhd:"Tag", cognate:"engl. day / niederl. dag", consonant:"d", position:"special",
-    stage2:{ candidates:[
-      { idg:"*dʰegʷʰ- („brennen“)", certainty:"wahrscheinlich",
-        chain:"idg. *dʰ → (Grimm: Aspirierte Media → Media) → Gmc. *d → (2. LV, Sonderregel d→t) → hd. Tag",
-        check:"Ergibt „Tag“ — stimmt; in der Forschung die bevorzugte, aber nicht unumstrittene Erklärung." },
-      { idg:"*t (Akzent nicht auf der vorausgehenden Silbe)", certainty:"möglich",
-        chain:"idg. *t → (Grimm: Tenues → Frikative) → (Verner: stimmhaft, da Akzent nicht unmittelbar davor) → Gmc. *d → (2. LV, Sonderregel d→t) → hd. Tag",
-        check:"Ergibt ebenfalls „Tag“ — vom Regelsystem her nicht von Kandidat 1 zu unterscheiden. Genau das ist die Verner-bedingte Mehrdeutigkeit aus Abschnitt 8." }
-    ]}}
-];
-
-const POSITION_LABEL = {
-  affricate: "Anlaut / Gemination / nach Konsonant",
-  fricative: "intervokalisch",
-  special: "Sonderregel d→t"
-};
-
-function certClass(c){
-  return c.replace("ä","ae").replace(/\s/g,"");
+  return out;
 }
 
-let selectedId = WORDS[0].id;
+function splitSyms(out){ return out === "" ? [] : (out === "ch" ? ["ch"] : Array.from(out)); }
+function norm(s){ return s.normalize("NFD").replace(/[́ʰʷ]/g, ""); }
 
-function renderChips(){
-  const el = document.getElementById("wordChips");
-  el.innerHTML = "";
-  WORDS.forEach(w => {
-    const chip = document.createElement("div");
-    chip.className = "chip" + (w.id === selectedId ? " active" : "");
-    chip.textContent = w.nhd;
-    chip.addEventListener("click", () => { selectedId = w.id; renderAll(); });
-    el.appendChild(chip);
+/* ======================================================================
+   SCHRITT A: 2. Lautverschiebung rückwärts (nhd. Konsonant -> urgerm.)
+   Jede Regel liefert Kandidaten, der erste ist die Standard-Lesart.
+   ====================================================================== */
+function rev2(T, i){
+  const t = T[i], g = t.g, p = T[i-1], n = T[i+1];
+  const pg = p ? p.g : "", ng = n ? n.g : "";
+  const prevV = !!p && p.k === "V", nextV = !!n && n.k === "V";
+  const C = (out, cert, note) => ({ out, cert, note });
+  const R = (rule, cands) => ({ rule, cands });
+  const same = { rule:null, cands:[C(g,"sicher","")] };
+
+  switch (g){
+    case "pf":
+      return R("pf → p", [C("p","sicher","pf entsteht nur durch die 2. Lautverschiebung aus p (engl. pound → Pfund, apple → Apfel).")]);
+    case "z": case "tz":
+      return R(g+" → t", [C("t","sicher","z/tz entsteht durch Verschiebung von t im Anlaut, nach Konsonant und in Doppelung (engl. two → zwei, heart → Herz, sit → sitzen).")]);
+    case "ß": case "ss":
+      return R(g+" → t", [
+        C("t","wahrscheinlich","ss/ß geht meist auf t zurück, das zwischen Vokalen und im Auslaut zum s-Laut wurde (engl. water → Wasser, foot → Fuß)."),
+        C("s","möglich","Altes s blieb s — z. B. bei Lehnwörtern oder Assimilation.")
+      ]);
+    case "ch":
+      if (ng === "t" || ng === "s")
+        return R("cht/chs → ht/hs", [C("h","sicher","cht/chs sind altes ht/hs: dieses h wurde nie verschoben (engl. night → Nacht, six → sechs).")]);
+      if (!p)
+        return R("ch im Anlaut", [C("ch","unwahrscheinlich","Anlautendes ch gibt es nur in Fremdwörtern — keine Regel anwendbar.")]);
+      return R("ch → k", [
+        C("k","wahrscheinlich","ch nach Vokal/Konsonant ist meist verschobenes k (engl. make → machen, book → Buch, milk → Milch)."),
+        C("h","möglich","ch kann auch altes h sein, das nur als Reibelaut erhalten blieb (hoch, doch).")
+      ]);
+    case "ck":
+      return R("ck → k", [C("k","sicher","ck ist Doppel-k und im Hochdeutschen unverschoben (engl. acre → Acker).")]);
+    case "sch":
+      if (["n","l","m","w"].includes(ng))
+        return R("sch → s", [C("s","sicher","sch vor n/l/m/w ist aus einfachem s entstanden (engl. snow → Schnee, sleep → schlafen, swan → Schwan).")]);
+      return R("sch → sk", [C("sk","wahrscheinlich","sch geht meist auf sk zurück (engl. fish → Fisch, ship → Schiff, sheep → Schaf).")]);
+    case "f": case "v":
+      if (!p) return R("f im Anlaut bleibt", [C("f","sicher","f/v im Anlaut ist altes f, nicht verschoben (engl. father → Vater, fish → Fisch).")]);
+      if (g === "v") return same;
+      if (ng === "t") return R("ft bleibt", [C("f","sicher","ft ist ein altes Cluster und blieb unverändert (Luft, Kraft).")]);
+      return R("f → p", [
+        C("p","wahrscheinlich","f nach Vokal/l/r ist oft verschobenes p (engl. open → offen, help → helfen, ship → Schiff)."),
+        C("f","möglich","Altes f bleibt f (engl. wolf → Wolf).")
+      ]);
+    case "ff":
+      return R("ff → p", [
+        C("p","wahrscheinlich","ff nach Kurzvokal ist meist verschobenes p (engl. open → offen, ship → Schiff)."),
+        C("f","möglich","Altes f bleibt f.")
+      ]);
+    case "d":
+      if (pg === "n")
+        return R("nd: d bleibt", [
+          C("d","wahrscheinlich","Nach n bleibt d als d (engl. hand → Hand, land → Land, wind → Wind)."),
+          C("þ","möglich","Nicht ausschließbar, aber selten.")
+        ]);
+      if (pg === "l" || pg === "r")
+        return R("ld/rd: d → þ", [
+          C("þ","wahrscheinlich","Nach l/r geht d meist auf þ (th) zurück (Gold ← *gulþą, Feld ← *felþuz)."),
+          C("d","möglich","Altes d ist möglich (z. B. Herde).")
+        ]);
+      return R("d → þ", [
+        C("þ","wahrscheinlich","nhd. d ist meist urgerm. þ (th), später stimmhaft geworden (engl. thing → Ding, three → drei, brother → Bruder)."),
+        C("d","möglich","Seltener altes d (z. B. in Lehnwörtern).")
+      ]);
+    case "t":
+      if (pg === "s" || pg === "ch" || pg === "f" || pg === "ff")
+        return R("t nach s/h/f bleibt", [C("t","sicher","t nach s, h (ch), f blieb schon in der 1. Lautverschiebung unverändert und wurde auch in der 2. nicht verschoben (engl. stone → Stein, night → Nacht).")]);
+      if (!p)
+        return R("t im Anlaut → d", [
+          C("d","wahrscheinlich","Anlautendes t ist verschobenes d (engl. day → Tag, door → Tür, deep → tief)."),
+          C("t","möglich", ng === "r" ? "tr blieb in der 2. Lautverschiebung unverschoben — altes t möglich (engl. true → treu)." : "Lehnwort oder Fremdwort mit altem t (Tisch, Tee).")
+        ]);
+      return R("t → d", [
+        C("d","wahrscheinlich","t nach Vokal/Liquid ist meist verschobenes d (engl. father → Vater, good → gut, word → Wort)."),
+        C("t","möglich", ng === "r" ? "tr blieb unverschoben (engl. bitter → bitter)." : "Altes t ist nur bei Ausnahmen/Lehnwörtern möglich.")
+      ]);
+    case "tt":
+      return R("tt → d", [
+        C("d","wahrscheinlich","Doppel-t ist meist verschobenes d (engl. mother → Mutter, bed → Bett, god → Gott)."),
+        C("t","möglich","tt kann auch altes t sein (Lehnwörter).")
+      ]);
+    case "h":
+      if (prevV && ["l","m","n","r"].includes(ng))
+        return R("Dehnungs-h entfällt", [
+          C("","wahrscheinlich","h nach Vokal vor l/m/n/r ist meist nur Dehnungszeichen (Zahn, Jahr, Zahl)."),
+          C("h","möglich","Kann auch altes h sein (vgl. zehn).")
+        ]);
+      return same;
+    case "qu":
+      return R("qu → kw", [C("kw","sicher","qu steht für k+w.")]);
+    case "pp": case "ll": case "mm": case "nn": case "rr":
+      return R("Doppelung vereinfacht", [C(g[0],"wahrscheinlich","Doppelkonsonant bezeichnet Vokalkürze bzw. westgermanische Gemination — für das Konsonantengerüst vereinfacht.")]);
+    default:
+      return same;
+  }
+}
+
+/* Stammvokal (erste Silbe): Kandidaten nach Häufigkeit, nicht eindeutig umkehrbar */
+function revV(g){
+  const C = (out, cert, note) => ({ out: out.normalize("NFC"), cert, note });
+  const R = (rule, cands) => ({ rule, cands });
+  switch (g){
+    case "a": return R("a → a", [C("a","wahrscheinlich","a bleibt meist a (Hand, Tag)."), C("ē","möglich","Altes ē wurde zu a (schlafen ← *slēpaną).")]);
+    case "ä": return R("ä → a (Umlaut)", [C("a","wahrscheinlich","ä ist meist umgelautetes a (Gäste ← Gast)."), C("ē","möglich","Nicht ausschließbar: ä aus altem ē.")]);
+    case "e": return R("e → e", [C("e","wahrscheinlich","e bleibt meist e (Herz, Feld)."), C("a","möglich","i-Umlaut: e kann umgelautetes a sein (Bett ← *badją).")]);
+    case "i": return R("i → i", [C("i","wahrscheinlich","i bleibt meist i (Wind, Ding)."), C("e","möglich","e wurde in manchen Stellungen zu i (Milch ← *meluks)."), C("eu","möglich","eu wurde über iu zu i (Licht ← *leuhtą).")]);
+    case "ie": return R("ie → eu", [C("eu","wahrscheinlich","ie geht oft auf eu zurück (tief ← *deupaz, ziehen ← *teuhaną)."), C("e","möglich","Auch gedehntes e wird ie (sieben ← *sebun).")]);
+    case "ei": return R("ei → ai / ī", [C("ai","wahrscheinlich","nhd. ei vereint mhd. ei (← ai: Stein) und mhd. ī (← ī: Zeit) — nicht unterscheidbar."), C("ī","wahrscheinlich","Siehe oben: ei kann auch auf ī zurückgehen.")]);
+    case "au": return R("au → au / ū", [C("au","wahrscheinlich","au kann alt au sein (Auge)."), C("ū","wahrscheinlich","au geht auch auf ū zurück (Haus ← *hūs) — nicht unterscheidbar.")]);
+    case "eu": return R("eu → iu / eu", [C("iu","wahrscheinlich","eu geht auf iu oder eu zurück."), C("eu","möglich","Siehe oben.")]);
+    case "äu": return R("äu → au / ū (Umlaut)", [C("au","wahrscheinlich","Umlaut von au (Bäume ← Baum)."), C("ū","möglich","Umlaut von ū (Häuser ← Haus).")]);
+    case "o": return R("o → u / au", [
+      C("u","wahrscheinlich","a-Umlaut: u vor a/e/o der Folgesilbe wurde o (Holz ← *hultą, Gold ← *gulþą, Dorf ← *þurpą)."),
+      C("au","möglich","au wurde zu ō (Brot ← *braudą, groß ← *grautaz)."),
+      C("o","möglich","Altes o (selten, v. a. Lehnwörter)."),
+      C("i","möglich","Seltener Wandel über die Folgesilbe (Woche ← *wikōn).")
+    ]);
+    case "ö": return R("ö → u / au (Umlaut)", [C("u","wahrscheinlich","Umlaut von o ← u."), C("au","möglich","Umlaut von au → ō (schön)."), C("ō","möglich","Umlaut von ō.")]);
+    case "u": return R("u → u / ō", [C("u","wahrscheinlich","u bleibt meist u (Hund, Zunge)."), C("ō","möglich","ō wurde zu uo, dann u (Mutter ← *mōdēr, gut, Fuß).")]);
+    case "ü": return R("ü → u / ō (Umlaut)", [C("u","wahrscheinlich","Umlaut von u."), C("ō","möglich","Umlaut von uo ← ō (Brüder ← *brōþēr).")]);
+    default: return { rule:null, cands:[C(g,"sicher","")] };
+  }
+}
+
+/* ======================================================================
+   SCHRITT B: Grimms Gesetz rückwärts (urgerm. -> idg.), Verner als Alternative
+   ====================================================================== */
+function rev1(sym, prev, next){
+  const C = (out, cert, note) => ({ out, cert, note });
+  const R = (rule, cands) => ({ rule, cands });
+  switch (sym){
+    case "f": return R("f → p", [C("p","sicher","urgerm. f ← idg. p (Grimm; lat. pater ↔ Vater).")]);
+    case "þ": return R("þ → t", [C("t","sicher","urgerm. þ ← idg. t (Grimm; lat. tres ↔ engl. three).")]);
+    case "h":
+      if (next === "t")
+        return R("h → k", [
+          C("k","wahrscheinlich","urgerm. h ← idg. k (Grimm; lat. cord- ↔ Herz)."),
+          C("g","möglich","Vor t kann h auch auf g(ʰ) zurückgehen (Tochter ← *dʰugh₂tēr)."),
+          C("ḱ","möglich","Palatales ḱ wirkt gleich wie k (Herz ← *ḱerd-); von außen nicht unterscheidbar.")
+        ]);
+      return R("h → k", [
+        C("k","wahrscheinlich","urgerm. h ← idg. k (Grimm; lat. cord- ↔ Herz, lat. caput ↔ Haupt)."),
+        C("ḱ","möglich","Palatales ḱ wirkt gleich wie k (Herz ← *ḱerd-); von außen nicht unterscheidbar.")
+      ]);
+    case "p":
+      return R("p → b", [
+        C("b","wahrscheinlich","urgerm. p ← idg. b (Grimm) — idg. b ist selten, deshalb oft unsichere Herkunft."),
+        C("p","möglich","Unverschobenes p: Lehnwort nach der 1. Lautverschiebung oder Wort ohne idg. Wurzel (Pfund, Apfel).")
+      ]);
+    case "t":
+      if (prev === "s" || prev === "f" || prev === "h")
+        return R("t nach s/h/f bleibt", [C("t","sicher","Grimm-Ausnahme: t nach s, h, f wurde nicht verschoben, also bleibt idg. t (lat. nox, noct- ↔ Nacht).")]);
+      return R("t → d", [C("d","wahrscheinlich","urgerm. t ← idg. d (Grimm; lat. pes, ped- ↔ Fuß, lat. decem ↔ engl. ten).")]);
+    case "k":
+      if (prev === "s")
+        return R("k nach s bleibt", [C("k","sicher","Grimm-Ausnahme: k nach s blieb unverschoben (lat. piscis ↔ Fisch).")]);
+      return R("k → g", [C("g","wahrscheinlich","urgerm. k ← idg. g (Grimm; lat. genu ↔ Knie, lat. ager ↔ Acker).")]);
+    case "b":
+      return R("b → bʰ", [
+        C("bʰ","wahrscheinlich","urgerm. b ← idg. bʰ (Grimm; aind. bhrātar- ↔ Bruder)."),
+        C("p","möglich","Verner: idg. p wurde nach unbetonter Silbe zu stimmhaftem b (p → f → b).")
+      ]);
+    case "d":
+      return R("d → dʰ", [
+        C("dʰ","wahrscheinlich","urgerm. d ← idg. dʰ (Grimm; aind. dhā- ↔ tun)."),
+        C("t","möglich","Verner: idg. t nach unbetonter Silbe wurde über þ zu d (Vater ← *ph₂tḗr).")
+      ]);
+    case "g":
+      return R("g → gʰ", [
+        C("gʰ","wahrscheinlich","urgerm. g ← idg. gʰ (Grimm; lat. hostis ↔ Gast)."),
+        C("k","möglich","Verner: idg. k nach unbetonter Silbe wurde über h zu g.")
+      ]);
+    default:
+      return { rule:null, cands:[C(sym,"sicher","")] };
+  }
+}
+
+/* ======================================================================
+   ANALYSE: beide Stufen mit den aktuell gewählten Lesarten
+   ch = { a:{tokenIndex:candIdx}, b:{"tokenIndex:sub":candIdx} }
+   ====================================================================== */
+function analyse(word, ch){
+  ch = ch || { a:{}, b:{} };
+  const T = tokenize(word);
+  const rootI = T.findIndex(t => t.k === "V");
+  const A = T.map((t,i) => {
+    if (t.k === "V" && i !== rootI) return { t, i, out:t.g, weak:true };
+    const r = t.k === "V" ? revV(t.g) : rev2(T, i);
+    const idx = Math.min(ch.a[i] || 0, r.cands.length - 1);
+    return { t, i, rule:r.rule, cands:r.cands, idx, out:r.cands[idx].out };
   });
+  const loan = LOANS[word.toLowerCase()] || null;
+
+  const G = [];
+  A.forEach(a => {
+    if (a.t.k === "V") G.push({ sym:a.out, V:true, ti:a.i, sub:0 });
+    else splitSyms(a.out).forEach((s, sub) => G.push({ sym:s, V:false, ti:a.i, sub, a }));
+  });
+
+  const B = G.map((g, gi) => {
+    if (g.V || loan) return { gi, g, out:g.sym };
+    const r = rev1(g.sym, G[gi-1] ? G[gi-1].sym : "", G[gi+1] ? G[gi+1].sym : "");
+    const key = g.ti + ":" + g.sub;
+    const idx = Math.min(ch.b[key] || 0, r.cands.length - 1);
+    return { gi, g, key, rule:r.rule, cands:r.cands, idx, out:r.cands[idx].out };
+  });
+
+  const EG = G.filter(g => !g.V).map(g => ({
+    sym:norm(g.sym), disp:g.sym, cands:g.a.cands, idx:g.a.idx, sub:g.sub, stage:"a", ti:g.ti
+  }));
+  const ra = A[rootI];
+  const EV = ra ? { disp:ra.out, cands:ra.cands, idx:ra.idx, ti:ra.i, stage:"a" } : null;
+  return { T, A, G, B, EG, EV, loan };
 }
 
-function renderAll(){
-  renderChips();
-  const w = WORDS.find(x => x.id === selectedId);
-
-  document.getElementById("observation").innerHTML = `
-    <div class="word">${w.nhd}</div>
-    <div class="meta">${w.cognate} &middot; Konsonant „${w.consonant}“, ${POSITION_LABEL[w.position]}</div>
-  `;
-
-  const s1 = STAGE1_REVERSE[w.consonant][w.position];
-  document.getElementById("stage1").innerHTML = s1.map((c,i) => `
-    <div class="candidate${i>0 ? " alt" : ""}">
-      <div class="form-line">
-        <span class="form">Gmc. *${c.form}</span>
-        <span class="badge ${certClass(c.certainty)}">${c.certainty}</span>
-      </div>
-      <p class="note">${c.note}</p>
-    </div>
-  `).join("");
-
-  const s2 = w.stage2;
-  const s2el = document.getElementById("stage2");
-  if (s2.limitNote){
-    s2el.innerHTML = `<div class="limit-box"><strong>Rekonstruktion endet hier.</strong> ${s2.limitNote}</div>`;
-  } else {
-    s2el.innerHTML = s2.candidates.map((c,i) => `
-      <div class="idg-candidate">
-        <div class="form-line">
-          <span class="form">idg. ${c.idg}</span>
-          <span class="badge ${certClass(c.certainty)}">${c.certainty}</span>
-        </div>
-        <div class="chain">${c.chain}</div>
-        <button class="check-btn" type="button" data-idx="${i}">Vorwärts prüfen</button>
-        <div class="check-result" data-idx="${i}"><span class="mark">✓</span> ${c.check}</div>
-      </div>
-    `).join("");
-    s2el.querySelectorAll(".check-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const res = s2el.querySelector(`.check-result[data-idx="${btn.dataset.idx}"]`);
-        res.classList.add("shown");
-      });
-    });
+/* ======================================================================
+   VERGLEICH: Needleman-Wunsch-Alignment des Konsonantengerüsts
+   ====================================================================== */
+function align(E, R){
+  const n = E.length, m = R.length;
+  const S = Array.from({ length:n+1 }, () => Array(m+1).fill(0));
+  for (let i = 1; i <= n; i++) S[i][0] = -i;
+  for (let j = 1; j <= m; j++) S[0][j] = -j;
+  const sc = (i,j) => E[i-1].sym === R[j-1] ? 2 : -1;
+  for (let i = 1; i <= n; i++)
+    for (let j = 1; j <= m; j++)
+      S[i][j] = Math.max(S[i-1][j-1] + sc(i,j), S[i-1][j] - 1, S[i][j-1] - 1);
+  const rows = [];
+  let i = n, j = m;
+  while (i > 0 || j > 0){
+    if (i > 0 && j > 0 && S[i][j] === S[i-1][j-1] + sc(i,j)) { rows.push({ e:E[i-1], r:R[j-1] }); i--; j--; }
+    else if (i > 0 && S[i][j] === S[i-1][j] - 1) { rows.push({ e:E[i-1], r:null }); i--; }
+    else { rows.push({ e:null, r:R[j-1] }); j--; }
   }
+  return rows.reverse();
 }
 
-renderAll();
+function altFor(e, r){
+  if (!e.cands) return null;
+  for (let ci = 0; ci < e.cands.length; ci++){
+    if (ci === e.idx) continue;
+    if (norm(splitSyms(e.cands[ci].out)[e.sub] || "") === r) return { ci, out:e.cands[ci].out };
+  }
+  return null;
+}
+
+function compare(E, skel){
+  const R = skel.split(" ").map(norm);
+  const rows = align(E, R);
+  let hit = 0;
+  rows.forEach(w => {
+    if (w.e && w.r !== null){
+      if (w.e.sym === w.r) { w.st = "ok"; hit++; }
+      else { w.st = "bad"; w.alt = altFor(w.e, w.r); }
+    } else w.st = w.e ? "extra" : "miss";
+  });
+  return { rows, hit, total:R.length };
+}
+
+function compareVowel(EV, rootV){
+  if (!EV) return null;
+  const ok = EV.disp === rootV;
+  let alt = null;
+  if (!ok) EV.cands.forEach((c, ci) => { if (!alt && ci !== EV.idx && c.out === rootV) alt = { ci, out:c.out }; });
+  return { e:EV, r:rootV, st: ok ? "ok" : "bad", alt };
+}
+
+/* ======================================================================
+   DATEN: urgerm. Urformen (nach gängigen Rekonstruktionen, noch nicht gegen Quellen geprüft).
+   skG = Konsonantengerüst des Teils, der im nhd. Wort noch steckt; Stammvokal = betonter Vokal der ersten Silbe.
+   Format: nhd | urgerm. | skG | Stammvokal
+   ====================================================================== */
+const WORD_DATA = `
+Wasser|*watōr|w t r|a
+Vater|*fadēr|f d r|a
+Mutter|*mōdēr|m d r|ō
+Bruder|*brōþēr|b r þ r|ō
+Tochter|*duhtēr|d h t r|u
+Schwester|*swestēr|s w s t r|e
+Herz|*hertōn|h r t|e
+Nacht|*nahts|n h t|a
+sechs|*sehs|s h s|e
+Zahn|*tanþs|t n|a
+Zunge|*tungōn|t n g|u
+Knie|*knewą|k n|e
+Fuß|*fōts|f t|ō
+zwei|*twai|t w|ai
+drei|*þrīz|þ r|ī
+Zeit|*tīdiz|t d|ī
+tun|*dōną|d n|ō
+tief|*deupaz|d p|eu
+Tag|*dagaz|d g|a
+Dach|*þaką|þ k|a
+Ding|*þingą|þ n g|i
+danken|*þankōną|þ n k n|a
+Dorf|*þurpą|þ r p|u
+Hund|*hundaz|h n d|u
+Hand|*handuz|h n d|a
+Land|*landą|l n d|a
+Wind|*windaz|w n d|i
+Gold|*gulþą|g l þ|u
+Feld|*felþuz|f l þ|e
+Wald|*walþuz|w l þ|a
+alt|*aldaz|l d|a
+kalt|*kaldaz|k l d|a
+Wort|*wurdą|w r d|u
+Brot|*braudą|b r d|au
+Bett|*badją|b d|a
+Salz|*saltą|s l t|a
+Holz|*hultą|h l t|u
+Stein|*stainaz|s t n|ai
+heiß|*haitaz|h t|ai
+groß|*grautaz|g r t|au
+beißen|*bītaną|b t n|ī
+essen|*etaną|t n|e
+sitzen|*sitjaną|s t n|i
+ziehen|*teuhaną|t h n|eu
+sieben|*sebun|s b n|e
+Licht|*leuhtą|l h t|eu
+Wachs|*wahsą|w h s|a
+Woche|*wikōn|w k|i
+Milch|*meluks|m l k|e
+machen|*makōną|m k n|a
+brechen|*brekaną|b r k n|e
+suchen|*sōkijaną|s k n|ō
+Schiff|*skipą|s k p|i
+Schaf|*skēpą|s k p|ē
+scharf|*skarpaz|s k r p|a
+schlafen|*slēpaną|s l p n|ē
+helfen|*helpaną|h l p n|e
+offen|*upanaz|p n|u
+Apfel|*aplaz|p l|a
+Pfund|*pundą|p n d|u
+Wolf|*wulfaz|w l f|u
+`.trim().split("\n").map(l => {
+  const [nhd, pgmc, skG, rootV] = l.split("|");
+  return { nhd, pgmc, skG, rootV: rootV.normalize("NFC") };
+});
+
+const WORDS = {};
+WORD_DATA.forEach(w => { WORDS[w.nhd.toLowerCase()] = w; });
+
+const LOANS = {
+  pfund:"lat. pondo", pfeffer:"lat. piper", pforte:"lat. porta", pfanne:"lat. patina",
+  pflanze:"lat. planta", pfirsich:"lat. persicum", pfeil:"lat. pilum", pfahl:"lat. palus",
+  kupfer:"lat. cuprum", ziegel:"lat. tegula", zoll:"lat. telonium", münze:"lat. moneta",
+  kreuz:"lat. crux", tisch:"lat. discus", wein:"lat. vinum", mauer:"lat. murus",
+  keller:"lat. cellarium", kaiser:"lat. Caesar"
+};
+Object.keys(LOANS).forEach(k => {
+  LOANS[k] = "Lehnwort aus " + LOANS[k] + ", erst nach Abschluss der 1. Lautverschiebung entlehnt. Grimm/Verner gelten für diese Konsonanten nicht — die Rekonstruktion endet auf der urgermanischen Stufe.";
+});
+LOANS.apfel = "Herkunft umstritten (vermutlich vorindogermanisches Substratwort). Grimm/Verner lassen sich hier nicht belastbar anwenden — die Rekonstruktion endet auf der urgermanischen Stufe.";
+/*ENGINE-END*/
+
+/* ======================================================================
+   UI
+   ====================================================================== */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+const certClass = c => c.replace("ö","oe");
+
+let state = { word:"", ch:{ a:{}, b:{} } };
+
+function seq(parts, star){
+  return (star ? '<span class="star">*</span>' : "") + parts.map(p =>
+    `<span class="${p.v ? "v" : "c"}${p.chg ? " chg" : ""}">${esc(p.s === "" ? "∅" : p.s)}</span>`).join("");
+}
+
+function altButtons(cands, idx, attrs){
+  if (cands.length < 2) return "";
+  return `<div class="alts"><span>Lesart:</span>` + cands.map((c, ci) =>
+    `<button type="button" class="alt${ci === idx ? " on" : ""}" ${attrs} data-ci="${ci}" aria-pressed="${ci === idx}">${esc(c.out === "" ? "∅" : c.out)}<span class="c">${c.cert}</span></button>`).join("") + `</div>`;
+}
+
+function compareCard(title, form, cmp, vow){
+  const total = cmp.total + (vow ? 1 : 0), hit = cmp.hit + (vow && vow.st === "ok" ? 1 : 0);
+  const full = hit === total;
+  const tryBtn = (e, alt, k) => `<button type="button" class="try" data-stage="a" data-k="${k}" data-ci="${alt.ci}">Testen</button>`;
+  let hints = "";
+  if (vow && vow.st === "bad"){
+    hints += vow.alt
+      ? `<p class="hint">Stammvokal: Regel liefert »${esc(vow.e.disp)}«, Original hat »${esc(vow.r)}« — die Alternativ-Lesart »${esc(vow.alt.out)}« würde passen.${tryBtn(vow.e, vow.alt, vow.e.ti)}</p>`
+      : `<p class="hint">Stammvokal: Regel liefert »${esc(vow.e.disp)}«, Original hat »${esc(vow.r)}« — keine Lesart passt (Vokalwandel außerhalb der hier abgebildeten Regeln).</p>`;
+  }
+  cmp.rows.forEach(w => {
+    if (w.st === "bad"){
+      hints += w.alt
+        ? `<p class="hint">Regel liefert »${esc(w.e.disp)}«, Original hat »${esc(w.r)}« — die Alternativ-Lesart »${esc(w.alt.out)}« würde passen.${tryBtn(w.e, w.alt, w.e.ti)}</p>`
+        : `<p class="hint">Regel liefert »${esc(w.e.disp)}«, Original hat »${esc(w.r)}« — keine Lesart passt: Ausnahme, Lehnwort oder Lautwandel außerhalb dieses Werkzeugs.</p>`;
+    } else if (w.st === "miss"){
+      hints += `<p class="hint">Original hat »${esc(w.r)}«, im Ergebnis fehlt dieser Laut.</p>`;
+    }
+  });
+  const col = w => `<div class="col ${w.st}"><span class="e">${w.e ? esc(w.e.disp) : "·"}</span><span class="r">${w.r !== null ? esc(w.r) : "·"}</span></div>`;
+  return `<div class="card">
+    <div class="cmp-head"><h3>${title} <span class="orig">${esc(form)}</span></h3>
+      <span class="score ${full ? "full" : "part"}">${hit} von ${total} Lauten getroffen</span></div>
+    <p class="legend">oben: dein Ergebnis · unten: Original · links: Stammvokal, rechts: Konsonanten</p>
+    <div class="align">${vow ? col(vow) + '<span class="sep"></span>' : ""}${cmp.rows.map(col).join("")}</div>
+    ${hints}</div>`;
+}
+
+function stageHtml(steps, stateOf, untouched, kind){
+  const body = steps.map((s, n) => {
+    const cur = stateOf(s);
+    return `<div class="step" style="--i:${n}">
+      <div class="step-head"><span class="num">${n + 1}</span><span class="rule">${esc(s.rule)}</span>
+        <span class="badge ${certClass(s.cands[s.idx].cert)}">${s.cands[s.idx].cert}</span></div>
+      <div class="wordnow">${cur}</div>
+      <p class="note">${esc(s.cands[s.idx].note)}</p>
+      ${altButtons(s.cands, s.idx, kind === "a" ? `data-stage="a" data-k="${s.i}"` : `data-stage="b" data-k="${s.key}"`)}
+    </div>`;
+  }).join("");
+  const rest = untouched.length ? `<p class="untouched">Unberührt: ${untouched.map(esc).join(", ")}</p>` : "";
+  return body + rest;
+}
+
+function render(animate){
+  const word = state.word;
+  const r = analyse(word, state.ch);
+  const ref = WORDS[word.toLowerCase()];
+  let html = "";
+
+  /* Ergebnis */
+  html += `<div class="card">
+    <div class="row"><span class="lab">nhd.</span><span class="seq">${seq(r.T.map(t => ({ s:t.g, v:t.k === "V" })))}</span></div>
+    <div class="row"><span class="lab">urgerm.</span><span class="seq">${seq(r.A.map(a => ({ s:a.weak ? "·" : a.out, v:a.t.k === "V" && a.weak, chg:a.out !== a.t.g })), true)}</span></div>
+    <div class="row"><span class="lab">idg.</span><span class="seq">${r.loan ? "—" : seq(r.B.map(b => ({ s:b.g.V ? "·" : b.out, v:b.g.V, chg:!b.g.V && b.out !== b.g.sym })), true)}</span></div>
+  </div>`;
+
+  /* Vergleich */
+  if (ref){
+    html += compareCard("Urgermanisch", ref.pgmc, compare(r.EG, ref.skG), compareVowel(r.EV, ref.rootV));
+  } else {
+    html += `<div class="info"><strong>Keine Urform hinterlegt.</strong> Das Ergebnis ist ein reines Regelergebnis ohne Gegenprobe. Nachschlagen im <a href="woerterbuch-kompass.html">Wörterbuch-Kompass</a> (z. B. Wiktionary, Kluge). Vorschläge im Eingabefeld: ${WORD_DATA.length} Wörter mit urgerm. Form.</div>`;
+  }
+
+  /* Schritt A */
+  const stepsA = r.A.filter(a => a.rule);
+  const stateA = s => r.A.map(x => {
+    const v = x.i <= s.i ? x.out : x.t.g;
+    return x.i === s.i ? `<mark>${esc(v === "" ? "∅" : v)}</mark>` : esc(v);
+  }).join("");
+  html += `<div class="${animate ? "animate" : ""}" id="steps">
+    <p class="stage-title">Schritt A · 2. Lautverschiebung rückgängig → urgermanisch</p>
+    ${stageHtml(stepsA, stateA, [...new Set(r.A.filter(a => !a.rule && a.t.k === "C").map(a => a.t.g))], "a") || '<p class="untouched">Keine Regel greift.</p>'}`;
+
+  /* Schritt B */
+  html += `<p class="stage-title">Schritt B · Grimms Gesetz rückgängig → indogermanisch</p>`;
+  if (r.loan){
+    html += `<div class="info"><strong>Rekonstruktion endet hier.</strong> ${esc(r.loan)}</div>`;
+  } else {
+    const stepsB = r.B.filter(b => b.rule);
+    const stateB = s => r.B.map(x => {
+      const v = x.gi <= s.gi ? x.out : x.g.sym;
+      return x.gi === s.gi ? `<mark>${esc(v)}</mark>` : esc(v);
+    }).join("");
+    html += stageHtml(stepsB, stateB, [...new Set(r.B.filter(b => !b.rule && !b.g.V).map(b => b.g.sym))], "b");
+  }
+  html += `</div>`;
+
+  $("out").innerHTML = html;
+  $("out").querySelectorAll(".alt, .try").forEach(btn => btn.addEventListener("click", () => {
+    const k = btn.dataset.k, ci = +btn.dataset.ci;
+    if (btn.dataset.stage === "a"){
+      state.ch.a[k] = ci;
+      Object.keys(state.ch.b).forEach(key => { if (key.split(":")[0] === k) delete state.ch.b[key]; });
+    } else state.ch.b[k] = ci;
+    render(false);
+  }));
+}
+
+function run(word){
+  word = word.trim();
+  if (!/^[a-zäöüß]{2,30}$/i.test(word)){
+    $("msg").textContent = "Bitte ein einzelnes Wort aus Buchstaben eingeben (2–30 Zeichen).";
+    return;
+  }
+  $("msg").textContent = "";
+  $("word").value = word;
+  state = { word, ch:{ a:{}, b:{} } };
+  render(true);
+}
+
+$("form").addEventListener("submit", e => { e.preventDefault(); run($("word").value); });
+$("wordlist").innerHTML = WORD_DATA.map(w => `<option value="${esc(w.nhd)}">`).join("");
+$("chips").innerHTML = ["Wasser","Vater","Herz","Tochter","Nacht","Dorf","Zunge","Wolf"].map(w =>
+  `<button type="button" class="chip" data-w="${w}">${w}${w === "Wolf" ? " (Ausnahme)" : ""}</button>`).join("");
+$("chips").querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => run(c.dataset.w)));
+run($("word").value);
 </script>
 </body>
 </html>

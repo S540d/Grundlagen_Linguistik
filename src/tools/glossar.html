@@ -1,0 +1,365 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Fachbegriffe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Gentium+Plus:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#EDEFE9; --paper-raised:#FFFFFF; --ink:#1B2426; --ink-soft:#52605E; --ink-faint:#7C8886;
+    --line:#C9CDC0; --accent:#9B3226; --accent-soft:#F1DAD2; --verdigris:#3F6E64; --verdigris-soft:#DCE7E1; --focus:#2E6F92;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#14181A; --paper-raised:#1D2320; --ink:#E7E9E1; --ink-soft:#AAB4AE; --ink-faint:#7C8886;
+      --line:#343F3A; --accent:#E08A72; --accent-soft:#3A2621; --verdigris:#8FC3B2; --verdigris-soft:#20342E; --focus:#6FB2D6;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#14181A; --paper-raised:#1D2320; --ink:#E7E9E1; --ink-soft:#AAB4AE; --ink-faint:#7C8886;
+    --line:#343F3A; --accent:#E08A72; --accent-soft:#3A2621; --verdigris:#8FC3B2; --verdigris-soft:#20342E; --focus:#6FB2D6;
+  }
+
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:'Gentium Plus','Times New Roman',serif; padding-inline:16px; }
+  .page{ max-width:920px; margin:0 auto; padding-block:32px 64px; }
+  h1,h2{ text-wrap:balance; }
+  .eyebrow{ font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--verdigris); font-weight:600; }
+  .title{ font-family:'UnifrakturMaguntia',serif; font-weight:400; font-size:clamp(2.2rem,5.5vw,3.4rem); line-height:1.1; margin:0.15em 0 0.1em; }
+  .subtitle{ font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.95rem; color:var(--ink-soft); margin:0 0 20px; max-width:70ch; }
+  .lede{ font-size:1.08rem; line-height:1.6; max-width:68ch; }
+
+  .filters{
+    display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+    margin:24px 0 32px; padding:14px 16px; background:var(--paper-raised); border:1px solid var(--line); border-radius:10px;
+  }
+  .filters .flabel{ font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.8rem; color:var(--ink-soft); margin-right:4px; }
+  .fbtn{
+    font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.78rem; font-weight:500;
+    padding:6px 12px; border-radius:999px; border:1px solid var(--line); background:var(--paper);
+    color:var(--ink-soft); cursor:pointer;
+  }
+  .fbtn:hover{ border-color:var(--verdigris); }
+  .fbtn.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .fbtn .swatch{ display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+
+  .kat{ margin:0 0 40px; }
+  .kat h2{
+    font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.78rem; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--ink-faint); font-weight:600; border-bottom:1px solid var(--line); padding-bottom:8px; margin:0 0 16px;
+  }
+  .entries{ display:flex; flex-direction:column; gap:10px; }
+  .entry{
+    display:grid; grid-template-columns:1fr auto; gap:6px 16px; align-items:start;
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:10px; padding:14px 16px;
+  }
+  @media (max-width:600px){
+    .entry{ grid-template-columns:1fr; }
+    .entry-meta{ justify-self:start; }
+  }
+  .entry[hidden]{ display:none; }
+  .entry-name{ font-family:'Gentium Plus',serif; font-weight:700; font-size:1.05rem; }
+  .entry-name a{ color:var(--ink); text-decoration:none; border-bottom:1px solid var(--verdigris); }
+  .entry-name a:hover{ color:var(--verdigris); }
+  .entry-desc{ grid-column:1 / -1; font-size:0.96rem; line-height:1.5; color:var(--ink); }
+  .entry-meta{ display:flex; gap:6px; align-items:start; justify-self:end; flex-wrap:wrap; }
+  .badge{
+    display:inline-block; font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.65rem; text-transform:uppercase;
+    letter-spacing:0.04em; padding:3px 8px; border-radius:999px; font-weight:600; white-space:nowrap;
+  }
+  .badge.gemeinfrei{ background:var(--verdigris-soft); color:var(--verdigris); }
+  .badge.frei{ background:var(--paper); color:var(--ink-soft); border:1px solid var(--line); }
+  .badge.geschuetzt{ background:var(--accent-soft); color:var(--accent); }
+  .badge.modul{ background:transparent; color:var(--ink-faint); border:1px dashed var(--line); }
+  .entry-note{
+    grid-column:1 / -1; font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.82rem; color:var(--ink-soft);
+    background:var(--paper); border-left:2px solid var(--accent); padding:8px 10px; margin-top:2px; line-height:1.5;
+  }
+
+  footer.tie-in{ margin-top:48px; padding-top:20px; border-top:1px solid var(--line); font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.85rem; color:var(--ink-soft); max-width:68ch; }
+  footer.tie-in strong{ color:var(--ink); }
+  .search{ width:100%; max-width:420px; margin:0 0 14px; padding:9px 12px; font:inherit; font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:0.9rem; color:var(--ink); background:var(--paper-raised); border:1px solid var(--line); border-radius:8px; }
+  .search:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .entry-name .alt{ font-weight:400; color:var(--ink-soft); font-size:0.9rem; }
+  .empty{ font-family:'IBM Plex Sans',system-ui,sans-serif; color:var(--ink-soft); }
+</style>
+
+<div class="page" id="glossar">
+
+  <p class="eyebrow">Historische Linguistik · Nachschlagen</p>
+  <h1 class="title">Fachbegriffe</h1>
+  <p class="subtitle">Die wesentlichen Begriffe der historischen Linguistik und Sprachgeschichte in Kurzform — zum Nachschlagen neben den Werkzeugen.</p>
+
+  <input class="search" id="q" type="search" placeholder="Begriff suchen …" aria-label="Begriff suchen" autocomplete="off">
+
+  <div class="filters" id="filters">
+    <span class="flabel">Filtern:</span>
+    <button class="fbtn active" data-filter="alle">Alle</button>
+    <button class="fbtn" data-filter="grundlagen">Grundbegriffe</button>
+    <button class="fbtn" data-filter="lautwandel">Lautwandel</button>
+    <button class="fbtn" data-filter="verschiebung">Lautverschiebungen</button>
+    <button class="fbtn" data-filter="ablaut">Ablaut &amp; Verben</button>
+    <button class="fbtn" data-filter="sprachstufen">Sprachstufen &amp; Verwandtschaft</button>
+  </div>
+
+  <section class="kat">
+    <h2>Grundbegriffe</h2>
+    <div class="entries">
+      <div class="entry" data-cat="grundlagen">
+        <span class="entry-name">Allophon</span>
+        <p class="entry-desc">Lautliche Variante eines Phonems, die nicht bedeutungsunterscheidend ist, z.&nbsp;B. [ç] und [x] (<em>ich</em> / <em>ach</em>) als Varianten von /x/.</p>
+      </div>
+      <div class="entry" data-cat="grundlagen">
+        <span class="entry-name">Beleg</span>
+        <p class="entry-desc">Konkrete Textstelle, an der eine Wortform oder Bedeutung nachweisbar ist. Etymologische Aussagen sollen durch Belege gestützt sein.</p>
+      </div>
+      <div class="entry" data-cat="grundlagen">
+        <span class="entry-name">Diachronie / Synchronie</span>
+        <p class="entry-desc">Diachrone Sprachbetrachtung verfolgt Veränderungen über die Zeit (Sprachgeschichte); synchrone beschreibt einen Sprachzustand zu einem bestimmten Zeitpunkt.</p>
+      </div>
+      <div class="entry" data-cat="grundlagen">
+        <span class="entry-name">Erbwort / Lehnwort / Fremdwort</span>
+        <p class="entry-desc">Erbwort: seit der Vorstufe der Sprache durchgehend überliefert (<em>Vater</em>). Lehnwort: aus einer anderen Sprache übernommen und lautlich/morphologisch angepasst (<em>Fenster</em> &lt; lat. <em>fenestra</em>). Fremdwort: noch als fremd erkennbar (<em>Computer</em>).</p>
+      </div>
+      <div class="entry" data-cat="grundlagen">
+        <span class="entry-name">Etymologie</span>
+        <p class="entry-desc">Lehre von Herkunft und Geschichte eines Wortes — Form und Bedeutung werden bis zu den frühest erreichbaren Vorstufen zurückverfolgt.</p>
+      </div>
+      <div class="entry" data-cat="grundlagen">
+        <span class="entry-name">IPA <span class="alt">· Internationales Phonetisches Alphabet</span></span>
+        <p class="entry-desc">Standardisierte Lautschrift, die jedem Laut genau ein Zeichen zuordnet. Lautangaben stehen in eckigen Klammern [ ] (phonetisch) oder Schrägstrichen / / (phonologisch).</p>
+      </div>
+      <div class="entry" data-cat="grundlagen">
+        <span class="entry-name">Kognat <span class="alt">· verwandtes Wort</span></span>
+        <p class="entry-desc">Wort, das mit einem Wort einer anderen Sprache auf dieselbe Vorform zurückgeht, z.&nbsp;B. dt. <em>Vater</em>, engl. <em>father</em>, lat. <em>pater</em>. Kognaten sind nicht notwendig bedeutungsgleich und nicht dasselbe wie Entlehnungen.</p>
+      </div>
+      <div class="entry" data-cat="grundlagen">
+        <span class="entry-name">Komparative Methode</span>
+        <p class="entry-desc">Verfahren, aus dem systematischen Vergleich verwandter Sprachen auf gemeinsame Vorstufen zu schließen. Beruht darauf, dass Lautwandel regelmäßig auftritt.</p>
+      </div>
+      <div class="entry" data-cat="grundlagen">
+        <span class="entry-name">Phonem</span>
+        <p class="entry-desc">Kleinste bedeutungsunterscheidende Lauteinheit einer Sprache. <em>Rat</em> und <em>Tat</em> unterscheiden sich im Anlaut-Phonem /r/ gegenüber /t/.</p>
+      </div>
+      <div class="entry" data-cat="grundlagen">
+        <span class="entry-name">Rekonstruktion <span class="alt">· Sternchenform (*)</span></span>
+        <p class="entry-desc">Nicht überlieferte, aus dem Sprachvergleich erschlossene Vorform. Das Sternchen markiert sie als erschlossen: idg. <em>*ph₂tḗr</em>, germ. <em>*fadēr</em>.</p>
+      </div>
+      <div class="entry" data-cat="grundlagen">
+        <span class="entry-name">Volksetymologie</span>
+        <p class="entry-desc">Nachträgliche, falsche Anlehnung eines undurchsichtigen Wortes an ein bekanntes (<em>Maulwurf</em> statt ursprünglich <em>Moltwurf</em>, „Erdwerfer“).</p>
+      </div>
+      <div class="entry" data-cat="grundlagen">
+        <span class="entry-name">Wanderwort</span>
+        <p class="entry-desc">Wort, das sich über Sprachgrenzen hinweg verbreitet hat, sodass sich der Ursprung nicht eindeutig bestimmen lässt (z.&nbsp;B. <em>Wein</em>).</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="kat">
+    <h2>Lautwandel</h2>
+    <div class="entries">
+      <div class="entry" data-cat="lautwandel">
+        <span class="entry-name">Analogie</span>
+        <p class="entry-desc">Angleichung einer Form an das Muster anderer Formen, wodurch Lautgesetze durchkreuzt werden (z.&nbsp;B. Ausgleich im Paradigma starker Verben).</p>
+      </div>
+      <div class="entry" data-cat="lautwandel">
+        <span class="entry-name">Assimilation</span>
+        <p class="entry-desc">Angleichung eines Lautes an einen benachbarten Laut (<em>Zimmer</em> &lt; mhd. <em>zimber</em>).</p>
+      </div>
+      <div class="entry" data-cat="lautwandel">
+        <span class="entry-name">Auslautverhärtung</span>
+        <p class="entry-desc">Stimmhafte Verschlusslaute werden am Wort-/Silbenende stimmlos gesprochen (<em>Rad</em> [raːt], aber <em>Räder</em>).</p>
+      </div>
+      <div class="entry" data-cat="lautwandel">
+        <span class="entry-name">Dehnung in offener Tonsilbe</span>
+        <p class="entry-desc">Kurze Vokale werden in betonter offener Silbe gedehnt (mhd. <em>sagen</em> [zaɡən] &gt; nhd. <em>sagen</em> [zaːɡən]).</p>
+      </div>
+      <div class="entry" data-cat="lautwandel">
+        <span class="entry-name">Diphthongierung (nhd.)</span>
+        <p class="entry-desc">Wandel langer Vokale <em>î, û, iu</em> zu <em>ei, au, eu/äu</em> (mhd. <em>mîn hûs</em> &gt; nhd. <em>mein Haus</em>), ab dem 12.&nbsp;Jh. von Südosten ausgehend.</p>
+      </div>
+      <div class="entry" data-cat="lautwandel">
+        <span class="entry-name">Lautgesetz</span>
+        <p class="entry-desc">Regelmäßig und ausnahmslos wirkende Lautveränderung innerhalb einer Sprache und Zeit. Scheinbare Ausnahmen erklären sich durch weitere Regeln (z.&nbsp;B. Verners Gesetz) oder durch Analogie.</p>
+      </div>
+      <div class="entry" data-cat="lautwandel">
+        <span class="entry-name">Monophthongierung (nhd.)</span>
+        <p class="entry-desc">Wandel der Diphthonge <em>ie, uo, üe</em> zu langen Monophthongen <em>[iː, uː, yː]</em> (mhd. <em>liebe guote brüeder</em> &gt; nhd. <em>liebe gute Brüder</em>).</p>
+      </div>
+      <div class="entry" data-cat="lautwandel">
+        <span class="entry-name">Rhotazismus</span>
+        <p class="entry-desc">Im Germanischen: stimmhaftes <em>s</em> (z) wird zu <em>r</em>. Erklärt den Wechsel in <em>verlieren – verloren</em> (vgl. <em>Verlust</em>) und <em>war</em> (vgl. <em>gewesen</em>).</p>
+      </div>
+      <div class="entry" data-cat="lautwandel">
+        <span class="entry-name">Synkope / Apokope</span>
+        <p class="entry-desc">Ausfall eines unbetonten Vokals im Wortinneren (Synkope: mhd. <em>gelücke</em> &gt; <em>Glück</em>) bzw. am Wortende (Apokope: mhd. <em>herze</em> &gt; <em>Herz</em>).</p>
+      </div>
+      <div class="entry" data-cat="lautwandel">
+        <span class="entry-name">Umlaut</span>
+        <p class="entry-desc">Veränderung eines Vokals durch ein <em>i</em>/<em>j</em> der Folgesilbe (a &gt; e/ä, u &gt; ü): ahd. <em>gast</em> – <em>gesti</em> &gt; <em>Gast</em> – <em>Gäste</em>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="kat">
+    <h2>Lautverschiebungen</h2>
+    <div class="entries">
+      <div class="entry" data-cat="verschiebung">
+        <span class="entry-name">Benrather Linie <span class="alt">· <em>maken</em>/<em>machen</em></span></span>
+        <p class="entry-desc">Isoglosse, die das Niederdeutsche (<em>maken</em>) vom Mitteldeutschen (<em>machen</em>) trennt; nach Benrath bei Düsseldorf benannt.</p>
+      </div>
+      <div class="entry" data-cat="verschiebung">
+        <span class="entry-name">Erste (germanische) Lautverschiebung</span>
+        <p class="entry-desc">Systematische Veränderung der idg. Verschlusslaute im Urgermanischen: Tenues → Frikative (p t k → f þ h), Mediae → Tenues (b d g → p t k), Mediae aspiratae → Frikative bzw. Mediae. Trennt das Germanische von den übrigen idg. Sprachen.</p>
+      </div>
+      <div class="entry" data-cat="verschiebung">
+        <span class="entry-name">Frikativ / Affrikata</span>
+        <p class="entry-desc">Frikativ (Reibelaut): Luft strömt durch eine Enge (f, s, x). Affrikata: Verschluss mit sofort folgender Reibung (pf, ts, kx).</p>
+      </div>
+      <div class="entry" data-cat="verschiebung">
+        <span class="entry-name">Grammatischer Wechsel</span>
+        <p class="entry-desc">Konsonantenwechsel innerhalb einer Wortfamilie als Folge von Verners Gesetz: <em>schneiden</em> – <em>schnitt</em> – <em>geschnitten</em>, <em>ziehen</em> – <em>zog</em> – <em>gezogen</em>.</p>
+      </div>
+      <div class="entry" data-cat="verschiebung">
+        <span class="entry-name">Grimms Gesetz</span>
+        <p class="entry-desc">Formulierung der ersten Lautverschiebung durch Jacob Grimm (1822): z.&nbsp;B. lat. <em>pater</em> – got. <em>fadar</em> (p → f), lat. <em>tres</em> – engl. <em>three</em> (t → þ).</p>
+      </div>
+      <div class="entry" data-cat="verschiebung">
+        <span class="entry-name">Isoglosse</span>
+        <p class="entry-desc">Linie auf einer Karte, die Gebiete mit unterschiedlichem Sprachgebrauch trennt (z.&nbsp;B. <em>machen</em> / <em>maken</em>).</p>
+      </div>
+      <div class="entry" data-cat="verschiebung">
+        <span class="entry-name">Rheinischer Fächer</span>
+        <p class="entry-desc">Bündel von Isoglossen im Rheinland, die sich von der Benrather bis zur Speyerer Linie fächerförmig auffächern und die Übergangszone der Lautverschiebung markieren.</p>
+      </div>
+      <div class="entry" data-cat="verschiebung">
+        <span class="entry-name">Speyerer Linie <span class="alt">· <em>Appel</em>/<em>Apfel</em></span></span>
+        <p class="entry-desc">Isoglosse zwischen Mittel- und Oberdeutsch: nördlich <em>Appel</em>, südlich <em>Apfel</em> (p → pf).</p>
+      </div>
+      <div class="entry" data-cat="verschiebung">
+        <span class="entry-name">Tenuis / Media / Aspirata</span>
+        <p class="entry-desc">Phonetische Klassen der Verschlusslaute: Tenuis (stimmlos: p t k), Media (stimmhaft: b d g), Aspirata (behaucht). Die Terminologie beschreibt die Stufen der Lautverschiebungen.</p>
+      </div>
+      <div class="entry" data-cat="verschiebung">
+        <span class="entry-name">Verners Gesetz</span>
+        <p class="entry-desc">Ausnahme zu Grimms Gesetz (Karl Verner, 1877): Die stimmlosen Frikative f, þ, h werden zu stimmhaften, wenn der idg. Akzent nicht unmittelbar davor lag. Erklärt den Grammatischen Wechsel.</p>
+      </div>
+      <div class="entry" data-cat="verschiebung">
+        <span class="entry-name">Zweite (hochdeutsche) Lautverschiebung</span>
+        <p class="entry-desc">Veränderung der germ. Verschlusslaute p t k im Althochdeutschen (ab ca. 6.–8.&nbsp;Jh.): zu Affrikaten (im Anlaut, nach Konsonant) bzw. Doppelfrikativen (nach Vokal). Trennt Hoch- und Niederdeutsch: <em>Pfund</em> / <em>pund</em>, <em>machen</em> / <em>maken</em>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="kat">
+    <h2>Ablaut &amp; Verben</h2>
+    <div class="entries">
+      <div class="entry" data-cat="ablaut">
+        <span class="entry-name">Ablaut</span>
+        <p class="entry-desc">Regelmäßiger Vokalwechsel in der Wortbildung und Flexion, bereits indogermanisch: <em>singen – sang – gesungen – Gesang</em>.</p>
+      </div>
+      <div class="entry" data-cat="ablaut">
+        <span class="entry-name">Ablautreihe</span>
+        <p class="entry-desc">Eine der sieben Gruppen starker Verben, die jeweils ein festes Muster des Vokalwechsels in Präsens, Präteritum (Singular/Plural) und Partizip II zeigen.</p>
+      </div>
+      <div class="entry" data-cat="ablaut">
+        <span class="entry-name">Präteritopräsens</span>
+        <p class="entry-desc">Verben, deren alte Perfektform (Präteritum) präsentische Bedeutung annahm: <em>ich weiß</em> („ich habe gesehen“), außerdem <em>kann, darf, muss, soll</em>.</p>
+      </div>
+      <div class="entry" data-cat="ablaut">
+        <span class="entry-name">Starkes / schwaches Verb</span>
+        <p class="entry-desc">Starke Verben bilden das Präteritum durch Ablaut (<em>singen – sang</em>), schwache durch ein Dentalsuffix (<em>sagen – sagte</em>).</p>
+      </div>
+      <div class="entry" data-cat="ablaut">
+        <span class="entry-name">Vollstufe / Schwundstufe / Dehnstufe</span>
+        <p class="entry-desc">Abstufungen im idg. Ablaut: Vollstufe (<em>e</em>/<em>o</em>), Schwundstufe (Vokal fällt aus) und Dehnstufe (<em>ē</em>/<em>ō</em>).</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="kat">
+    <h2>Sprachstufen &amp; Verwandtschaft</h2>
+    <div class="entries">
+      <div class="entry" data-cat="sprachstufen">
+        <span class="entry-name">Althochdeutsch <span class="alt">· ca. 750–1050</span></span>
+        <p class="entry-desc">Älteste überlieferte Sprachstufe des Deutschen; Zeit der zweiten Lautverschiebung, voller Endsilbenvokale und starker dialektaler Gliederung (z.&nbsp;B. Hildebrandslied, Tatian).</p>
+      </div>
+      <div class="entry" data-cat="sprachstufen">
+        <span class="entry-name">Frühneuhochdeutsch <span class="alt">· ca. 1350–1650</span></span>
+        <p class="entry-desc">Übergangsphase: Diphthongierung, Monophthongierung, Dehnung; Herausbildung der Schriftsprache (Luther).</p>
+      </div>
+      <div class="entry" data-cat="sprachstufen">
+        <span class="entry-name">Germanisch <span class="alt">· Urgermanisch</span></span>
+        <p class="entry-desc">Erschlossene Vorstufe aller germanischen Sprachen (Deutsch, Englisch, Nordisch, Gotisch u.&nbsp;a.). Kennzeichen u.&nbsp;a. die erste Lautverschiebung und der Initialakzent.</p>
+      </div>
+      <div class="entry" data-cat="sprachstufen">
+        <span class="entry-name">Indogermanisch <span class="alt">· Urindogermanisch (PIE)</span></span>
+        <p class="entry-desc">Erschlossene gemeinsame Vorstufe von u.&nbsp;a. Germanisch, Lateinisch, Griechisch, Keltisch, Slawisch, Indoiranisch. Nicht schriftlich überliefert. (International: <em>Proto-Indo-European</em>.)</p>
+      </div>
+      <div class="entry" data-cat="sprachstufen">
+        <span class="entry-name">Initialakzent</span>
+        <p class="entry-desc">Festlegung der Betonung auf die erste (Wurzel-)Silbe im Germanischen. Folge: Abschwächung der unbetonten Endsilben.</p>
+      </div>
+      <div class="entry" data-cat="sprachstufen">
+        <span class="entry-name">Kentum-/Satem-Sprachen</span>
+        <p class="entry-desc">Einteilung der idg. Sprachen nach der Behandlung der Palatovelare: Kentum (<em>k</em>, z.&nbsp;B. Germanisch, Lateinisch) und Satem (Zischlaut, z.&nbsp;B. Slawisch, Indoiranisch).</p>
+      </div>
+      <div class="entry" data-cat="sprachstufen">
+        <span class="entry-name">Mittelhochdeutsch <span class="alt">· ca. 1050–1350</span></span>
+        <p class="entry-desc">Endsilbenvokale zu <em>e</em> abgeschwächt, höfische Dichtung (Nibelungenlied, Minnesang).</p>
+      </div>
+      <div class="entry" data-cat="sprachstufen">
+        <span class="entry-name">Neuhochdeutsch <span class="alt">· ca. 1650–heute</span></span>
+        <p class="entry-desc">Standardisierte Schriftsprache mit weitgehend normierter Orthographie und Grammatik.</p>
+      </div>
+      <div class="entry" data-cat="sprachstufen">
+        <span class="entry-name">Stammbaummodell / Wellentheorie</span>
+        <p class="entry-desc">Stammbaummodell (August Schleicher): Sprachen spalten sich wie Äste ab. Wellentheorie (Johannes Schmidt, 1872): Neuerungen breiten sich wellenförmig aus und überlagern sich — erklärt Übergangsgebiete besser.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="empty" id="empty" hidden>Kein Begriff gefunden.</p>
+
+  <footer class="tie-in">
+    Die Beispiele sind bewusst knapp gehalten; ausführlichere Erklärungen und Übungen finden sich in den jeweiligen Werkzeugen.
+  </footer>
+</div>
+
+<script>
+(function(){
+  var root = document.getElementById('glossar');
+  var buttons = root.querySelectorAll('.fbtn');
+  var entries = root.querySelectorAll('.entry');
+  var kats = root.querySelectorAll('.kat');
+  var q = document.getElementById('q');
+  var empty = document.getElementById('empty');
+  var filter = 'alle';
+
+  function apply(){
+    var term = q.value.trim().toLowerCase();
+    var shown = 0;
+    entries.forEach(function(e){
+      var okCat = filter === 'alle' || e.getAttribute('data-cat') === filter;
+      var okTerm = !term || e.textContent.toLowerCase().indexOf(term) !== -1;
+      e.hidden = !(okCat && okTerm);
+      if (!e.hidden) shown++;
+    });
+    kats.forEach(function(k){
+      k.hidden = k.querySelectorAll('.entry:not([hidden])').length === 0;
+    });
+    empty.hidden = shown !== 0;
+  }
+
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      buttons.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      filter = btn.getAttribute('data-filter');
+      apply();
+    });
+  });
+  q.addEventListener('input', apply);
+})();
+</script>
+
+</body></html>
